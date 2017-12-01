@@ -20,14 +20,14 @@ LAND		varchar(3),
 HUB		varchar(3),
 NAME		varchar(30),
 ALLIANZ		varchar(20),
-constraint FLUGLINIE_LAND_NN
-		check (LAND is not null),
-constraint FLUGLINIE_ALLIANZ_CHK
-		check (ALLIANZ in ('Star','Excellence','Leftover','OneWorld','SkyTeam')),
 constraint FLUGLINIE_PS
 		primary key (FLC),
 constraint FLUGLINIE_FS_HUB
-		foreign key (HUB) references FLUGHAFEN(FHC)
+		foreign key (HUB) references FLUGHAFEN(FHC),
+constraint FLUGLINIE_LAND_NN
+		check (LAND is not null),
+constraint FLUGLINIE_ALLIANZ_CHK
+		check (ALLIANZ in ('Star','Excellence','Leftover','OneWorld','SkyTeam'))
 )
 HORIZONTAL (FLC('KK','MM'));
 
@@ -39,6 +39,14 @@ VON		varchar(3),
 NACH		varchar(3),
 AB		integer,
 AN		integer,
+constraint FLUG_PS
+		primary key (FNR),
+constraint FLUG_FS_FLC
+		foreign key (FLC) references FLUGLINIE(FLC),
+constraint FLUG_FS_VON
+		foreign key (VON) references FLUGHAFEN(FHC),
+constraint FLUG_FS_NACH
+		foreign key (NACH) references FLUGHAFEN(FHC),
 constraint FLUG_VON_NN
 		check (VON is not null),
 constraint FLUG_NACH_NN
@@ -52,15 +60,7 @@ constraint FLUG_AB_CHK
 constraint FLUG_AN_CHK
 		check (AN between 0 and 2400),
 constraint FLUG_VONNACH_CHK
-		check (VON != NACH),
-constraint FLUG_PS
-		primary key (FNR),
-constraint FLUG_FS_FLC
-		foreign key (FLC) references FLUGLINIE(FLC),
-constraint FLUG_FS_VON
-		foreign key (VON) references FLUGHAFEN(FHC),
-constraint FLUG_FS_NACH
-		foreign key (NACH) references FLUGHAFEN(FHC)
+		check (VON != NACH)
 )
 HORIZONTAL (FLC('KK','MM'));
 
@@ -69,10 +69,10 @@ PNR		integer,
 NAME		varchar(40),
 VORNAME		varchar(40),		
 LAND		varchar(3),
-constraint PASSAGIER_NAME_NN
-                check (NAME is not null),
 constraint PASSAGIER_PS
-		primary key (PNR)
+		primary key (PNR),
+constraint PASSAGIER_NAME_NN
+        check (NAME is not null)
 )
 HORIZONTAL (PNR(35,70))
 VERTICAL ((PNR, NAME),(VORNAME, LAND));
@@ -88,16 +88,6 @@ NACH		varchar(3),
 TAG		varchar(20),
 MEILEN          integer,
 PREIS           integer,
-constraint BUCHUNG_NACH_NN
-		check (NACH is not null),
-constraint BUCHUNG_MEILEN_NN
-		check (MEILEN is not null),
-constraint BUCHUNG_PREIS_NN
-		check (PREIS is not null),
-constraint BUCHUNG_MEILEN_CHK
-                check (MEILEN >= 0),
-constraint BUCHUNG_PREIS_CHK
-                check (PREIS > 0),
 constraint BUCHUNG_PS
 		primary key (BNR),
 constraint BUCHUNG_FS_PNR
@@ -107,6 +97,16 @@ constraint BUCHUNG_FS_FLC
 constraint BUCHUNG_FS_VON
 		foreign key (VON) references FLUGHAFEN(FHC),
 constraint BUCHUNG_FS_NACH
-		foreign key (NACH) references FLUGHAFEN(FHC)
+		foreign key (NACH) references FLUGHAFEN(FHC),
+constraint BUCHUNG_NACH_NN
+		check (NACH is not null),
+constraint BUCHUNG_MEILEN_NN
+		check (MEILEN is not null),
+constraint BUCHUNG_PREIS_NN
+		check (PREIS is not null),
+constraint BUCHUNG_MEILEN_CHK
+        check (MEILEN >= 0),
+constraint BUCHUNG_PREIS_CHK
+        check (PREIS > 0)
 )
 HORIZONTAL (PNR(35,70));
