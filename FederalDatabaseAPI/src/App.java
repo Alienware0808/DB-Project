@@ -10,11 +10,11 @@ public class App {
          * -Doracle.jdbc.Trace=true
          * -Djava.util.logging.config.file=config.properties
          */
-        final String usernameTest = "VDBSA08";
-        final String passwordTest = "VDBSA08";
+        final String usernameTest = "VDBSA09";
+        final String passwordTest = "VDBSA09";
 
-        final String usernameValidation = "VDBSA08";
-        final String passwordValidation = "VDBSA08";
+        final String usernameValidation = "VDBSA09";
+        final String passwordValidation = "VDBSA09";
 
         FedConnection fedConnection;
 
