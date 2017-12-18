@@ -42,15 +42,6 @@ public class FedPseudoDriver implements FedPseudoDriverInterface
             con [1]= DriverManager.getConnection("jdbc:oracle:thin:@krakatau.informatik.hs-fulda.de:1521:ORALV10A",username,password);
             con [2]= DriverManager.getConnection("jdbc:oracle:thin:@pinatubo.informatik.hs-fulda.de:1521:ORALV8A",username,password);
             
-            Statement st = con[0].createStatement();
-            ResultSet rs = st.executeQuery(query);
-            rs.next();
-            
-            
-            /*con[0].close();
-            con[1].close();
-            con[2].close();*/ 
-            
         }catch (Exception exc)
         {
             exc.printStackTrace();
