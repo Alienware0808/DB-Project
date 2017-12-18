@@ -3,7 +3,15 @@ public class FedStatement implements FedStatementInterface {
 
         @Override
 	public int executeUpdate(String sql) throws FedException {
-            return 1;
+            
+            if(true){
+                //Anweisung die Werte zurück gibt
+                return 1;
+            }
+            else{
+                //Anweisung die KEINE Werte zurück gibt
+                return 0;
+            }
 	}
 
         @Override
