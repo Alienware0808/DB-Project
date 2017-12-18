@@ -10,11 +10,11 @@ public class App {
          * -Doracle.jdbc.Trace=true
          * -Djava.util.logging.config.file=config.properties
          */
-        final String usernameTest = "PROJA04";
-        final String passwordTest = "XXXXXX";
+        final String usernameTest = "VDBSA08";
+        final String passwordTest = "VDBSA08";
 
-        final String usernameValidation = "PROJA04";
-        final String passwordValidation = "XXXXXX";
+        final String usernameValidation = "VDBSA08";
+        final String passwordValidation = "VDBSA08";
 
         FedConnection fedConnection;
 
@@ -26,8 +26,8 @@ public class App {
 
             final FedTestEnvironment fedTestEvironment = new FedTestEnvironment(fedConnection);
 
-            fedTestEvironment.run("Test/DRPTABS.SQL", false);
-            fedTestEvironment.run("Test/CREPARTABS.SQL", false);
+            fedTestEvironment.run("SQL Test/DRPTABS.SQL", false);
+            fedTestEvironment.run("SQL Test/CREPARTABS.SQL", false);
 
             /*
             fedTestEvironment.run("Test/INSERTAIRPORTS.SQL", false);

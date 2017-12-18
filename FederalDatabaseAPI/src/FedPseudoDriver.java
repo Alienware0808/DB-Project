@@ -26,9 +26,10 @@ public class FedPseudoDriver implements FedPseudoDriverInterface
        
     }
     
+    @Override
     public FedConnection getConnection(String username, String password) 
     {
-        Connection[] con = new Connection [2];
+        Connection[] con = new Connection [3];
        
          try{
             DriverManager.registerDriver (new oracle.jdbc.driver.OracleDriver());
@@ -37,9 +38,9 @@ public class FedPseudoDriver implements FedPseudoDriverInterface
             //Get a connection do DB
             Class.forName("oracle.jdbc.OracleDriver"); //driver
  
-            con [0]= DriverManager.getConnection("jdbc:oracle:thin:@mtsthelens.informatik.hs-fulda.de:1521:oralv9a","username","password");
-            con [1]= DriverManager.getConnection("jdbc:oracle:thin:@krakatau.informatik.hs-fulda.de:1521:ORALV10A","username","password");
-            con [2]= DriverManager.getConnection("jdbc:oracle:thin:@pinatubo.informatik.hs-fulda.de:1521:ORALV8A","username","password");
+            con [0]= DriverManager.getConnection("jdbc:oracle:thin:@mtsthelens.informatik.hs-fulda.de:1521:ORALV9A",username,password);
+            con [1]= DriverManager.getConnection("jdbc:oracle:thin:@krakatau.informatik.hs-fulda.de:1521:ORALV10A",username,password);
+            con [2]= DriverManager.getConnection("jdbc:oracle:thin:@pinatubo.informatik.hs-fulda.de:1521:ORALV8A",username,password);
             
             Statement st = con[0].createStatement();
             ResultSet rs = st.executeQuery(query);
