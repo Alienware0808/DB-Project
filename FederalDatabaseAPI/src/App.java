@@ -1,14 +1,15 @@
-package hsfulda.de;
+//package hsfulda.de;
 
 public class App {
+
     public static void main(final String[] args) {
 
         /**
          * Logging
          *
-         * -Doracle.jdbc.Trace=true -Djava.util.logging.config.file=config.properties
+         * -Doracle.jdbc.Trace=true
+         * -Djava.util.logging.config.file=config.properties
          */
-
         final String usernameTest = "PROJA04";
         final String passwordTest = "XXXXXX";
 
@@ -17,15 +18,13 @@ public class App {
 
         FedConnection fedConnection;
 
-		/*
+        /*
          * Test schema
-		 */
-
+         */
         try {
             fedConnection = (new FedPseudoDriver()).getConnection(usernameValidation, passwordValidation);
 
             final FedTestEnvironment fedTestEvironment = new FedTestEnvironment(fedConnection);
-
 
             fedTestEvironment.run("Test/DRPTABS.SQL", false);
             fedTestEvironment.run("Test/CREPARTABS.SQL", false);
@@ -47,15 +46,17 @@ public class App {
             fedTestEvironment.run("Test/PARINSERTS.SQL", true);
             fedTestEvironment.run("Test/PARDELS.SQL", true);
             fedTestEvironment.run("Test/PARSELCNTSTAR.SQL", true);
-            */
-        } catch (final FedException fedException) {
-            fedException.printStackTrace();
+             */
+//        } catch (final FedException fedException) {
+//            fedException.printStackTrace();
+//        }
+        } catch (final Exception e) {
 
         }
 
-		/*
+        /*
 		 * Validation schema
-		 */
+         */
         try {
             fedConnection = (new FedPseudoDriver()).getConnection(usernameValidation, passwordValidation);
 
@@ -87,10 +88,12 @@ public class App {
             fedTestEvironment.run("Validation/PARSEL1TGHAVSmall.SQL", true);  // OPTIONAL
             fedTestEvironment.run("Validation/PARSEL1TGHAVLarge.SQL", true);  // OPTIONAL
             fedTestEvironment.run("Validation/PARSELCNTSTAR.SQL", true);            
-            */
+             */
+//        } catch (final FedException fedException) {
+//            fedException.printStackTrace();
+//        }
+        } catch (final Exception e) {
 
-        } catch (final FedException fedException) {
-            fedException.printStackTrace();
         }
     }
 }

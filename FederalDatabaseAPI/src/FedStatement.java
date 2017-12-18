@@ -1,20 +1,23 @@
-import interfaces.*
 
 public class FedStatement implements FedStatementInterface {
 
-	int executeUpdate(String sql) throws FedException {
-	
+        @Override
+	public int executeUpdate(String sql) throws FedException {
+            return 1;
 	}
 
-    FedResultSet executeQuery(String sql) throws FedException {
-	
+        @Override
+    public FedResultSet executeQuery(String sql) throws FedException {
+	return null;
 	}
 
-    FedConnection getConnection() throws FedException {
-	
+        @Override
+    public FedConnection getConnection() throws FedException {
+            return null;
 	}
 
-    void close() throws FedException {
+        @Override
+    public void close() throws FedException {
 	
 	}
 }
