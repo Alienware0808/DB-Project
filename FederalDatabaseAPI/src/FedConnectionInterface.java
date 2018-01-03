@@ -10,5 +10,5 @@ public interface FedConnectionInterface {
 
     void close() throws FedException;
 
-    FedStatement getStatement();
+//    FedStatement getStatement();
 }
