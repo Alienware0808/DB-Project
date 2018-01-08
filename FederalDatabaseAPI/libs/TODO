@@ -1,2 +1,5 @@
-
 Die antlr-4.7-complete.jar Herunterladen und in den Ordner einfügen
+http://www.antlr.org/download/antlr-4.7-complete.jar
+
+Die ojdbc8.jar datei ganz oben Herunterladen, damit der Driver frunktioniert.
+http://www.oracle.com/technetwork/database/features/jdbc/jdbc-ucp-122-3110062.html

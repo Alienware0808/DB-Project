@@ -27,7 +27,7 @@ constraint FLUGLINIE_FS_HUB
 constraint FLUGLINIE_LAND_NN
 		check (LAND is not null),
 constraint FLUGLINIE_ALLIANZ_CHK
-		check (ALLIANZ in ('Star','Excellence','Leftover','OneWorld','SkyTeam'))
+		check (ALLIANZ != 'BlackList')
 )
 HORIZONTAL (FLC('KK','MM'));
 
@@ -74,7 +74,6 @@ constraint PASSAGIER_PS
 constraint PASSAGIER_NAME_NN
         check (NAME is not null)
 )
-HORIZONTAL (PNR(35,70))
 VERTICAL ((PNR, NAME),(VORNAME, LAND));
 
 
