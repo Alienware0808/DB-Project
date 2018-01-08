@@ -48,6 +48,56 @@ public interface SQLiteListener extends ParseTreeListener {
 	 */
 	void exitSql_stmt(SQLiteParser.Sql_stmtContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SQLiteParser#alter_stmt}.
+	 * @param ctx the parse tree
+	 */
+	void enterAlter_stmt(SQLiteParser.Alter_stmtContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SQLiteParser#alter_stmt}.
+	 * @param ctx the parse tree
+	 */
+	void exitAlter_stmt(SQLiteParser.Alter_stmtContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SQLiteParser#alter_session_stmt}.
+	 * @param ctx the parse tree
+	 */
+	void enterAlter_session_stmt(SQLiteParser.Alter_session_stmtContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SQLiteParser#alter_session_stmt}.
+	 * @param ctx the parse tree
+	 */
+	void exitAlter_session_stmt(SQLiteParser.Alter_session_stmtContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SQLiteParser#set_stmt}.
+	 * @param ctx the parse tree
+	 */
+	void enterSet_stmt(SQLiteParser.Set_stmtContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SQLiteParser#set_stmt}.
+	 * @param ctx the parse tree
+	 */
+	void exitSet_stmt(SQLiteParser.Set_stmtContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SQLiteParser#set_keyword}.
+	 * @param ctx the parse tree
+	 */
+	void enterSet_keyword(SQLiteParser.Set_keywordContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SQLiteParser#set_keyword}.
+	 * @param ctx the parse tree
+	 */
+	void exitSet_keyword(SQLiteParser.Set_keywordContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SQLiteParser#set_value}.
+	 * @param ctx the parse tree
+	 */
+	void enterSet_value(SQLiteParser.Set_valueContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SQLiteParser#set_value}.
+	 * @param ctx the parse tree
+	 */
+	void exitSet_value(SQLiteParser.Set_valueContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SQLiteParser#alter_table_stmt}.
 	 * @param ctx the parse tree
 	 */
@@ -267,6 +317,16 @@ public interface SQLiteListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitDrop_table_stmt(SQLiteParser.Drop_table_stmtContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SQLiteParser#drop_table_options}.
+	 * @param ctx the parse tree
+	 */
+	void enterDrop_table_options(SQLiteParser.Drop_table_optionsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SQLiteParser#drop_table_options}.
+	 * @param ctx the parse tree
+	 */
+	void exitDrop_table_options(SQLiteParser.Drop_table_optionsContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SQLiteParser#drop_trigger_stmt}.
 	 * @param ctx the parse tree
