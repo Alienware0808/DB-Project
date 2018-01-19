@@ -46,12 +46,11 @@ sql_stmt_list
  ;
 
 sql_stmt
- : ( K_EXPLAIN ( K_QUERY K_PLAN )? )? ( alter_table_stmt
-                                      | analyze_stmt
+ : ( K_EXPLAIN ( K_QUERY K_PLAN )? )? ( analyze_stmt
                                       | attach_stmt
                                       | begin_stmt
                                       | commit_stmt
-                                      | compound_select_stmt
+                                     // | compound_select_stmt
                                       | create_index_stmt
                                       | create_table_stmt
                                       | create_trigger_stmt
@@ -71,12 +70,34 @@ sql_stmt
                                       | release_stmt
                                       | rollback_stmt
                                       | savepoint_stmt
-                                      | simple_select_stmt
-                                      | select_stmt
+                                    //  | simple_select_stmt
+                                     // | select_stmt
                                       | update_stmt
                                       | update_stmt_limited
-                                      | vacuum_stmt )
+                                      | vacuum_stmt
+                                      | set_stmt
+                                      | alter_stmt)
  ;
+
+alter_stmt
+ : alter_table_stmt | alter_session_stmt
+;
+
+alter_session_stmt
+ : K_ALTER K_SESSION K_SET any_name '=' any_name
+;
+
+set_stmt
+ : K_SET set_keyword set_value
+;
+
+set_keyword
+ : K_ECHO
+;
+
+set_value
+ : K_ON | K_OFF
+;
 
 alter_table_stmt
  : K_ALTER K_TABLE ( database_name '.' )? table_name
@@ -189,8 +210,12 @@ drop_index_stmt
  ;
 
 drop_table_stmt
- : K_DROP K_TABLE ( K_IF K_EXISTS )? ( database_name '.' )? table_name
+ : K_DROP K_TABLE ( K_IF K_EXISTS )? ( database_name '.' )? table_name ( drop_table_options )?
  ;
+
+drop_table_options
+ : K_CASCADE K_CONSTRAINTS
+;
 
 drop_trigger_stmt
  : K_DROP K_TRIGGER ( K_IF K_EXISTS )? ( database_name '.' )? trigger_name
@@ -452,10 +477,18 @@ join_constraint
 select_core
  : K_SELECT ( K_DISTINCT | K_ALL )? result_column ( ',' result_column )*
    ( K_FROM ( table_or_subquery ( ',' table_or_subquery )* | join_clause ) )?
-   ( K_WHERE expr )?
-   ( K_GROUP K_BY expr ( ',' expr )* ( K_HAVING expr )? )?
- | K_VALUES '(' expr ( ',' expr )* ')' ( ',' '(' expr ( ',' expr )* ')' )*
+   ( select_core_where )?
+   ( select_core_groud_by )?
+ //| K_VALUES '(' expr ( ',' expr )* ')' ( ',' '(' expr ( ',' expr )* ')' )*
  ;
+
+select_core_groud_by
+ : K_GROUP K_BY expr ( ',' expr )* ( K_HAVING expr )?
+;
+
+ select_core_where
+  : K_WHERE expr
+;
 
 compound_operator
  : K_UNION
@@ -739,6 +772,10 @@ K_ADD : A D D;
 K_AFTER : A F T E R;
 K_ALL : A L L;
 K_ALTER : A L T E R;
+K_SET: S E T;
+K_ECHO: E C H O;
+K_ON: O N;
+K_OFF: O F F;
 K_ANALYZE : A N A L Y Z E;
 K_AND : A N D;
 K_AS : A S;
@@ -758,6 +795,7 @@ K_COLUMN : C O L U M N;
 K_COMMIT : C O M M I T;
 K_CONFLICT : C O N F L I C T;
 K_CONSTRAINT : C O N S T R A I N T;
+K_CONSTRAINTS: C O N S T R A I N T S;
 K_CREATE : C R E A T E;
 K_VERTICAL : V E R T I C A L;
 K_HORIZONTAL : H O R I Z O N T A L;
@@ -817,7 +855,6 @@ K_NOTNULL : N O T N U L L;
 K_NULL : N U L L;
 K_OF : O F;
 K_OFFSET : O F F S E T;
-K_ON : O N;
 K_OR : O R;
 K_ORDER : O R D E R;
 K_OUTER : O U T E R;
@@ -839,7 +876,7 @@ K_ROLLBACK : R O L L B A C K;
 K_ROW : R O W;
 K_SAVEPOINT : S A V E P O I N T;
 K_SELECT : S E L E C T;
-K_SET : S E T;
+K_SESSION : S E S S I O N;
 K_TABLE : T A B L E;
 K_TEMP : T E M P;
 K_TEMPORARY : T E M P O R A R Y;

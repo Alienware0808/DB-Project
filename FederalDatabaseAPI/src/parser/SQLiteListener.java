@@ -678,6 +678,26 @@ public interface SQLiteListener extends ParseTreeListener {
 	 */
 	void exitSelect_core(SQLiteParser.Select_coreContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SQLiteParser#select_core_groud_by}.
+	 * @param ctx the parse tree
+	 */
+	void enterSelect_core_groud_by(SQLiteParser.Select_core_groud_byContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SQLiteParser#select_core_groud_by}.
+	 * @param ctx the parse tree
+	 */
+	void exitSelect_core_groud_by(SQLiteParser.Select_core_groud_byContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SQLiteParser#select_core_where}.
+	 * @param ctx the parse tree
+	 */
+	void enterSelect_core_where(SQLiteParser.Select_core_whereContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SQLiteParser#select_core_where}.
+	 * @param ctx the parse tree
+	 */
+	void exitSelect_core_where(SQLiteParser.Select_core_whereContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SQLiteParser#compound_operator}.
 	 * @param ctx the parse tree
 	 */
