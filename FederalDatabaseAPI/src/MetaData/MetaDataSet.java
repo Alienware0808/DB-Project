@@ -24,4 +24,9 @@ public class MetaDataSet {
     public MetaDataEntry getEntry(String tableName){
         return DataSet.get(tableName);
     }
+    
+    @Override
+    public String toString(){
+        return DataSet.toString();
+    }
 }
