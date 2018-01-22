@@ -12,7 +12,8 @@ public class FedConnection implements FedConnectionInterface{
 
     @Override
     public FedStatement getStatement(){
-        return null;
+      FedStatement statement= new FedStatement(conn);
+        return statement;
     }
 
     @Override
@@ -23,7 +24,6 @@ public class FedConnection implements FedConnectionInterface{
             } catch (SQLException se) {
                 
             }
-           
         }
     }
 
