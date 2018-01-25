@@ -13,9 +13,8 @@ import java.util.HashMap;
 public class MetaDataSet {
     private HashMap<String, MetaDataEntry> DataSet;
     
-    public initDataset(){
-        DataSet = new Hashmap<String, MetaDataEntry>();
-        return DataSet;
+    public MetaDataSet(){
+        DataSet = new HashMap<String, MetaDataEntry>();
     }
 
     public void addEntry(String tableName, MetaDataEntry mdE){
@@ -23,13 +22,20 @@ public class MetaDataSet {
     }
     
     public void deleteEntry(String tableName){
-        DataSet.remove(tableName);
+        System.out.println(DataSet.toString());
+        MetaDataEntry mdE = DataSet.remove(tableName);
+        if(mdE != null){
+            System.out.println("TABLE "+tableName+" ENTRY REMOVED");
+            System.out.println(mdE.toString());
+        }else{ 
+            System.out.println("NO ENTRY REMOVED!");
+        }      
+        
     }
     
     public MetaDataEntry getEntry(String tableName){
         return DataSet.get(tableName);
     }
-    
 
     @Override
     public String toString(){
