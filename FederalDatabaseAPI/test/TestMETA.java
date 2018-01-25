@@ -19,6 +19,9 @@ public class TestMETA {
         
         MetaDataManager MM = new MetaDataManager("C:/users/Smile/Desktop/metaDaten.json");
         try {
+            String[][] fKeys = {{"age","ageR", "12"},{"age", "ageRR", "22"}};
+            String[] checks = {"greater than 1"};
+            MetaDataEntry mdE = new MetaDataEntry("1", "h", "age", "22", "44", fKey, checks);
             MM.saveMetaData("C:/users/Smile/Desktop/metaDaten.json");
         } catch (Exception ex) {
             System.out.println("Error saving MetaManager! "+ex.toString());

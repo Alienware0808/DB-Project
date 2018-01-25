@@ -22,11 +22,13 @@ public class MetaDataManager {
         String metaFileString;
         try{
             metaFileString = Files.lines(Paths.get(metaDataFilePath), StandardCharsets.UTF_8).toString();
+            metaDataSet = new GsonBuilder().create().fromJson(metaFileString, MetaDataSet.class);
+
         }catch(Exception e){
-            System.out.println("There is no metaData File. Dummy String is returned.");
-            metaFileString = "{'DataSet':{'table1':{'Type':'h','attr1':'age','attr2':'22', 'attr3':'77'}, 'table2':{'Type':'h', attr1':'age','attr2':'22', 'attr3':'77'}}}";
+            System.out.println("There is no metaData File. Empty dataset will be created");
+            metaDataSet = new MetaDataSet();
         }
-        metaDataSet = new GsonBuilder().create().fromJson(metaFileString, MetaDataSet.class);
+
         
         System.out.println("MetaData read: "+metaDataSet.toString());
     }
@@ -37,73 +39,21 @@ public class MetaDataManager {
     // indices:
     // 0 -> tablename, 1 -> pKey, 2 -> type, 3 -> attr1
     // 4 -> attr2, 5 -> attr3
-    public void newMetaData(String distribution, String[][] fKeys, String[] checks){
-        String[] ps = distribution.split(".@.");
-        MetaDataEntry mdE = new MetaDataEntry();
-        mdE.pKey = ps[1];
-        mdE.Type = ps[2];
-        mdE.Attr1 = ps[3];
-        mdE.Attr2 = ps[4];
-        mdE.Attr3 = ps[5];
-        mdE.ForeignKeys = fKeys;
-        mdE.Checks = checks;
-        
-        metaDataSet.addEntry(ps[0], mdE);
+    public void newMetaData(String tableName, MetaDataEntry mdE){
+        metaDataSet.addEntry(tablename, mdE);
     }
     
     public void deleteMetaData(String tableName){
         metaDataSet.deleteEntry(tableName);
     }
     
-    // returns array which describes the distribution
-    // of the table on the three databases
-    // array:
-    // [0] = type
-    // [1] = db1, [2] = db2, [3] = db3
-    // values are either for horizontal the colum name plus min and
-    // max integer values or for vertical the colum names
-    // 5 -> foreignKeys as a String:= (columName, foreignTablename, foreignPKey)
-    // 6 -> checks, String seperated by comma
-    public String[][] getDistribution(String tableName){
+    // returns the metaDataEntry which describes the database
+    // distribution according to its tablename
+    public MetaDataEntry getDistribution(String tableName){
         MetaDataEntry mdE = metaDataSet.getEntry(tableName);
-        
-        String attr1 = mdE.Type.equals("h") ? getMinMaxValues(1, mdE) : mdE.Attr1;
-        String attr2 = mdE.Type.equals("h") ? getMinMaxValues(2, mdE) : mdE.Attr2;
-        String attr3 = mdE.Type.equals("h") ? getMinMaxValues(3, mdE) : mdE.Attr3;
-
-        String[] fKeys = new String[mdE.ForeignKeys.length];
-        for(int i=0; i < mdE.ForeignKeys.length;i++){
-            fKeys[i] = mdE.ForeignKeys[i][0]+","+mdE.ForeignKeys[i][1]+","+mdE.ForeignKeys[i][2];
-        }
-                
-        String[][] distr = new String[][]{
-            {mdE.Type},
-            {attr1, attr2, attr3},
-            fKeys,
-            mdE.Checks
-        };
-        return distr;
+        return mdE;
     }
     
-    private String getMinMaxValues(int index, MetaDataEntry entry){
-        String minMax;
-        
-        switch(index){
-            case 1:
-                minMax = entry.Attr1+",0,"+entry.Attr2;
-                break;
-            case 2:
-                minMax = entry.Attr1+","+entry.Attr2+","+entry.Attr3;
-                break;
-            case 3:
-                minMax = entry.Attr1+","+entry.Attr3+","+"9999999999999999";
-                break;
-            default:
-                minMax = null;
-        }
-        
-        return minMax;
-    }
     
     // to save the JavaObject of the metaData onto the file
     public void saveMetaData(String metaDataFilePath) throws Exception {

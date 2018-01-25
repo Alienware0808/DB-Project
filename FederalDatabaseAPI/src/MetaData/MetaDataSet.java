@@ -13,6 +13,11 @@ import java.util.HashMap;
 public class MetaDataSet {
     private HashMap<String, MetaDataEntry> DataSet;
     
+    public initDataset(){
+        DataSet = new Hashmap<String, MetaDataEntry>();
+        return DataSet;
+    }
+
     public void addEntry(String tableName, MetaDataEntry mdE){
         DataSet.put(tableName, mdE);
     }
@@ -25,6 +30,7 @@ public class MetaDataSet {
         return DataSet.get(tableName);
     }
     
+
     @Override
     public String toString(){
         return DataSet.toString();
