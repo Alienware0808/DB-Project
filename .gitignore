@@ -1,5 +1,6 @@
 FederalDatabaseAPI\nbproject\ojdbc8.jar
-
+FederalDatabaseAPI/nbproject/private/private.properties
+FederalDatabaseAPI/nbproject/private/private.xml
 # Compiled class file
 *.class
 
