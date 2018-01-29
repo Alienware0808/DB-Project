@@ -7,11 +7,13 @@ package parser.AnalysedStatements;
 
 import Conditions.ColumnValueDescriptor;
 import Conditions.CompareCondition;
+import Conditions.CompareType;
 import Conditions.Condition;
 import Conditions.JunctionCondition;
 import Conditions.SingleValueDescriptor;
 import Conditions.ValueDescriptor;
 import MetaDummy.TableDescription;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,11 +30,12 @@ import parser.Walker;
  * @author Tobias Habermann
  */
 public class SelectStatement extends Statement {
-    public final boolean IsFirstColumnDistinct;
-    public final HashMap<String, ResultColumn> ColumnAliases;    
-    public final HashMap<String, TableDescription> TableAliases;
-    private List<TableDescription> tables;
-    private List<ResultColumn> columns;
+    public final boolean isFirstColumnDistinct;
+    public final HashMap<String, ResultColumn> columnAliases;    
+    public final HashMap<String, TableDescription> tableAliases;
+    public final List<TableDescription> tables;
+    public final List<ResultColumn> resultColumns;    
+    public final List<Column> extraColumnsForWhere;
     private Conditions.Condition where;
     private ResultColumn groupByColumn;
     private Condition groupByHavingCondition;
@@ -46,17 +49,18 @@ public class SelectStatement extends Statement {
     public SelectStatement(Select_coreContext tree) throws ContextException, Exception {
         super(tree);
         // Init all Fields
-        ColumnAliases = new HashMap<>();
-        TableAliases = new HashMap<>();
+        columnAliases = new HashMap<>();
+        tableAliases = new HashMap<>();
         tables = new ArrayList<>();
-        columns = new ArrayList<>();
+        resultColumns = new ArrayList<>();
+        extraColumnsForWhere = new ArrayList<>();
         
-        // Load all Tables in the From Statement
+        // Load all tables in the From Statement
         loadTableNamesAndAliases();
         
         int i = 1; // Skit the "Select" statement
-        IsFirstColumnDistinct = IsTerminalNode(tree.getChild(i), SQLiteParser.K_DISTINCT);
-        if(IsFirstColumnDistinct)
+        isFirstColumnDistinct = IsTerminalNode(tree.getChild(i), SQLiteParser.K_DISTINCT);
+        if(isFirstColumnDistinct)
             i++;
         
         // Load all Result Columns in the Statement
@@ -67,18 +71,11 @@ public class SelectStatement extends Statement {
         
         // Load the Group by Clause
         loadGroupClause();
-        
-        while(tree.getChild(i) instanceof SQLiteParser.Result_columnContext)
-        {
-            
-        }
-        ParseTree mydummy = tree.getChild(i);
-        int dummy = 123;
     }
     
     public TableDescription getTableByNameOrAlias(String nameOrAlias)
     {
-        TableDescription table = this.TableAliases.get(nameOrAlias);
+        TableDescription table = this.tableAliases.get(nameOrAlias);
         if(table == null)
         {
             // TODO search the Metadata for that table ...
@@ -89,10 +86,10 @@ public class SelectStatement extends Statement {
     public ResultColumn getResultColumnByNameOrAlias(String nameOrAlias)
     {
         nameOrAlias = nameOrAlias.toLowerCase();
-        ResultColumn col = this.ColumnAliases.get(nameOrAlias);
+        ResultColumn col = this.columnAliases.get(nameOrAlias);
         if(col == null)
         {
-            for (ResultColumn curCol : columns) {
+            for (ResultColumn curCol : resultColumns) {
                 if(curCol.getName().equals(nameOrAlias))
                     return curCol;
             }
@@ -104,7 +101,7 @@ public class SelectStatement extends Statement {
     {
         TableDescription table = getTableByNameOrAlias(tableNameOrAlias);
         colName = colName.toLowerCase();
-        for (ResultColumn curCol : columns) {
+        for (ResultColumn curCol : resultColumns) {
             if(curCol.getName().equals(colName) && curCol.getTableName().equals(table.getName()))
                 return curCol;
         }
@@ -118,7 +115,7 @@ public class SelectStatement extends Statement {
         while(!IsTerminalNode(tree.getChild(i), SQLiteParser.K_FROM))
             i++;
         i++; // skip the FROM Node
-        // Find all Tables mentioned in the Statement
+        // Find all tables mentioned in the Statement
         while(tree.getChild(i) instanceof SQLiteParser.Table_or_subqueryContext)
         {
             // Process the found Table Statement
@@ -136,7 +133,7 @@ public class SelectStatement extends Statement {
                 // Add the Alias for the table
                 else if(table_node.getChild(j) instanceof SQLiteParser.Table_aliasContext)
                 {
-                    TableAliases.put(table_node.getChild(j).getText(), current);
+                    tableAliases.put(table_node.getChild(j).getText(), current);
                 }
             }
             i++; // Switch to the "," TerminalNode
@@ -150,7 +147,7 @@ public class SelectStatement extends Statement {
     {
         int i = 1; // skip the select statement
         // skip the Distinct statement as well if needed
-        if(IsFirstColumnDistinct)
+        if(isFirstColumnDistinct)
             i++;
         // Find all Columns mentioned in the Statement and the corresponding table to it
         while(tree.getChild(i) instanceof SQLiteParser.Result_columnContext)
@@ -195,7 +192,7 @@ public class SelectStatement extends Statement {
                         // Add the Alias for the column
                         else if(tree instanceof SQLiteParser.Column_aliasContext)
                         {
-                            ColumnAliases.put(tree.getText().toLowerCase(), workValue);
+                            columnAliases.put(tree.getText().toLowerCase(), workValue);
                         }
                         // Set the function name for the column
                         else if(tree instanceof SQLiteParser.Function_nameContext)
@@ -225,8 +222,8 @@ public class SelectStatement extends Statement {
                         return workValue;
                     }
                 });
-                walker.workValue = new ResultColumn(columns.size());
-                columns.add(walker.workValue);
+                walker.workValue = new ResultColumn(resultColumns.size());
+                resultColumns.add(walker.workValue);
                 walker.run();
                 // Look for the Tablename to be set for the found column
                 if(walker.workValue.getTableName() == null)
@@ -277,27 +274,27 @@ public class SelectStatement extends Statement {
                             parseCondition(expr.getChild(0)),
                             parseCondition(expr.getChild(2)));
                     case "=": return new CompareCondition(
-                            CompareCondition.CompareType.EQUAL,
+                            CompareType.EQUAL,
                             parseValueDescriptor(expr.getChild(0)),
                             parseValueDescriptor(expr.getChild(2)));
                     case "<>": return new CompareCondition(
-                            CompareCondition.CompareType.NOT_EQUAL,
+                            CompareType.NOT_EQUAL,
                             parseValueDescriptor(expr.getChild(0)),
                             parseValueDescriptor(expr.getChild(2)));
                     case "<": return new CompareCondition(
-                            CompareCondition.CompareType.LESSER,
+                            CompareType.LESSER,
                             parseValueDescriptor(expr.getChild(0)),
                             parseValueDescriptor(expr.getChild(2)));
                     case "<=": return new CompareCondition(
-                            CompareCondition.CompareType.LESSER_OR_EQUAL,
+                            CompareType.LESSER_OR_EQUAL,
                             parseValueDescriptor(expr.getChild(0)),
                             parseValueDescriptor(expr.getChild(2)));
                     case ">": return new CompareCondition(
-                            CompareCondition.CompareType.GREATER,
+                            CompareType.GREATER,
                             parseValueDescriptor(expr.getChild(0)),
                             parseValueDescriptor(expr.getChild(2)));
                     case ">=": return new CompareCondition(
-                            CompareCondition.CompareType.GREATER_OR_EQUAL,
+                            CompareType.GREATER_OR_EQUAL,
                             parseValueDescriptor(expr.getChild(0)),
                             parseValueDescriptor(expr.getChild(2)));
                     default:
@@ -310,18 +307,35 @@ public class SelectStatement extends Statement {
         }
     }
     
-    private ValueDescriptor parseValueDescriptor(ParseTree expr)
+    private ValueDescriptor parseValueDescriptor(ParseTree expr) throws ContextException
     {
-        // TODO Parse the Value Descriptor here
-        if(expr instanceof SQLiteParser.Literal_valueContext)
-        {
-            String value = expr.getText().trim();
-            if(value.startsWith("'"))
-                return new SingleValueDescriptor<String>(value.subSequence(1, value.length()-2).toString());
-            return new SingleValueDescriptor<Integer>(Integer.parseInt(value));
+        
+        switch (expr.getChildCount()) {
+            case 1:
+                if(expr instanceof SQLiteParser.Literal_valueContext)
+                {
+                    String value = expr.getText().trim();
+                    if(value.startsWith("'"))
+                        return new SingleValueDescriptor(value.subSequence(1, value.length()-2).toString());
+                    return new SingleValueDescriptor(Integer.parseInt(value));
+                }
+                else if(expr instanceof SQLiteParser.Column_nameContext)
+                {
+                    if(tables.size() != 1)
+                        throw new ContextException("The Column description could not be matched to an exact table");
+                    Column col = new Column(tables.get(0).getName(), expr.getText());
+                    if(getResultColumnByNameOrAlias(col.getName(), col.getTableName()) == null)
+                        extraColumnsForWhere.add(col);
+                    return new ColumnValueDescriptor(col.getName(), col.getTableName());
+                }
+            case 3:
+                Column col = new Column(getTableByNameOrAlias(expr.getChild(0).getText()).getName(), expr.getChild(2).getText());
+                if(getResultColumnByNameOrAlias(col.getName(), col.getTableName()) == null)
+                    extraColumnsForWhere.add(col);
+                return new ColumnValueDescriptor(col.getName(), col.getTableName());
+            default:
+                throw new ContextException("Unexpected expression in where clause");
         }
-        // TODO is that correct?
-        return new ColumnValueDescriptor<>(expr.getText());
     }
 
     private void loadGroupClause() throws ContextException {
@@ -350,6 +364,18 @@ public class SelectStatement extends Statement {
             groupByHavingCondition = parseCondition(tree.getChild(i+2));
         }
     }
+
+    public Condition getWhere() {
+        return where;
+    }
+
+    public ResultColumn getGroupByColumn() {
+        return groupByColumn;
+    }
+
+    public Condition getGroupByHavingCondition() {
+        return groupByHavingCondition;
+    }
     
     public class Column
     {
@@ -360,12 +386,12 @@ public class SelectStatement extends Statement {
         private Column() {
         }
 
-        public Column(String tableName, String name) {
+        private Column(String tableName, String name) {
             setTableName(tableName);
             setName(name);
         }
         
-        public Column(String name) {
+        private Column(String name) {
             setName(name);
         }
 

@@ -9,26 +9,26 @@ package Conditions;
  *
  * @author Tobias Habermann
  */
-public class SingleValueDescriptor<TYPE> extends ValueDescriptor<TYPE> {
-    private TYPE value;
+public class SingleValueDescriptor extends ValueDescriptor {
+    private Object value;
     
     public SingleValueDescriptor() {
     }
 
-    public SingleValueDescriptor(TYPE value) {
+    public SingleValueDescriptor(Object value) {
         this.value = value;
     }
     
     @Override
-    public TYPE getValueFromRow(Object row) {
+    public Object getValueFromRow(FedResultSet resultSet) {
         return value;
     }
 
-    public TYPE getValue() {
+    public Object getValue() {
         return value;
     }
 
-    public void setValue(TYPE value) {
+    public void setValue(Object value) {
         this.value = value;
     }
 }

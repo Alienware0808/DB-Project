@@ -5,16 +5,13 @@
  */
 package Conditions;
 
-import java.sql.ResultSet;
-
 /**
  *
  * @author Tobias Habermann
  */
-public abstract class Condition {
-    
-    public void Execute()
-    {
-        // TODO Implement the Execution here!!!
-    }
+public enum CompareType
+{
+    EQUAL, NOT_EQUAL, 
+    GREATER, LESSER, 
+    GREATER_OR_EQUAL, LESSER_OR_EQUAL
 }

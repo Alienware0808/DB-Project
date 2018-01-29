@@ -18,34 +18,11 @@ import parser.Walker;
  */
 public class LazyPreparedStatement extends Statement{
     
-    public final String sqlString;
     public final StatementType statementType;
     
     public LazyPreparedStatement(ParseTree tree) throws Exception {
         super(tree);
         statementType = getStatementType(tree);
-        String sql = "";
-        Walker walker = new Walker(tree, new Walker.IEvents() {
-            @Override
-            public Object nodeFound(ParseTree tree, Object workValue) throws Exception {
-                return workValue;
-            }
-
-            @Override
-            public Object finalNodeFound(ParseTree tree, Object workValue) throws Exception {
-                workValue += tree.getText() + " ";
-                return workValue;
-            }
-
-            @Override
-            public Object finalLiteraFound(String text, Object workValue) throws Exception {
-                //workValue += tree.getText() + " ";
-                return workValue;
-            }
-        });
-        walker.workValue = sql;
-        walker.run();
-        sqlString = walker.workValue.toString();
     }
     
     public static boolean isLazyStatement(ParseTree tree)

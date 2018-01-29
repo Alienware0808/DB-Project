@@ -9,7 +9,7 @@ package Conditions;
  *
  * @author Tobias Habermann
  */
-public abstract class ValueDescriptor<TYPE> {
+public abstract class ValueDescriptor {
     // TODO Change the type of row to the correct one...
-    public abstract TYPE getValueFromRow(Object row);
+    public abstract Object getValue(FedResultSet resultSet);
 }

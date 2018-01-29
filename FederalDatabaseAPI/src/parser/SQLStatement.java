@@ -18,6 +18,7 @@ import org.antlr.v4.runtime.tree.IterativeParseTreeWalker;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.tool.GrammarParserInterpreter;
+import parser.AnalysedStatements.CreateStatement;
 import parser.AnalysedStatements.LazyPreparedStatement;
 import parser.AnalysedStatements.SelectStatement;
 import parser.AnalysedStatements.Statement;
@@ -104,7 +105,10 @@ public class SQLStatement {
                     statements.add(new LazyPreparedStatement(sql_stmt));
 
                 //create table
-
+                else if(sql_stmt instanceof SQLiteParser.Create_table_stmtContext)
+                {
+                    statements.add(new CreateStatement(sql_stmt));
+                }
                 //insert into
                 
                 //update

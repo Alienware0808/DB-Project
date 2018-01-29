@@ -25,13 +25,6 @@ public class CompareCondition<LEFT, RIGHT> extends Condition {
     public CompareCondition(CompareType type) {
         this.type = type;
     }
-    
-    public enum CompareType
-    {
-        EQUAL, NOT_EQUAL, 
-        GREATER, LESSER, 
-        GREATER_OR_EQUAL, LESSER_OR_EQUAL
-    }
 
     public ValueDescriptor getLeftValues() {
         return leftValues;

@@ -9,20 +9,27 @@ package Conditions;
  *
  * @author Tobias Habermann
  */
-public class ColumnValueDescriptor<TYPE> extends ValueDescriptor<TYPE> {
+public class ColumnValueDescriptor extends ValueDescriptor {
 
     // TODO Create a Descriptor for a Column in a ResultSet...
-    private Object somethingToDescribeTheColumnToChooseIDK;
+    private String columnName;
+    private String tableName;
     
-    
-    public ColumnValueDescriptor(String columnNameOrAliasDontKnow) {
+    public ColumnValueDescriptor(String colmunName, String tableName) {
         // TODO what ever has to be done here ...
     }
 
-    @Override
-    public TYPE getValueFromRow(Object row) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String getColumnName() {
+        return columnName;
     }
-    
-    
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    @Override
+    public Object getValue(FedResultSet resultSet) {
+        // TODO Get Value via ColumnName and TableName of a field
+        
+    }
 }
