@@ -10,21 +10,25 @@
  */
 
 import MetaData.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class TestMETA {
     public static void main(String[] args){
         System.out.println("Starting MetaData test...");
+        String metaDataPath = "C:/users/Smile/Desktop/metaDaten.json";
+        MetaDataManager MM = new MetaDataManager(metaDataPath);
+        String[][] fKeys = {{"age","ageR", "12"},{"age", "ageRR", "22"}};
+        String[] checks = {"greater than 1"};
+        String[] attrs = {"age", "22", "44"};
+        MM.newMetaData("Person", new MetaDataEntry("1", "h", attrs, fKeys, checks));
+        MM.newMetaData("Animal", new MetaDataEntry("2", "h", attrs, fKeys, checks));
         
-        MetaDataManager MM = new MetaDataManager("C:/users/Smile/Desktop/metaDaten.json");
+        System.out.println(MM.getMetaData("Animal").toString());
+        MM.deleteMetaData("Animal");
+        
         try {
-            String[][] fKeys = {{"age","ageR", "12"},{"age", "ageRR", "22"}};
-            String[] checks = {"greater than 1"};
-            MetaDataEntry mdE = new MetaDataEntry("1", "h", "age", "22", "44", fKey, checks);
-            MM.saveMetaData("C:/users/Smile/Desktop/metaDaten.json");
+            MM.saveMetaData();
         } catch (Exception ex) {
-            System.out.println("Error saving MetaManager! "+ex.toString());
+            System.out.println("Error saving MetaManager! "+ex.getMessage());
         }
         
         System.out.println("Finished MetaData test...");

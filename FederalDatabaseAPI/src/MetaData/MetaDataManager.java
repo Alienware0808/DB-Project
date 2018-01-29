@@ -9,9 +9,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 /**
  *
@@ -19,9 +16,12 @@ import java.nio.file.Paths;
  */
 public class MetaDataManager {
     private MetaDataSet metaDataSet;
+    private String metaDataFilePath; 
     
     public MetaDataManager(String metaDataFilePath){
+        this.metaDataFilePath = metaDataFilePath;
         String metaFileString;
+        
         try{
             metaFileString = getMetaDataStringFromFile(metaDataFilePath);
             metaDataSet = new GsonBuilder().create().fromJson(metaFileString, MetaDataSet.class);
@@ -32,7 +32,7 @@ public class MetaDataManager {
         }
 
         
-        System.out.println("MetaData read: "+metaDataSet.toString());
+        System.out.println("MetaData read: "+metaDataSet);
     }
     
     // Adds a new metadataentry to the gson hashmap
@@ -45,15 +45,15 @@ public class MetaDataManager {
     }
     
     // returns the metaDataEntry which describes the database
+    // or null if there is no entry for this tablename
     // distribution according to its tablename
-    public MetaDataEntry getDistribution(String tableName){
-        MetaDataEntry mdE = metaDataSet.getEntry(tableName);
-        return mdE;
+    public MetaDataEntry getMetaData(String tableName){
+        return metaDataSet.getEntry(tableName);
     }
     
     
     // to save the JavaObject of the metaData onto the json file
-    public void saveMetaData(String metaDataFilePath) throws Exception {
+    public void saveMetaData() throws Exception {
         String metaDataString = new GsonBuilder().create().toJson(metaDataSet);
         System.out.println(metaDataString);
         FileWriter fileWriter = new FileWriter(metaDataFilePath);

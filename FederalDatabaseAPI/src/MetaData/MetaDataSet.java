@@ -1,6 +1,6 @@
 /*
- * Diese Klasse beinhaltet lediglich eine Hashmap
-    die alle Metadaten abspeichert beschreibt.
+ This class saves all metaDataEntries in a hashmap
+with the tablename as its key
  */
 package MetaData;
 
@@ -18,6 +18,7 @@ public class MetaDataSet {
     }
 
     public void addEntry(String tableName, MetaDataEntry mdE){
+        System.out.println("New Entry: "+tableName);
         DataSet.put(tableName, mdE);
     }
     
@@ -34,9 +35,13 @@ public class MetaDataSet {
     }
     
     public MetaDataEntry getEntry(String tableName){
+        System.out.println("Getting MDE named: "+ tableName);
+        System.out.println(DataSet.toString());
+        System.out.println(DataSet.keySet());
+        System.out.println(DataSet.get(tableName));
         return DataSet.get(tableName);
     }
-
+    
     @Override
     public String toString(){
         return DataSet.toString();
