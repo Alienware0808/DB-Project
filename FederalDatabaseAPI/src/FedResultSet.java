@@ -12,16 +12,28 @@ import java.util.List;
 public class FedResultSet implements FedResultSetInterface {
 
     private final List<ResultSetColumn> resultTable;
+    private boolean isDisposed;
+    private int index;
 
-    public FedResultSet() {
+    private FedResultSet() {
         this.resultTable = new ArrayList();
+        isDisposed = false;
+        index = 0;
     }
 
+    /**
+     * Instanciating a FedResultSet from a java.sql.ResultSet
+     * @param resultSet
+     * @throws SQLException 
+     */
     public FedResultSet(ResultSet resultSet) throws SQLException {
-
+        isDisposed = false;
         this.resultTable = new ArrayList();
+        index = 0;
         ResultSetMetaData rsMetaData = resultSet.getMetaData();
         int columnCount = rsMetaData.getColumnCount();
+        if(columnCount < 1)
+            throw new SQLException("A ResultSet must have atleast one column");
         for (int i = 1; i <= columnCount;i++){
             resultSet.first();
             String classname = rsMetaData.getColumnClassName(i);
@@ -64,85 +76,194 @@ public class FedResultSet implements FedResultSetInterface {
         
     }
 
-    // TODO Zusammenführen von ResultSets
-    // Zusammenführen bezieht sich auf fedresultset --> Methode heißt Union und die nimmt ein fedreulstsetan --> da werden die 
-    // Beim zusammenführen soll ein neues resultset erstellt werden --> wie a + b = c 
     
-    //Funktion für resultset was heißt "Merge" (wie ein mergen git) und dabei wir dein resultset angenommen und pflegt es in das momentate resultset ein
-    //Beim Mergen --> for each schleife und itereirt über die datensätze die wir bekommen (liste mit data drinne) und schauen ob es bei jedem 
-    //wenn ja beide listen hinzufügen // wenn nein füge ich die columen in mein resultset ein //schauen wie referenzenzierung in java funktioniert --> wen wir eine column übernehmen die wir überkommen haben müssen wir die referenz reinschreiben --> 
-    //dispose durchführen --> resultset soll nicht mehr gültig sein (sperren)
-    //Expection schreiben --> dispose Exception --> String Message "Du darfst das nicht machen weil.." - von exception erben
-    //Jede Table müss gleich viele Einträge haben deswegen private/public --> vor merge schauen ob das valid ist oder nicht
-    //tipp: private funktion nimmt ein eintrag entgegen ResultSetColumn und schauen ob es diesen gibt oder nicht. check if columnexits
+    /**
+     * Checks if a Merge with another ResultSet would result in valid ResultSet
+     * @param resultSet
+     * @return 
+     */
+    private boolean isMergeValid(FedResultSet resultSet)
+    {
+        if(getIndexOfColumn(resultSet.resultTable.get(0)) == -1)
+        {
+            // Check if the both resultSets have the same amound of Rows
+            if(resultSet.resultTable.get(0).data.size() != 
+                    resultTable.get(0).data.size())
+                return false;
+            else
+            {
+                // Check if the result sets are distinct
+                for(ResultSetColumn current : resultSet.resultTable)
+                    if(getIndexOfColumn(current) != -1)
+                        return false;
+            }
+        }
+        else
+        {
+            // check if the resultsets have the same columns everywhere!!!
+            for(ResultSetColumn current : resultSet.resultTable)
+                    if(getIndexOfColumn(current) == -1)
+                        return false;
+        }
+        return true;
+    }
+    /**
+     * Merging different ResultSets
+     * @param resultSet
+     * @throws FedException 
+     */
+    public void mergeWith(FedResultSet resultSet)
+            throws FedException
+    {
+        if(!isMergeValid(resultSet))
+            throw new FedException(new Exception("The merge would result in an inconsistent ResultSet"));
+        if(getIndexOfColumn(resultSet.resultTable.get(0)) == -1)
+        {
+            // Vertical Merge
+            resultSet.resultTable.forEach((current) -> {
+                resultTable.add(current);
+            });
+        }
+        else
+        {
+            // Horizontal Merge
+            resultSet.resultTable.forEach((current) -> {
+                ResultSetColumn ourColumn = resultTable.get(getIndexOfColumn(current));
+                ourColumn.data.addAll(current.data);
+            });
+        }
+        resultSet.close();
+    }
+    
+    /**
+     * Instanciate FedResultSet as a Crossproduct from the giving FedResultSet
+     * @param resultSet
+     * @return
+     * @throws FedException 
+     */
+    public FedResultSet crossProduct(FedResultSet resultSet) throws FedException
+    {
+        FedResultSet result = new FedResultSet();
+        resultTable.forEach((current) -> {
+            result.resultTable.add(current.clone());
+        });
+        resultSet.resultTable.forEach((current) -> {
+            result.resultTable.add(current.clone());
+        });
+        // TODO MAKE THAT SHIT PERFOMANZZZZZZZZZEEEE BIATCH!!!
+        // TODO TEST THAT SHITTTTT
+        int length = resultTable.get(0).data.size();
+        int _length = resultSet.resultTable.get(0).data.size();
+        for(int rowIndex = 0; rowIndex < length; rowIndex++)
+        {
+            for(int _rowIndex = 0; _rowIndex < _length; _rowIndex++)
+            {
+                for(int columnIndex = 0; columnIndex < getColumnCount(); columnIndex++)
+                    result.resultTable.get(columnIndex).data.add(resultTable.get(columnIndex).data.get(rowIndex));
+                for(int _columnIndex = 0; _columnIndex < getColumnCount(); _columnIndex++)
+                    result.resultTable.get(_columnIndex).data.add(resultSet.resultTable.get(_columnIndex).data.get(_rowIndex));
+            }
+        }
+        return result;
+    }
+    
+    /**
+     * Returns the index of the given Column in the resultTable
+     * @param column
+     * @return 
+     */
+    private int getIndexOfColumn(ResultSetColumn column)
+    {
+        for(int i = 0; i < resultTable.size(); i++)
+        {
+            if(resultTable.get(i).name.equals(column.name) && 
+                    resultTable.get(i).tableName.equals(column.tableName))
+                return i;
+        }
+        return -1;
+    }
     
     
-    // TODO Interface - Funktionen (letzter Schritt)
     @Override
     public boolean next() throws FedException {
+        if(isDisposed)
+            throw new FedException(new Exception("Object disposed"));
+        if(resultTable.get(0).data.size() >= index + 1)
+            return false;
+        index++;
         return true;
     }
 
     /**
-     * dfhdfhdfhdfh
      * @param columnIndex
      * @return
      * @throws FedException 
      */
     @Override
     public String getString(int columnIndex) throws FedException {
-        return "Test";
-        
+        if(isDisposed)
+            throw new FedException(new Exception("Object disposed"));
+        return resultTable.get(columnIndex).data.get(index).toString();
     }
 
-    //Wird irgendwie auch nie verwendet..
+    
     @Override
     public int getInt(int columnIndex) throws FedException {
-        //Hier fehlt noch der Inhalt
-        return 0;
+        if(isDisposed)
+            throw new FedException(new Exception("Object disposed"));
+        return ((Integer)resultTable.get(columnIndex).data.get(index));
     }
 
     @Override
     public int getColumnCount() throws FedException {
-        return 20;
+        if(isDisposed)
+            throw new FedException(new Exception("Object disposed"));
+        return resultTable.size();
     }
 
     @Override
     public String getColumnName(int index) throws FedException {
-        return "Überschrift_1";
+        if(isDisposed)
+            throw new FedException(new Exception("Object disposed"));
+        return resultTable.get(index).getName();
     }
 
-    //Wird nie verwendet..
+    
     @Override
     public int getColumnType(int index) throws FedException {
-        //Hier fehlt noch der Inhalt
-        //rs.getColumnType(index);
-        return 3;
+        if(isDisposed)
+            throw new FedException(new Exception("Object disposed"));
+        // TODO Schauen wie es das sqlResultSet macht von Java und dann hier drauf übertragen
+        return java.sql.Types.INTEGER;
     }
-
-    //wird auch nicht aufgerufen, sollte aber geschlossen werden, wenn das Statement geschlossen wird.
+    
     @Override
     public void close() throws FedException {
+        isDisposed = true;
 
     }
 
     
-    // erstmal finished
-    public class ResultSetColumn<T> {
+    
+    /**
+     * Creating a generic List T
+     * @param <T> 
+     */
+    private class ResultSetColumn<T> {
 
         private String name;
         private String tableName;
         private final List<T> data;
 
-        public ResultSetColumn() {
+        private ResultSetColumn() {
             this.data = new ArrayList<>();
         }
 
-        public ResultSetColumn(List<T> data) {
+        private ResultSetColumn(List<T> data) {
             this.data = data;
         }
 
-        public ResultSetColumn(String name, String tableName, List<T> data) {
+        private ResultSetColumn(String name, String tableName, List<T> data) {
             this.name = name;
             this.tableName = tableName;
             this.data = data;
@@ -158,6 +279,15 @@ public class FedResultSet implements FedResultSetInterface {
 
         public String getTableName() {
             return tableName;
+        }
+        
+        @Override
+        protected ResultSetColumn clone()
+        {
+            ResultSetColumn<T> clone = new ResultSetColumn<>();
+            clone.name = name;
+            clone.tableName = tableName;
+            return clone;
         }
     }
 }
