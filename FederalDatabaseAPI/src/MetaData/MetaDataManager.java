@@ -17,6 +17,7 @@ import java.io.PrintWriter;
 public class MetaDataManager {
     private MetaDataSet metaDataSet;
     private String metaDataFilePath; 
+    public static final MetaDataManager MetaManager = new MetaDataManager("myjson.json");
     
     public MetaDataManager(String metaDataFilePath){
         this.metaDataFilePath = metaDataFilePath;

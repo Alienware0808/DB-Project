@@ -13,6 +13,7 @@ import Conditions.Condition;
 import Conditions.JunctionCondition;
 import Conditions.SingleValueDescriptor;
 import Conditions.ValueDescriptor;
+import MetaData.MetaDataEntry;
 import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.util.ArrayList;
 import java.util.List;
@@ -117,7 +118,10 @@ public class CreateStatement extends Statement {
                     j++;
                     j++; // skip ")"
                     j++; // skip "references"
-                    foreignkey.referenceTo = "Unknown"; // TODO getMetadataForColumn(contree.getChild(j).getText());
+                    foreignkey.referenceToTable = MetaData.MetaDataManager.MetaManager.getMetaData(contree.getChild(j).getText());
+                    j++; // skip tablename
+                    j++; // skip "("
+                    foreignkey.referenceToColumn = contree.getChild(j).getText();
                     this.tableConstrains.add(foreignkey);
                 }
                 if(IsTerminalNode(contree.getChild(j), SQLiteParser.K_CHECK))
@@ -369,7 +373,8 @@ public class CreateStatement extends Statement {
     public class TableConstraintForeignKey extends TableConstraint
     {
         private ColumnDefinition from;
-        private Object referenceTo;
+        private MetaDataEntry referenceToTable;
+        private String referenceToColumn;
         
         public TableConstraintForeignKey(ParseTree tree) {
             super(tree);
@@ -380,7 +385,7 @@ public class CreateStatement extends Statement {
         }
 
         public Object getReferenceTo() {
-            return referenceTo;
+            return referenceToTable;
         }
     }
     

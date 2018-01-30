@@ -25,6 +25,7 @@ public class MetaDataEntry {
     public String Attr1;
     public String Attr2;
     public String Attr3;
+    public String TableName;
     
     // Describes the foreign keys
     // Second String Array:

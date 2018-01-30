@@ -3,3 +3,7 @@ http://www.antlr.org/download/antlr-4.7-complete.jar
 
 Die ojdbc8.jar datei ganz oben Herunterladen, damit der Driver frunktioniert.
 http://www.oracle.com/technetwork/database/features/jdbc/jdbc-ucp-122-3110062.html
+
+Die GSON Jar herunterladen
+https://repo1.maven.org/maven2/com/google/code/gson/gson/2.8.0/gson-2.8.0.jar
+

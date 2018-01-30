@@ -13,6 +13,7 @@ import Conditions.Condition;
 import Conditions.JunctionCondition;
 import Conditions.SingleValueDescriptor;
 import Conditions.ValueDescriptor;
+import MetaData.MetaDataEntry;
 import org.antlr.v4.runtime.tree.ParseTree;
 import parser.ContextException;
 import parser.SQLiteParser;
@@ -22,15 +23,15 @@ import parser.SQLiteParser;
  * @author Admin
  */
 public class UpdateStatement extends Statement {
-    public final Object table;
-    public final Object column;
-    public final Object valueString;
+    public final MetaDataEntry table;
+    public final String column;
+    public final String valueString;
     public final Condition where;
 
     public UpdateStatement(ParseTree tree) throws ContextException {
         super(tree);
-        table = tree.getChild(1); // TODO read table from metadata via name
-        column = tree.getChild(3); // TODO read column from metadata via colname and tablename
+        table = MetaData.MetaDataManager.MetaManager.getMetaData(tree.getChild(1).getText()); // TODO read table from metadata via name
+        column = tree.getChild(3).getText(); // TODO read column from metadata via colname and tablename
         valueString = tree.getChild(5).getText();
         if(IsTerminalNode(tree.getChild(6), SQLiteParser.K_WHERE))
         {
@@ -102,10 +103,10 @@ public class UpdateStatement extends Statement {
                 }
                 else if(expr instanceof SQLiteParser.Column_nameContext)
                 {
-                    Conditions.ColumnValueDescriptor coldef = null; // TODO get column //getColumnDefinitionByName(expr.getText());
-                    if(coldef == null)
-                        throw new ContextException("Column Definition not found");
-                    return new ColumnValueDescriptor(this.table, ???); // TODO get table name from it
+//                    Conditions.ColumnValueDescriptor coldef = null; // TODO get column //getColumnDefinitionByName(expr.getText());
+//                    if(coldef == null)
+//                        throw new ContextException("Column Definition not found");
+                    return new ColumnValueDescriptor(this.table.TableName, expr.getText()); 
                 }
             default:
                 throw new ContextException("Unexpected expression in where clause");

@@ -12,7 +12,7 @@ import Conditions.Condition;
 import Conditions.JunctionCondition;
 import Conditions.SingleValueDescriptor;
 import Conditions.ValueDescriptor;
-import MetaDummy.TableDescription;
+import MetaData.MetaDataEntry;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,8 +32,8 @@ import parser.Walker;
 public class SelectStatement extends Statement {
     public final boolean isFirstColumnDistinct;
     public final HashMap<String, ResultColumn> columnAliases;    
-    public final HashMap<String, TableDescription> tableAliases;
-    public final List<TableDescription> tables;
+    public final HashMap<String, MetaDataEntry> tableAliases;
+    public final List<MetaDataEntry> tables;
     public final List<ResultColumn> resultColumns;    
     public final List<Column> extraColumnsForWhere;
     private Conditions.Condition where;
@@ -73,12 +73,15 @@ public class SelectStatement extends Statement {
         loadGroupClause();
     }
     
-    public TableDescription getTableByNameOrAlias(String nameOrAlias)
+    public MetaDataEntry getTableByNameOrAlias(String nameOrAlias) throws ContextException
     {
-        TableDescription table = this.tableAliases.get(nameOrAlias);
+        MetaDataEntry table = this.tableAliases.get(nameOrAlias);
         if(table == null)
         {
             // TODO search the Metadata for that table ...
+            table = MetaData.MetaDataManager.MetaManager.getMetaData(nameOrAlias);
+            if(table == null)
+                throw new ContextException("Table not found");
         }
         return table;
     }
@@ -97,12 +100,12 @@ public class SelectStatement extends Statement {
         return null;
     }
     
-    public ResultColumn getResultColumnByNameOrAlias(String colName, String tableNameOrAlias)
+    public ResultColumn getResultColumnByNameOrAlias(String colName, String tableNameOrAlias) throws ContextException
     {
-        TableDescription table = getTableByNameOrAlias(tableNameOrAlias);
+        MetaDataEntry table = getTableByNameOrAlias(tableNameOrAlias);
         colName = colName.toLowerCase();
         for (ResultColumn curCol : resultColumns) {
-            if(curCol.getName().equals(colName) && curCol.getTableName().equals(table.getName()))
+            if(curCol.getName().equals(colName) && curCol.getTableName().equals(table.TableName))
                 return curCol;
         }
         return null;
@@ -120,14 +123,14 @@ public class SelectStatement extends Statement {
         {
             // Process the found Table Statement
             ParseTree table_node = tree.getChild(i);
-            TableDescription current = null;
+            MetaDataEntry current = null;
             for (int j = 0; j < table_node.getChildCount(); j++) 
             {
                 // Add the Table
                 if(table_node.getChild(j) instanceof SQLiteParser.Table_nameContext)
                 {
                     // TODO Exception Handling??? Maybe???
-                    current = new TableDescription(table_node.getChild(j).getText());
+                    current =  MetaData.MetaDataManager.MetaManager.getMetaData(table_node.getChild(j).getText());
                     tables.add(current);
                 }
                 // Add the Alias for the table
@@ -203,7 +206,7 @@ public class SelectStatement extends Statement {
                         else if(tree instanceof SQLiteParser.Table_nameContext)
                         {
                             String table_name = tree.getChild(0).getText();
-                            TableDescription table = getTableByNameOrAlias(table_name);
+                            MetaDataEntry table = getTableByNameOrAlias(table_name);
                             if(table == null)
                                 throw new ContextException("Table " + table_name + " not found");
                             workValue.setTableName(table_name);
@@ -230,7 +233,7 @@ public class SelectStatement extends Statement {
                 {
                     if(tables.size() == 1)
                     {
-                        walker.workValue.setTableName(tables.get(0).getName());
+                        walker.workValue.setTableName(tables.get(0).TableName);
                         walker.workValue.setTables(null); // TODO Put all tables here and stuff you know...
                     }
                     else
@@ -323,13 +326,13 @@ public class SelectStatement extends Statement {
                 {
                     if(tables.size() != 1)
                         throw new ContextException("The Column description could not be matched to an exact table");
-                    Column col = new Column(tables.get(0).getName(), expr.getText());
+                    Column col = new Column(tables.get(0).TableName, expr.getText());
                     if(getResultColumnByNameOrAlias(col.getName(), col.getTableName()) == null)
                         extraColumnsForWhere.add(col);
                     return new ColumnValueDescriptor(col.getName(), col.getTableName());
                 }
             case 3:
-                Column col = new Column(getTableByNameOrAlias(expr.getChild(0).getText()).getName(), expr.getChild(2).getText());
+                Column col = new Column(getTableByNameOrAlias(expr.getChild(0).getText()).TableName, expr.getChild(2).getText());
                 if(getResultColumnByNameOrAlias(col.getName(), col.getTableName()) == null)
                     extraColumnsForWhere.add(col);
                 return new ColumnValueDescriptor(col.getName(), col.getTableName());
@@ -380,7 +383,7 @@ public class SelectStatement extends Statement {
     public class Column
     {
         private String tableName;
-        private TableDescription[] tables;
+        private MetaDataEntry[] tables;
         private String name;
 
         private Column() {
@@ -403,7 +406,7 @@ public class SelectStatement extends Statement {
             return tableName;
         }
 
-        public TableDescription[] getTables() {
+        public MetaDataEntry[] getTables() {
             return tables;
         }
 
@@ -415,7 +418,7 @@ public class SelectStatement extends Statement {
             this.tableName = tableName.toLowerCase();
         }
 
-        protected final void setTables(TableDescription[] tables) {
+        protected final void setTables(MetaDataEntry[] tables) {
             this.tables = tables;
         }
     }

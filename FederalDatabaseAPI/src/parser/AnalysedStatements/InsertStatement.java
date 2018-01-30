@@ -5,6 +5,7 @@
  */
 package parser.AnalysedStatements;
 
+import MetaData.MetaDataEntry;
 import java.util.ArrayList;
 import java.util.List;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -15,13 +16,13 @@ import parser.SQLiteParser;
  * @author Admin
  */
 public class InsertStatement extends Statement{
-    public final Object tableDescription;
+    public final MetaDataEntry tableDescription;
     public List<Object> values;
 
     public InsertStatement(ParseTree tree) {
         super(tree);
         values = new ArrayList<>();
-        tableDescription = tree.getChild(2); // TODO get the Table Information here via name
+        tableDescription = MetaData.MetaDataManager.MetaManager.getMetaData(tree.getChild(2).getText());
         for(int i = 4; i < tree.getChildCount(); i++)
         {
             if(tree.getChild(i) instanceof SQLiteParser.Literal_valueContext)
