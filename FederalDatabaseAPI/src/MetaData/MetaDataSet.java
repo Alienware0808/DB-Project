@@ -18,12 +18,10 @@ public class MetaDataSet {
     }
 
     public void addEntry(String tableName, MetaDataEntry mdE){
-        System.out.println("New Entry: "+tableName);
         DataSet.put(tableName, mdE);
     }
     
     public void deleteEntry(String tableName){
-        System.out.println(DataSet.toString());
         MetaDataEntry mdE = DataSet.remove(tableName);
         if(mdE != null){
             System.out.println("TABLE "+tableName+" ENTRY REMOVED");
@@ -35,10 +33,6 @@ public class MetaDataSet {
     }
     
     public MetaDataEntry getEntry(String tableName){
-        System.out.println("Getting MDE named: "+ tableName);
-        System.out.println(DataSet.toString());
-        System.out.println(DataSet.keySet());
-        System.out.println(DataSet.get(tableName));
         return DataSet.get(tableName);
     }
     

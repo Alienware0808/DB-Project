@@ -58,6 +58,7 @@ public class MetaDataManager {
         System.out.println(metaDataString);
         FileWriter fileWriter = new FileWriter(metaDataFilePath);
         PrintWriter printWriter = new PrintWriter(fileWriter);
+        printWriter.write(metaDataString);
         printWriter.close();
         System.out.println("MetaData successfully saved to "+metaDataFilePath+"!");
     }
