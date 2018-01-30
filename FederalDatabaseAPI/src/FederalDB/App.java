@@ -1,3 +1,5 @@
+package FederalDB;
+
 //package hsfulda.de;
 
 public class App {

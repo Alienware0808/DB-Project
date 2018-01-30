@@ -1,3 +1,7 @@
+package ResultSetManagment;
+
+import FederalDB.FedException;
+import FederalDB.FedResultSetInterface;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -110,10 +114,10 @@ public class FedResultSet implements FedResultSetInterface {
     /**
      * Merging different ResultSets
      * @param resultSet
-     * @throws FedException 
+     * @throws FederalDB.FedException
      */
     public void mergeWith(FedResultSet resultSet)
-            throws FedException
+            throws Exception
     {
         if(!isMergeValid(resultSet))
             throw new FedException(new Exception("The merge would result in an inconsistent ResultSet"));
@@ -141,7 +145,7 @@ public class FedResultSet implements FedResultSetInterface {
      * @return
      * @throws FedException 
      */
-    public FedResultSet crossProduct(FedResultSet resultSet) throws FedException
+    public FedResultSet crossProduct(FedResultSet resultSet) throws Exception
     {
         FedResultSet result = new FedResultSet();
         resultTable.forEach((current) -> {
@@ -204,6 +208,18 @@ public class FedResultSet implements FedResultSetInterface {
         if(isDisposed)
             throw new FedException(new Exception("Object disposed"));
         return resultTable.get(columnIndex).data.get(index).toString();
+    }
+    
+    public Object getObjectByNames(String tableName, String columnName) throws FedException {
+        if(isDisposed)
+            throw new FedException(new Exception("Object disposed"));
+        for(ResultSetColumn col: this.resultTable)
+        {
+            if(col.name.equals(columnName) && col.tableName.equals(tableName))
+                return col;
+        }
+        return null;
+        //return resultTable.get(columnIndex).data.get(index).toString();
     }
 
     

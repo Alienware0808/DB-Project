@@ -1,3 +1,5 @@
+package FederalDB;
+
 
 public interface FedResultSetInterface {
     boolean next() throws FedException;

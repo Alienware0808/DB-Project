@@ -1,3 +1,5 @@
+package FederalDB;
+
 
 public interface FedConnectionInterface {
     void setAutoCommit(boolean autoCommit) throws FedException;
@@ -10,5 +12,5 @@ public interface FedConnectionInterface {
 
     void close() throws FedException;
 
-//    FedStatement getStatement();
+    FedStatement getStatement();
 }

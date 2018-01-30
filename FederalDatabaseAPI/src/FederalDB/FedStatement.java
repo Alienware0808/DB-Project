@@ -1,3 +1,8 @@
+package FederalDB;
+
+
+import ResultSetManagment.FedResultSet;
+
 
 public class FedStatement implements FedStatementInterface {
 

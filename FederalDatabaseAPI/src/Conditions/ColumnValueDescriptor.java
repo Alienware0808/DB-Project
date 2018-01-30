@@ -5,6 +5,11 @@
  */
 package Conditions;
 
+import FederalDB.FedException;
+import ResultSetManagment.FedResultSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Tobias Habermann
@@ -30,6 +35,13 @@ public class ColumnValueDescriptor extends ValueDescriptor {
     @Override
     public Object getValue(FedResultSet resultSet) {
         // TODO Get Value via ColumnName and TableName of a field
-        
+        Object res;
+        try {
+            res = resultSet.getObjectByNames(tableName, columnName);
+            return res;
+        } catch (FedException ex) {
+            Logger.getLogger(ColumnValueDescriptor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 }

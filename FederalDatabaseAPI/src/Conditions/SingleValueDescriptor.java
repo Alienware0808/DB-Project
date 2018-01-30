@@ -5,6 +5,8 @@
  */
 package Conditions;
 
+import ResultSetManagment.FedResultSet;
+
 /**
  *
  * @author Tobias Habermann
@@ -18,11 +20,6 @@ public class SingleValueDescriptor extends ValueDescriptor {
     public SingleValueDescriptor(Object value) {
         this.value = value;
     }
-    
-    @Override
-    public Object getValueFromRow(FedResultSet resultSet) {
-        return value;
-    }
 
     public Object getValue() {
         return value;
@@ -30,5 +27,10 @@ public class SingleValueDescriptor extends ValueDescriptor {
 
     public void setValue(Object value) {
         this.value = value;
+    }
+
+    @Override
+    public Object getValue(FedResultSet resultSet) {
+        return value;
     }
 }

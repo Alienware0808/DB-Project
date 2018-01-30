@@ -5,6 +5,8 @@
  */
 package Conditions;
 
+import ResultSetManagment.FedResultSet;
+
 /**
  *
  * @author Tobias Habermann

@@ -5,6 +5,7 @@
  */
 package Conditions;
 
+import ResultSetManagment.FedResultSet;
 import parser.AnalysedStatements.CreateStatement.ColumnDefinition;
 
 /**
@@ -26,6 +27,6 @@ public class ColumnDefinitionDescriptor extends ValueDescriptor {
     @Override
     public Object getValue(FedResultSet resultSet) {
         // TODO Get Value via ColumnName and TableName of a field
-        
+        return null;
     }
 }
