@@ -115,7 +115,7 @@ public class FedTestEnvironment {
                                     System.out.flush();
                                 }
                             } else {
-                                // UPDATE, INSERT, DELETE
+                                // UPDATE, INSERT, DELETE, DROP
                                 try {
                                     final FedStatement fedStatement = fedConnection.getStatement();
                                     final int count = fedStatement.executeUpdate(statement);

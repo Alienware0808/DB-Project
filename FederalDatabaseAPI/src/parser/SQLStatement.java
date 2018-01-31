@@ -39,7 +39,7 @@ public class SQLStatement {
      * @throws ParseException 
      * If any Errors occour this Exception will be thrown. Including an Error-List with all Problems included
      */
-    public static SQLStatement[] parseString(String sql)
+    public static Statement[] parseString(String sql)
             throws ParseException, ContextException, Exception
     {
         CharStream stream = new ANTLRInputStream(sql);
@@ -115,6 +115,8 @@ public class SQLStatement {
 
            }
         }
-        return null;
+        Statement[] stockArr = new Statement[statements.size()];
+        stockArr = statements.toArray(stockArr);
+        return stockArr;
     }
 }

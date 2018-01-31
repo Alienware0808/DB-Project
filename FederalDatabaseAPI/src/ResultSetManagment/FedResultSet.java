@@ -154,8 +154,8 @@ public class FedResultSet implements FedResultSetInterface {
         resultSet.resultTable.forEach((current) -> {
             result.resultTable.add(current.clone());
         });
-        // TODO MAKE THAT SHIT PERFOMANZZZZZZZZZEEEE BIATCH!!!
-        // TODO TEST THAT SHITTTTT
+        // TODO MAKE THAT PERFOMANZZZZZZZZZEEEE !!!
+        // TODO TEST THAT 
         int length = resultTable.get(0).data.size();
         int _length = resultSet.resultTable.get(0).data.size();
         for(int rowIndex = 0; rowIndex < length; rowIndex++)
