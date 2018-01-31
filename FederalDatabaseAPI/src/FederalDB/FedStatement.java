@@ -1,22 +1,39 @@
 package FederalDB;
 
-
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import ResultSetManagment.FedResultSet;
 
 
 public class FedStatement implements FedStatementInterface {
-
+    private Connection con[] = new Connection[3];
+    
+    public FedStatement(Connection conn[])
+        {             
+             this.con=conn;
+        }
+    
+    
         @Override
 	public int executeUpdate(String sql) throws FedException {
             
-            if(true){
-                //Anweisung die Werte zurück gibt
-                return 1;
+           if(sql.startsWith("drop"))
+            {
+                for(int i=0; i<3;i++)
+                {
+                    try {
+                        PreparedStatement statement= con[i].prepareStatement(sql);
+                        statement.executeUpdate();
+                    } catch (Exception ex) {
+                        Logger.getLogger(FedStatement.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
             }
-            else{
-                //Anweisung die KEINE Werte zurück gibt
-                return 0;
-            }
+           
+           return 1;
 	}
 
         @Override
