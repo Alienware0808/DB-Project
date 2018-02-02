@@ -12,11 +12,11 @@ import java.util.ArrayList;
  *
  * @author Franz Weidmann
  */
-public class Checks extends Constraints {
+public class ForeignKey extends Constraint {
     
     
     @Override
-    public boolean check(FedConnection fc, ArrayList<ColDef> cList){
+    public boolean check(FedConnection fc, ArrayList<ColumnValue> cList){
         return true;
     }
 

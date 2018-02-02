@@ -221,6 +221,16 @@ public class FedResultSet implements FedResultSetInterface {
         return null;
         //return resultTable.get(columnIndex).data.get(index).toString();
     }
+    
+    public int getIndexOfColumn(String name)
+    {
+        for(int i = 0; i < this.resultTable.size(); i++)
+        {
+            if(resultTable.get(i).name.equals(name))
+                return i;
+        }
+        return -1;
+    }
 
     
     @Override
@@ -250,6 +260,7 @@ public class FedResultSet implements FedResultSetInterface {
         if(isDisposed)
             throw new FedException(new Exception("Object disposed"));
         // TODO Schauen wie es das sqlResultSet macht von Java und dann hier drauf übertragen
+        
         return java.sql.Types.INTEGER;
     }
     

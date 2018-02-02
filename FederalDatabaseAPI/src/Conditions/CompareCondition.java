@@ -13,10 +13,10 @@ package Conditions;
  */
 public class CompareCondition<LEFT, RIGHT> extends Condition {
     public final CompareType type;
-    private ValueDescriptor leftValues;
-    private ValueDescriptor rightValues;
+    private IValue leftValues;
+    private IValue rightValues;
 
-    public CompareCondition(CompareType type, ValueDescriptor leftValues, ValueDescriptor rightValues) {
+    public CompareCondition(CompareType type, IValue leftValues, IValue rightValues) {
         this.type = type;
         this.leftValues = leftValues;
         this.rightValues = rightValues;
@@ -26,19 +26,19 @@ public class CompareCondition<LEFT, RIGHT> extends Condition {
         this.type = type;
     }
 
-    public ValueDescriptor getLeftValues() {
+    public IValue getLeftValues() {
         return leftValues;
     }
 
-    public ValueDescriptor getRightValues() {
+    public IValue getRightValues() {
         return rightValues;
     }
 
-    public void setLeftValues(ValueDescriptor leftValues) {
+    public void setLeftValues(IValue leftValues) {
         this.leftValues = leftValues;
     }
 
-    public void setRightValues(ValueDescriptor rightValues) {
+    public void setRightValues(IValue rightValues) {
         this.rightValues = rightValues;
     }
 }

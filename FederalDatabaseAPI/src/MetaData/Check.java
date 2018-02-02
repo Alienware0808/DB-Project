@@ -5,18 +5,19 @@
  */
 package MetaData;
 
+import FederalDB.FedConnection;
+import java.util.ArrayList;
+
 /**
  *
  * @author Franz Weidmann
  */
-public class ColDef {
-    public String colName;
-    public String tableName;
-    public Object value;
+public class Check extends Constraint {
     
-    public ColDef(String cN, String tN, Object val){
-        colName = cN;
-        tableName = tN;
-        value = val;
+    
+    @Override
+    public boolean check(FedConnection fc, ArrayList<ColumnValue> cList){
+        return true;
     }
+
 }

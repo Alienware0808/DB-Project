@@ -12,7 +12,7 @@ import Conditions.CompareType;
 import Conditions.Condition;
 import Conditions.JunctionCondition;
 import Conditions.SingleValueDescriptor;
-import Conditions.ValueDescriptor;
+import Conditions.IValue;
 import MetaData.MetaDataEntry;
 import org.antlr.v4.runtime.tree.ParseTree;
 import parser.ContextException;
@@ -89,7 +89,7 @@ public class UpdateStatement extends Statement {
         }
     }
     
-    private ValueDescriptor parseValueDescriptor(ParseTree expr) throws ContextException
+    private IValue parseValueDescriptor(ParseTree expr) throws ContextException
     {
         
         switch (expr.getChildCount()) {

@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  *
  * @author Tobias Habermann
  */
-public class ColumnValueDescriptor extends ValueDescriptor {
+public class ColumnValueDescriptor implements IValue {
 
     // TODO Create a Descriptor for a Column in a ResultSet...
     private String columnName;
@@ -32,7 +32,6 @@ public class ColumnValueDescriptor extends ValueDescriptor {
         return tableName;
     }
 
-    @Override
     public Object getValue(FedResultSet resultSet) {
         // TODO Get Value via ColumnName and TableName of a field
         Object res;

@@ -11,7 +11,6 @@ import ResultSetManagment.FedResultSet;
  *
  * @author Tobias Habermann
  */
-public abstract class ValueDescriptor {
-    // TODO Change the type of row to the correct one...
-    public abstract Object getValue(FedResultSet resultSet);
+public interface IValue {
+    Object getValue(FedResultSet resultSet);
 }

@@ -12,12 +12,13 @@ import java.util.ArrayList;
  *
  * @author Franz Weidmann
  */
-public class ForeignKeys extends Constraints {
-    
-    
-    @Override
-    public boolean check(FedConnection fc, ArrayList<ColDef> cList){
-        return true;
-    }
 
+public abstract class Constraint {
+    public ArrayList<ColumnDefinition> columns;
+    
+    public Constraint(){
+        columns = new ArrayList<>();
+    }
+    
+    public abstract boolean check(FedConnection fc, ArrayList<ColumnValue> cList);
 }

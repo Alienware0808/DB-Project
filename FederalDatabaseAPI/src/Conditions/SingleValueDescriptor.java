@@ -11,21 +11,13 @@ import ResultSetManagment.FedResultSet;
  *
  * @author Tobias Habermann
  */
-public class SingleValueDescriptor extends ValueDescriptor {
-    private Object value;
+public class SingleValueDescriptor implements IValue {
+    public Object value;
     
     public SingleValueDescriptor() {
     }
 
     public SingleValueDescriptor(Object value) {
-        this.value = value;
-    }
-
-    public Object getValue() {
-        return value;
-    }
-
-    public void setValue(Object value) {
         this.value = value;
     }
 

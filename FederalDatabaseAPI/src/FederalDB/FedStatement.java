@@ -1,5 +1,6 @@
 package FederalDB;
 
+import MetaData.ColumnDefinition;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -138,7 +139,7 @@ public class FedStatement implements FedStatementInterface
         if (createstmt.fedStatement instanceof CreateStatement.FedVertical)
         {
             CreateStatement.FedVertical vert = (CreateStatement.FedVertical) createstmt.fedStatement;
-            List<CreateStatement.IColumnDefinition> primkey = null;
+            List<CreateStatement.CreateColumnDefinition> primkey = null;
             for(CreateStatement.TableConstraint tabcon : createstmt.tableConstrains)
             {
                 if(tabcon instanceof CreateStatement.TableConstraintPrimaryKey)
@@ -153,7 +154,7 @@ public class FedStatement implements FedStatementInterface
                 createsql[j] = "create table " + createstmt.tableName + " (";
                 for (int i = 0; i < primkey.size(); i++)
                 {
-                    createsql[j] += ((CreateStatement.ColumnDefinition)primkey.get(i)).getText();
+                    createsql[j] += ((CreateStatement.CreateColumnDefinition)primkey.get(i)).getText();
                     if (i + 1 < primkey.size())
                     {
                         createsql[j] += ", ";
@@ -162,7 +163,7 @@ public class FedStatement implements FedStatementInterface
                 for (int i = 0; i < vert.getDistributionLists().get(j).size(); i++)
                 {
                     createsql[j] += ", ";
-                    createsql[j] += vert.getDistributionLists().get(j).get(i).getText();
+                    createsql[j] += ((CreateStatement.CreateColumnDefinition)vert.getDistributionLists().get(j).get(i)).getText();
                 }
                 for (int i = 0; i < createstmt.tableConstrains.size(); i++)
                 {

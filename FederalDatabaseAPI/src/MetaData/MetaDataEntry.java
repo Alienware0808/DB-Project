@@ -15,68 +15,33 @@ Example: VERTICAL((ID,AGE), (HOUSENUMBER, COUNTY), (DATE, STEET))
  */
 package MetaData;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author Franz Weidmann
  */
 public class MetaDataEntry {
-    public PrimaryKeys pKey;
     public String Type;
     public String Attr1;
     public String Attr2;
     public String Attr3;
     public String TableName;
-    public ForeignKeys ForeignKeys;
-    public Checks Checks;
+    public List<Constraint> constraints;
     
     // contructor for empty object
-    public MetaDataEntry(){}
+    public MetaDataEntry(){ constraints = new ArrayList<>();}
     
     // constructor when all values are available
-    public MetaDataEntry(PrimaryKeys pKey, String type, String[] entry, ForeignKeys FKs, Checks checks){
-        this.pKey = pKey;
+    public MetaDataEntry(PrimaryKeys pKey, String type, String[] entry, List<ForeignKey> FKs, List<Check> checks){
         Type = type;
         Attr1 = entry[0];
         Attr2 = entry[1];
         Attr3 = entry[2];
-        
-        ForeignKeys = FKs;
-        Checks = checks;
-    }
-    
-    // constructor when all values are available except foreign keys
-    public MetaDataEntry(PrimaryKeys pKey, String type, String[] entry, Checks checks){
-        this.pKey = pKey;
-        Type = type;
-        Attr1 = entry[0];
-        Attr2 = entry[1];
-        Attr3 = entry[2];
-        
-        ForeignKeys = null;
-        Checks = checks;
-    }
-    
-    // constructor when all values are available except checks
-    public MetaDataEntry(PrimaryKeys pKey, String type, String[] entry, ForeignKeys FKs){
-        this.pKey = pKey;
-        Type = type;
-        Attr1 = entry[0];
-        Attr2 = entry[1];
-        Attr3 = entry[2];
-        
-        ForeignKeys = FKs;
-        Checks = null;
-    }
-    
-    // constructor when all values are available except foreign keys and checks
-    public MetaDataEntry(PrimaryKeys pKey, String type, String[] entry){
-        this.pKey = pKey;
-        Type = type;
-        Attr1 = entry[0];
-        Attr2 = entry[1];
-        Attr3 = entry[2];
-        
-        ForeignKeys = null;
-        Checks = null;
+        constraints = new ArrayList<>();
+        constraints.add(pKey);
+        constraints.addAll(FKs);
+        constraints.addAll(checks);
     }
 }
