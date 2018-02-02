@@ -20,20 +20,27 @@ package MetaData;
  * @author Franz Weidmann
  */
 public class MetaDataEntry {
-    public PrimaryKeys pKey;
+    public String pKey;
     public String Type;
     public String Attr1;
     public String Attr2;
     public String Attr3;
     public String TableName;
-    public ForeignKeys ForeignKeys;
-    public Checks Checks;
+    
+    // Describes the foreign keys
+    // Second String Array:
+    // [x][0] -> Name of the colum
+    // [x][1] -> Name of the referenced table
+    // [x][2] -> Name of the referenced primary key
+    public String[][] ForeignKeys;
+    // String array of check strings
+    public String[] Checks;
     
     // contructor for empty object
     public MetaDataEntry(){}
     
     // constructor when all values are available
-    public MetaDataEntry(PrimaryKeys pKey, String type, String[] entry, ForeignKeys FKs, Checks checks){
+    public MetaDataEntry(String pKey, String type, String[] entry, String[][] FKs, String[] checks){
         this.pKey = pKey;
         Type = type;
         Attr1 = entry[0];
@@ -45,7 +52,7 @@ public class MetaDataEntry {
     }
     
     // constructor when all values are available except foreign keys
-    public MetaDataEntry(PrimaryKeys pKey, String type, String[] entry, Checks checks){
+    public MetaDataEntry(String pKey, String type, String[] entry, String[] checks){
         this.pKey = pKey;
         Type = type;
         Attr1 = entry[0];
@@ -57,7 +64,7 @@ public class MetaDataEntry {
     }
     
     // constructor when all values are available except checks
-    public MetaDataEntry(PrimaryKeys pKey, String type, String[] entry, ForeignKeys FKs){
+    public MetaDataEntry(String pKey, String type, String[] entry, String[][] FKs){
         this.pKey = pKey;
         Type = type;
         Attr1 = entry[0];
@@ -69,7 +76,7 @@ public class MetaDataEntry {
     }
     
     // constructor when all values are available except foreign keys and checks
-    public MetaDataEntry(PrimaryKeys pKey, String type, String[] entry){
+    public MetaDataEntry(String pKey, String type, String[] entry){
         this.pKey = pKey;
         Type = type;
         Attr1 = entry[0];
