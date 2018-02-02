@@ -43,7 +43,7 @@ public class LazyPreparedStatement extends Statement{
             return StatementType.SET_ECHO;
         else if(tree.getChild(0) instanceof SQLiteParser.Rollback_stmtContext)
             return StatementType.ROLLBACK;
-        else if(tree.getChild(0) instanceof SQLiteParser.Drop_table_stmtContext)
+        else if(IsTerminalNode(tree.getChild(0), SQLiteParser.K_DROP))
             return StatementType.DROP;
         else if(tree.getChild(0) instanceof SQLiteParser.Commit_stmtContext)
             return StatementType.COMMIT;

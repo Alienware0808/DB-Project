@@ -5395,12 +5395,6 @@ public class SQLiteParser extends Parser {
 		public Type_nameContext type_name() {
 			return getRuleContext(Type_nameContext.class,0);
 		}
-		public List<Column_constraintContext> column_constraint() {
-			return getRuleContexts(Column_constraintContext.class);
-		}
-		public Column_constraintContext column_constraint(int i) {
-			return getRuleContext(Column_constraintContext.class,i);
-		}
 		public Column_defContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -5418,36 +5412,13 @@ public class SQLiteParser extends Parser {
 	public final Column_defContext column_def() throws RecognitionException {
 		Column_defContext _localctx = new Column_defContext(_ctx, getState());
 		enterRule(_localctx, 94, RULE_column_def);
-		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(1139);
 			column_name();
-			setState(1141);
-			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,151,_ctx) ) {
-			case 1:
-				{
-				setState(1140);
-				type_name();
-				}
-				break;
-			}
-			setState(1146);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << K_CHECK) | (1L << K_COLLATE) | (1L << K_CONSTRAINT) | (1L << K_DEFAULT))) != 0) || ((((_la - 109)) & ~0x3f) == 0 && ((1L << (_la - 109)) & ((1L << (K_NOT - 109)) | (1L << (K_NULL - 109)) | (1L << (K_PRIMARY - 109)) | (1L << (K_REFERENCES - 109)) | (1L << (K_UNIQUE - 109)))) != 0)) {
-				{
-				{
-				setState(1143);
-				column_constraint();
-				}
-				}
-				setState(1148);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-			}
+			setState(1140);
+			type_name();
 			}
 		}
 		catch (RecognitionException re) {
@@ -5462,17 +5433,11 @@ public class SQLiteParser extends Parser {
 	}
 
 	public static class Type_nameContext extends ParserRuleContext {
-		public List<NameContext> name() {
-			return getRuleContexts(NameContext.class);
+		public NameContext name() {
+			return getRuleContext(NameContext.class,0);
 		}
-		public NameContext name(int i) {
-			return getRuleContext(NameContext.class,i);
-		}
-		public List<Signed_numberContext> signed_number() {
-			return getRuleContexts(Signed_numberContext.class);
-		}
-		public Signed_numberContext signed_number(int i) {
-			return getRuleContext(Signed_numberContext.class,i);
+		public Signed_numberContext signed_number() {
+			return getRuleContext(Signed_numberContext.class,0);
 		}
 		public Type_nameContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -5491,58 +5456,26 @@ public class SQLiteParser extends Parser {
 	public final Type_nameContext type_name() throws RecognitionException {
 		Type_nameContext _localctx = new Type_nameContext(_ctx, getState());
 		enterRule(_localctx, 96, RULE_type_name);
+		int _la;
 		try {
-			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1150); 
+			setState(1142);
+			name();
+			setState(1147);
 			_errHandler.sync(this);
-			_alt = 1;
-			do {
-				switch (_alt) {
-				case 1:
-					{
-					{
-					setState(1149);
-					name();
-					}
-					}
-					break;
-				default:
-					throw new NoViableAltException(this);
-				}
-				setState(1152); 
-				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,153,_ctx);
-			} while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
-			setState(1164);
-			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,154,_ctx) ) {
-			case 1:
+			_la = _input.LA(1);
+			if (_la==OPEN_PAR) {
 				{
-				setState(1154);
+				setState(1143);
 				match(OPEN_PAR);
-				setState(1155);
+				setState(1144);
 				signed_number();
-				setState(1156);
+				setState(1145);
 				match(CLOSE_PAR);
 				}
-				break;
-			case 2:
-				{
-				setState(1158);
-				match(OPEN_PAR);
-				setState(1159);
-				signed_number();
-				setState(1160);
-				match(COMMA);
-				setState(1161);
-				signed_number();
-				setState(1162);
-				match(CLOSE_PAR);
-				}
-				break;
 			}
+
 			}
 		}
 		catch (RecognitionException re) {
@@ -5611,33 +5544,33 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1168);
+			setState(1151);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==K_CONSTRAINT) {
 				{
-				setState(1166);
+				setState(1149);
 				match(K_CONSTRAINT);
-				setState(1167);
+				setState(1150);
 				name();
 				}
 			}
 
-			setState(1203);
+			setState(1186);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case K_PRIMARY:
 				{
-				setState(1170);
+				setState(1153);
 				match(K_PRIMARY);
-				setState(1171);
+				setState(1154);
 				match(K_KEY);
-				setState(1173);
+				setState(1156);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==K_ASC || _la==K_DESC) {
 					{
-					setState(1172);
+					setState(1155);
 					_la = _input.LA(1);
 					if ( !(_la==K_ASC || _la==K_DESC) ) {
 					_errHandler.recoverInline(this);
@@ -5650,14 +5583,14 @@ public class SQLiteParser extends Parser {
 					}
 				}
 
-				setState(1175);
+				setState(1158);
 				conflict_clause();
-				setState(1177);
+				setState(1160);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==K_AUTOINCREMENT) {
 					{
-					setState(1176);
+					setState(1159);
 					match(K_AUTOINCREMENT);
 					}
 				}
@@ -5667,68 +5600,68 @@ public class SQLiteParser extends Parser {
 			case K_NOT:
 			case K_NULL:
 				{
-				setState(1180);
+				setState(1163);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==K_NOT) {
 					{
-					setState(1179);
+					setState(1162);
 					match(K_NOT);
 					}
 				}
 
-				setState(1182);
+				setState(1165);
 				match(K_NULL);
-				setState(1183);
+				setState(1166);
 				conflict_clause();
 				}
 				break;
 			case K_UNIQUE:
 				{
-				setState(1184);
+				setState(1167);
 				match(K_UNIQUE);
-				setState(1185);
+				setState(1168);
 				conflict_clause();
 				}
 				break;
 			case K_CHECK:
 				{
-				setState(1186);
+				setState(1169);
 				match(K_CHECK);
-				setState(1187);
+				setState(1170);
 				match(OPEN_PAR);
-				setState(1188);
+				setState(1171);
 				expr(0);
-				setState(1189);
+				setState(1172);
 				match(CLOSE_PAR);
 				}
 				break;
 			case K_DEFAULT:
 				{
-				setState(1191);
+				setState(1174);
 				match(K_DEFAULT);
-				setState(1198);
+				setState(1181);
 				_errHandler.sync(this);
-				switch ( getInterpreter().adaptivePredict(_input,159,_ctx) ) {
+				switch ( getInterpreter().adaptivePredict(_input,156,_ctx) ) {
 				case 1:
 					{
-					setState(1192);
+					setState(1175);
 					signed_number();
 					}
 					break;
 				case 2:
 					{
-					setState(1193);
+					setState(1176);
 					literal_value();
 					}
 					break;
 				case 3:
 					{
-					setState(1194);
+					setState(1177);
 					match(OPEN_PAR);
-					setState(1195);
+					setState(1178);
 					expr(0);
-					setState(1196);
+					setState(1179);
 					match(CLOSE_PAR);
 					}
 					break;
@@ -5737,15 +5670,15 @@ public class SQLiteParser extends Parser {
 				break;
 			case K_COLLATE:
 				{
-				setState(1200);
+				setState(1183);
 				match(K_COLLATE);
-				setState(1201);
+				setState(1184);
 				collation_name();
 				}
 				break;
 			case K_REFERENCES:
 				{
-				setState(1202);
+				setState(1185);
 				foreign_key_clause();
 				}
 				break;
@@ -5794,16 +5727,16 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1208);
+			setState(1191);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==K_ON) {
 				{
-				setState(1205);
+				setState(1188);
 				match(K_ON);
-				setState(1206);
+				setState(1189);
 				match(K_CONFLICT);
-				setState(1207);
+				setState(1190);
 				_la = _input.LA(1);
 				if ( !(_la==K_ABORT || ((((_la - 79)) & ~0x3f) == 0 && ((1L << (_la - 79)) & ((1L << (K_FAIL - 79)) | (1L << (K_IGNORE - 79)) | (1L << (K_REPLACE - 79)) | (1L << (K_ROLLBACK - 79)))) != 0)) ) {
 				_errHandler.recoverInline(this);
@@ -5927,66 +5860,66 @@ public class SQLiteParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1286);
+			setState(1269);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,172,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,169,_ctx) ) {
 			case 1:
 				{
-				setState(1211);
+				setState(1194);
 				literal_value();
 				}
 				break;
 			case 2:
 				{
-				setState(1212);
+				setState(1195);
 				match(BIND_PARAMETER);
 				}
 				break;
 			case 3:
 				{
-				setState(1221);
+				setState(1204);
 				_errHandler.sync(this);
-				switch ( getInterpreter().adaptivePredict(_input,163,_ctx) ) {
+				switch ( getInterpreter().adaptivePredict(_input,160,_ctx) ) {
 				case 1:
 					{
-					setState(1216);
+					setState(1199);
 					_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,162,_ctx) ) {
+					switch ( getInterpreter().adaptivePredict(_input,159,_ctx) ) {
 					case 1:
 						{
-						setState(1213);
+						setState(1196);
 						database_name();
-						setState(1214);
+						setState(1197);
 						match(DOT);
 						}
 						break;
 					}
-					setState(1218);
+					setState(1201);
 					table_name();
-					setState(1219);
+					setState(1202);
 					match(DOT);
 					}
 					break;
 				}
-				setState(1223);
+				setState(1206);
 				column_name();
 				}
 				break;
 			case 4:
 				{
-				setState(1224);
+				setState(1207);
 				unary_operator();
-				setState(1225);
+				setState(1208);
 				expr(21);
 				}
 				break;
 			case 5:
 				{
-				setState(1227);
+				setState(1210);
 				function_name();
-				setState(1228);
+				setState(1211);
 				match(OPEN_PAR);
-				setState(1241);
+				setState(1224);
 				_errHandler.sync(this);
 				switch (_input.LA(1)) {
 				case OPEN_PAR:
@@ -6123,31 +6056,31 @@ public class SQLiteParser extends Parser {
 				case STRING_LITERAL:
 				case BLOB_LITERAL:
 					{
-					setState(1230);
+					setState(1213);
 					_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,164,_ctx) ) {
+					switch ( getInterpreter().adaptivePredict(_input,161,_ctx) ) {
 					case 1:
 						{
-						setState(1229);
+						setState(1212);
 						match(K_DISTINCT);
 						}
 						break;
 					}
-					setState(1232);
+					setState(1215);
 					expr(0);
-					setState(1237);
+					setState(1220);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 					while (_la==COMMA) {
 						{
 						{
-						setState(1233);
+						setState(1216);
 						match(COMMA);
-						setState(1234);
+						setState(1217);
 						expr(0);
 						}
 						}
-						setState(1239);
+						setState(1222);
 						_errHandler.sync(this);
 						_la = _input.LA(1);
 					}
@@ -6155,7 +6088,7 @@ public class SQLiteParser extends Parser {
 					break;
 				case STAR:
 					{
-					setState(1240);
+					setState(1223);
 					match(STAR);
 					}
 					break;
@@ -6164,144 +6097,144 @@ public class SQLiteParser extends Parser {
 				default:
 					break;
 				}
-				setState(1243);
+				setState(1226);
 				match(CLOSE_PAR);
 				}
 				break;
 			case 6:
 				{
-				setState(1245);
+				setState(1228);
 				match(OPEN_PAR);
-				setState(1246);
+				setState(1229);
 				expr(0);
-				setState(1247);
+				setState(1230);
 				match(CLOSE_PAR);
 				}
 				break;
 			case 7:
 				{
-				setState(1249);
+				setState(1232);
 				match(K_CAST);
-				setState(1250);
+				setState(1233);
 				match(OPEN_PAR);
-				setState(1251);
+				setState(1234);
 				expr(0);
-				setState(1252);
+				setState(1235);
 				match(K_AS);
-				setState(1253);
+				setState(1236);
 				type_name();
-				setState(1254);
+				setState(1237);
 				match(CLOSE_PAR);
 				}
 				break;
 			case 8:
 				{
-				setState(1260);
+				setState(1243);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==K_EXISTS || _la==K_NOT) {
 					{
-					setState(1257);
+					setState(1240);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 					if (_la==K_NOT) {
 						{
-						setState(1256);
+						setState(1239);
 						match(K_NOT);
 						}
 					}
 
-					setState(1259);
+					setState(1242);
 					match(K_EXISTS);
 					}
 				}
 
-				setState(1262);
+				setState(1245);
 				match(OPEN_PAR);
-				setState(1263);
+				setState(1246);
 				select_stmt();
-				setState(1264);
+				setState(1247);
 				match(CLOSE_PAR);
 				}
 				break;
 			case 9:
 				{
-				setState(1266);
+				setState(1249);
 				match(K_CASE);
-				setState(1268);
+				setState(1251);
 				_errHandler.sync(this);
-				switch ( getInterpreter().adaptivePredict(_input,169,_ctx) ) {
+				switch ( getInterpreter().adaptivePredict(_input,166,_ctx) ) {
 				case 1:
 					{
-					setState(1267);
+					setState(1250);
 					expr(0);
 					}
 					break;
 				}
-				setState(1275); 
+				setState(1258); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				do {
 					{
 					{
-					setState(1270);
+					setState(1253);
 					match(K_WHEN);
-					setState(1271);
+					setState(1254);
 					expr(0);
-					setState(1272);
+					setState(1255);
 					match(K_THEN);
-					setState(1273);
+					setState(1256);
 					expr(0);
 					}
 					}
-					setState(1277); 
+					setState(1260); 
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				} while ( _la==K_WHEN );
-				setState(1281);
+				setState(1264);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==K_ELSE) {
 					{
-					setState(1279);
+					setState(1262);
 					match(K_ELSE);
-					setState(1280);
+					setState(1263);
 					expr(0);
 					}
 				}
 
-				setState(1283);
+				setState(1266);
 				match(K_END);
 				}
 				break;
 			case 10:
 				{
-				setState(1285);
+				setState(1268);
 				raise_function();
 				}
 				break;
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(1388);
+			setState(1371);
 			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,185,_ctx);
+			_alt = getInterpreter().adaptivePredict(_input,182,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
 					{
-					setState(1386);
+					setState(1369);
 					_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,184,_ctx) ) {
+					switch ( getInterpreter().adaptivePredict(_input,181,_ctx) ) {
 					case 1:
 						{
 						_localctx = new ExprContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(1288);
+						setState(1271);
 						if (!(precpred(_ctx, 20))) throw new FailedPredicateException(this, "precpred(_ctx, 20)");
-						setState(1289);
+						setState(1272);
 						match(PIPE2);
-						setState(1290);
+						setState(1273);
 						expr(21);
 						}
 						break;
@@ -6309,9 +6242,9 @@ public class SQLiteParser extends Parser {
 						{
 						_localctx = new ExprContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(1291);
+						setState(1274);
 						if (!(precpred(_ctx, 19))) throw new FailedPredicateException(this, "precpred(_ctx, 19)");
-						setState(1292);
+						setState(1275);
 						_la = _input.LA(1);
 						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << STAR) | (1L << DIV) | (1L << MOD))) != 0)) ) {
 						_errHandler.recoverInline(this);
@@ -6321,7 +6254,7 @@ public class SQLiteParser extends Parser {
 							_errHandler.reportMatch(this);
 							consume();
 						}
-						setState(1293);
+						setState(1276);
 						expr(20);
 						}
 						break;
@@ -6329,9 +6262,9 @@ public class SQLiteParser extends Parser {
 						{
 						_localctx = new ExprContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(1294);
+						setState(1277);
 						if (!(precpred(_ctx, 18))) throw new FailedPredicateException(this, "precpred(_ctx, 18)");
-						setState(1295);
+						setState(1278);
 						_la = _input.LA(1);
 						if ( !(_la==PLUS || _la==MINUS) ) {
 						_errHandler.recoverInline(this);
@@ -6341,7 +6274,7 @@ public class SQLiteParser extends Parser {
 							_errHandler.reportMatch(this);
 							consume();
 						}
-						setState(1296);
+						setState(1279);
 						expr(19);
 						}
 						break;
@@ -6349,9 +6282,9 @@ public class SQLiteParser extends Parser {
 						{
 						_localctx = new ExprContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(1297);
+						setState(1280);
 						if (!(precpred(_ctx, 17))) throw new FailedPredicateException(this, "precpred(_ctx, 17)");
-						setState(1298);
+						setState(1281);
 						_la = _input.LA(1);
 						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LT2) | (1L << GT2) | (1L << AMP) | (1L << PIPE))) != 0)) ) {
 						_errHandler.recoverInline(this);
@@ -6361,7 +6294,7 @@ public class SQLiteParser extends Parser {
 							_errHandler.reportMatch(this);
 							consume();
 						}
-						setState(1299);
+						setState(1282);
 						expr(18);
 						}
 						break;
@@ -6369,9 +6302,9 @@ public class SQLiteParser extends Parser {
 						{
 						_localctx = new ExprContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(1300);
+						setState(1283);
 						if (!(precpred(_ctx, 16))) throw new FailedPredicateException(this, "precpred(_ctx, 16)");
-						setState(1301);
+						setState(1284);
 						_la = _input.LA(1);
 						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LT) | (1L << LT_EQ) | (1L << GT) | (1L << GT_EQ))) != 0)) ) {
 						_errHandler.recoverInline(this);
@@ -6381,7 +6314,7 @@ public class SQLiteParser extends Parser {
 							_errHandler.reportMatch(this);
 							consume();
 						}
-						setState(1302);
+						setState(1285);
 						expr(17);
 						}
 						break;
@@ -6389,81 +6322,81 @@ public class SQLiteParser extends Parser {
 						{
 						_localctx = new ExprContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(1303);
+						setState(1286);
 						if (!(precpred(_ctx, 15))) throw new FailedPredicateException(this, "precpred(_ctx, 15)");
-						setState(1316);
+						setState(1299);
 						_errHandler.sync(this);
-						switch ( getInterpreter().adaptivePredict(_input,173,_ctx) ) {
+						switch ( getInterpreter().adaptivePredict(_input,170,_ctx) ) {
 						case 1:
 							{
-							setState(1304);
+							setState(1287);
 							match(ASSIGN);
 							}
 							break;
 						case 2:
 							{
-							setState(1305);
+							setState(1288);
 							match(EQ);
 							}
 							break;
 						case 3:
 							{
-							setState(1306);
+							setState(1289);
 							match(NOT_EQ1);
 							}
 							break;
 						case 4:
 							{
-							setState(1307);
+							setState(1290);
 							match(NOT_EQ2);
 							}
 							break;
 						case 5:
 							{
-							setState(1308);
+							setState(1291);
 							match(K_IS);
 							}
 							break;
 						case 6:
 							{
-							setState(1309);
+							setState(1292);
 							match(K_IS);
-							setState(1310);
+							setState(1293);
 							match(K_NOT);
 							}
 							break;
 						case 7:
 							{
-							setState(1311);
+							setState(1294);
 							match(K_IN);
 							}
 							break;
 						case 8:
 							{
-							setState(1312);
+							setState(1295);
 							match(K_LIKE);
 							}
 							break;
 						case 9:
 							{
-							setState(1313);
+							setState(1296);
 							match(K_GLOB);
 							}
 							break;
 						case 10:
 							{
-							setState(1314);
+							setState(1297);
 							match(K_MATCH);
 							}
 							break;
 						case 11:
 							{
-							setState(1315);
+							setState(1298);
 							match(K_REGEXP);
 							}
 							break;
 						}
-						setState(1318);
+						setState(1301);
 						expr(16);
 						}
 						break;
@@ -6471,11 +6404,11 @@ public class SQLiteParser extends Parser {
 						{
 						_localctx = new ExprContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(1319);
+						setState(1302);
 						if (!(precpred(_ctx, 14))) throw new FailedPredicateException(this, "precpred(_ctx, 14)");
-						setState(1320);
+						setState(1303);
 						match(K_AND);
-						setState(1321);
+						setState(1304);
 						expr(15);
 						}
 						break;
@@ -6483,11 +6416,11 @@ public class SQLiteParser extends Parser {
 						{
 						_localctx = new ExprContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(1322);
+						setState(1305);
 						if (!(precpred(_ctx, 13))) throw new FailedPredicateException(this, "precpred(_ctx, 13)");
-						setState(1323);
+						setState(1306);
 						match(K_OR);
-						setState(1324);
+						setState(1307);
 						expr(14);
 						}
 						break;
@@ -6495,21 +6428,21 @@ public class SQLiteParser extends Parser {
 						{
 						_localctx = new ExprContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(1325);
+						setState(1308);
 						if (!(precpred(_ctx, 6))) throw new FailedPredicateException(this, "precpred(_ctx, 6)");
-						setState(1326);
+						setState(1309);
 						match(K_IS);
-						setState(1328);
+						setState(1311);
 						_errHandler.sync(this);
-						switch ( getInterpreter().adaptivePredict(_input,174,_ctx) ) {
+						switch ( getInterpreter().adaptivePredict(_input,171,_ctx) ) {
 						case 1:
 							{
-							setState(1327);
+							setState(1310);
 							match(K_NOT);
 							}
 							break;
 						}
-						setState(1330);
+						setState(1313);
 						expr(7);
 						}
 						break;
@@ -6517,25 +6450,25 @@ public class SQLiteParser extends Parser {
 						{
 						_localctx = new ExprContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(1331);
+						setState(1314);
 						if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
-						setState(1333);
+						setState(1316);
 						_errHandler.sync(this);
 						_la = _input.LA(1);
 						if (_la==K_NOT) {
 							{
-							setState(1332);
+							setState(1315);
 							match(K_NOT);
 							}
 						}
 
-						setState(1335);
+						setState(1318);
 						match(K_BETWEEN);
-						setState(1336);
+						setState(1319);
 						expr(0);
-						setState(1337);
+						setState(1320);
 						match(K_AND);
-						setState(1338);
+						setState(1321);
 						expr(6);
 						}
 						break;
@@ -6543,11 +6476,11 @@ public class SQLiteParser extends Parser {
 						{
 						_localctx = new ExprContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(1340);
+						setState(1323);
 						if (!(precpred(_ctx, 9))) throw new FailedPredicateException(this, "precpred(_ctx, 9)");
-						setState(1341);
+						setState(1324);
 						match(K_COLLATE);
-						setState(1342);
+						setState(1325);
 						collation_name();
 						}
 						break;
@@ -6555,19 +6488,19 @@ public class SQLiteParser extends Parser {
 						{
 						_localctx = new ExprContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(1343);
+						setState(1326);
 						if (!(precpred(_ctx, 8))) throw new FailedPredicateException(this, "precpred(_ctx, 8)");
-						setState(1345);
+						setState(1328);
 						_errHandler.sync(this);
 						_la = _input.LA(1);
 						if (_la==K_NOT) {
 							{
-							setState(1344);
+							setState(1327);
 							match(K_NOT);
 							}
 						}
 
-						setState(1347);
+						setState(1330);
 						_la = _input.LA(1);
 						if ( !(((((_la - 84)) & ~0x3f) == 0 && ((1L << (_la - 84)) & ((1L << (K_GLOB - 84)) | (1L << (K_LIKE - 84)) | (1L << (K_MATCH - 84)) | (1L << (K_REGEXP - 84)))) != 0)) ) {
 						_errHandler.recoverInline(this);
@@ -6577,16 +6510,16 @@ public class SQLiteParser extends Parser {
 							_errHandler.reportMatch(this);
 							consume();
 						}
-						setState(1348);
+						setState(1331);
 						expr(0);
-						setState(1351);
+						setState(1334);
 						_errHandler.sync(this);
-						switch ( getInterpreter().adaptivePredict(_input,177,_ctx) ) {
+						switch ( getInterpreter().adaptivePredict(_input,174,_ctx) ) {
 						case 1:
 							{
-							setState(1349);
+							setState(1332);
 							match(K_ESCAPE);
-							setState(1350);
+							setState(1333);
 							expr(0);
 							}
 							break;
@@ -6597,28 +6530,28 @@ public class SQLiteParser extends Parser {
 						{
 						_localctx = new ExprContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(1353);
+						setState(1336);
 						if (!(precpred(_ctx, 7))) throw new FailedPredicateException(this, "precpred(_ctx, 7)");
-						setState(1358);
+						setState(1341);
 						_errHandler.sync(this);
 						switch (_input.LA(1)) {
 						case K_ISNULL:
 							{
-							setState(1354);
+							setState(1337);
 							match(K_ISNULL);
 							}
 							break;
 						case K_NOTNULL:
 							{
-							setState(1355);
+							setState(1338);
 							match(K_NOTNULL);
 							}
 							break;
 						case K_NOT:
 							{
-							setState(1356);
+							setState(1339);
 							match(K_NOT);
-							setState(1357);
+							setState(1340);
 							match(K_NULL);
 							}
 							break;
@@ -6631,78 +6564,78 @@ public class SQLiteParser extends Parser {
 						{
 						_localctx = new ExprContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(1360);
+						setState(1343);
 						if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
-						setState(1362);
+						setState(1345);
 						_errHandler.sync(this);
 						_la = _input.LA(1);
 						if (_la==K_NOT) {
 							{
-							setState(1361);
+							setState(1344);
 							match(K_NOT);
 							}
 						}
 
-						setState(1364);
+						setState(1347);
 						match(K_IN);
-						setState(1384);
+						setState(1367);
 						_errHandler.sync(this);
-						switch ( getInterpreter().adaptivePredict(_input,183,_ctx) ) {
+						switch ( getInterpreter().adaptivePredict(_input,180,_ctx) ) {
 						case 1:
 							{
-							setState(1365);
+							setState(1348);
 							match(OPEN_PAR);
-							setState(1375);
+							setState(1358);
 							_errHandler.sync(this);
-							switch ( getInterpreter().adaptivePredict(_input,181,_ctx) ) {
+							switch ( getInterpreter().adaptivePredict(_input,178,_ctx) ) {
 							case 1:
 								{
-								setState(1366);
+								setState(1349);
 								select_stmt();
 								}
 								break;
 							case 2:
 								{
-								setState(1367);
+								setState(1350);
 								expr(0);
-								setState(1372);
+								setState(1355);
 								_errHandler.sync(this);
 								_la = _input.LA(1);
 								while (_la==COMMA) {
 									{
 									{
-									setState(1368);
+									setState(1351);
 									match(COMMA);
-									setState(1369);
+									setState(1352);
 									expr(0);
 									}
 									}
-									setState(1374);
+									setState(1357);
 									_errHandler.sync(this);
 									_la = _input.LA(1);
 								}
 								}
 								break;
 							}
-							setState(1377);
+							setState(1360);
 							match(CLOSE_PAR);
 							}
 							break;
 						case 2:
 							{
-							setState(1381);
+							setState(1364);
 							_errHandler.sync(this);
-							switch ( getInterpreter().adaptivePredict(_input,182,_ctx) ) {
+							switch ( getInterpreter().adaptivePredict(_input,179,_ctx) ) {
 							case 1:
 								{
-								setState(1378);
+								setState(1361);
 								database_name();
-								setState(1379);
+								setState(1362);
 								match(DOT);
 								}
 								break;
 							}
-							setState(1383);
+							setState(1366);
 							table_name();
 							}
 							break;
@@ -6712,9 +6645,9 @@ public class SQLiteParser extends Parser {
 					}
 					} 
 				}
-				setState(1390);
+				setState(1373);
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,185,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,182,_ctx);
 			}
 			}
 		}
@@ -6734,11 +6667,8 @@ public class SQLiteParser extends Parser {
 		public Foreign_tableContext foreign_table() {
 			return getRuleContext(Foreign_tableContext.class,0);
 		}
-		public List<Column_nameContext> column_name() {
-			return getRuleContexts(Column_nameContext.class);
-		}
-		public Column_nameContext column_name(int i) {
-			return getRuleContext(Column_nameContext.class,i);
+		public Column_nameContext column_name() {
+			return getRuleContext(Column_nameContext.class,0);
 		}
 		public TerminalNode K_DEFERRABLE() { return getToken(SQLiteParser.K_DEFERRABLE, 0); }
 		public List<TerminalNode> K_ON() { return getTokens(SQLiteParser.K_ON); }
@@ -6816,54 +6746,38 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1391);
+			setState(1374);
 			match(K_REFERENCES);
-			setState(1392);
+			setState(1375);
 			foreign_table();
-			setState(1404);
+			setState(1380);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==OPEN_PAR) {
 				{
-				setState(1393);
+				setState(1376);
 				match(OPEN_PAR);
-				setState(1394);
+				setState(1377);
 				column_name();
-				setState(1399);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-				while (_la==COMMA) {
-					{
-					{
-					setState(1395);
-					match(COMMA);
-					setState(1396);
-					column_name();
-					}
-					}
-					setState(1401);
-					_errHandler.sync(this);
-					_la = _input.LA(1);
-				}
-				setState(1402);
+				setState(1378);
 				match(CLOSE_PAR);
 				}
 			}
 
-			setState(1424);
+			setState(1400);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==K_ON || _la==K_MATCH) {
 				{
 				{
-				setState(1420);
+				setState(1396);
 				_errHandler.sync(this);
 				switch (_input.LA(1)) {
 				case K_ON:
 					{
-					setState(1406);
+					setState(1382);
 					match(K_ON);
-					setState(1407);
+					setState(1383);
 					_la = _input.LA(1);
 					if ( !(_la==K_DELETE || _la==K_UPDATE) ) {
 					_errHandler.recoverInline(this);
@@ -6873,42 +6787,42 @@ public class SQLiteParser extends Parser {
 						_errHandler.reportMatch(this);
 						consume();
 					}
-					setState(1416);
+					setState(1392);
 					_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,188,_ctx) ) {
+					switch ( getInterpreter().adaptivePredict(_input,184,_ctx) ) {
 					case 1:
 						{
-						setState(1408);
+						setState(1384);
 						match(K_SET);
-						setState(1409);
+						setState(1385);
 						match(K_NULL);
 						}
 						break;
 					case 2:
 						{
-						setState(1410);
+						setState(1386);
 						match(K_SET);
-						setState(1411);
+						setState(1387);
 						match(K_DEFAULT);
 						}
 						break;
 					case 3:
 						{
-						setState(1412);
+						setState(1388);
 						match(K_CASCADE);
 						}
 						break;
 					case 4:
 						{
-						setState(1413);
+						setState(1389);
 						match(K_RESTRICT);
 						}
 						break;
 					case 5:
 						{
-						setState(1414);
+						setState(1390);
 						match(K_NO);
-						setState(1415);
+						setState(1391);
 						match(K_ACTION);
 						}
 						break;
@@ -6917,9 +6831,9 @@ public class SQLiteParser extends Parser {
 					break;
 				case K_MATCH:
 					{
-					setState(1418);
+					setState(1394);
 					match(K_MATCH);
-					setState(1419);
+					setState(1395);
 					name();
 					}
 					break;
@@ -6928,50 +6842,50 @@ public class SQLiteParser extends Parser {
 				}
 				}
 				}
-				setState(1426);
+				setState(1402);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(1437);
+			setState(1413);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,193,_ctx) ) {
-			case 1:
+			_la = _input.LA(1);
+			if (_la==K_DEFERRABLE || _la==K_NOT) {
 				{
-				setState(1428);
+				setState(1404);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==K_NOT) {
 					{
-					setState(1427);
+					setState(1403);
 					match(K_NOT);
 					}
 				}
 
-				setState(1430);
+				setState(1406);
 				match(K_DEFERRABLE);
-				setState(1435);
+				setState(1411);
 				_errHandler.sync(this);
-				switch ( getInterpreter().adaptivePredict(_input,192,_ctx) ) {
+				switch ( getInterpreter().adaptivePredict(_input,188,_ctx) ) {
 				case 1:
 					{
-					setState(1431);
+					setState(1407);
 					match(K_INITIALLY);
-					setState(1432);
+					setState(1408);
 					match(K_DEFERRED);
 					}
 					break;
 				case 2:
 					{
-					setState(1433);
+					setState(1409);
 					match(K_INITIALLY);
-					setState(1434);
+					setState(1410);
 					match(K_IMMEDIATE);
 					}
 					break;
 				}
 				}
-				break;
 			}
+
 			}
 		}
 		catch (RecognitionException re) {
@@ -7015,16 +6929,16 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1439);
+			setState(1415);
 			match(K_RAISE);
-			setState(1440);
+			setState(1416);
 			match(OPEN_PAR);
-			setState(1445);
+			setState(1421);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case K_IGNORE:
 				{
-				setState(1441);
+				setState(1417);
 				match(K_IGNORE);
 				}
 				break;
@@ -7032,7 +6946,7 @@ public class SQLiteParser extends Parser {
 			case K_FAIL:
 			case K_ROLLBACK:
 				{
-				setState(1442);
+				setState(1418);
 				_la = _input.LA(1);
 				if ( !(_la==K_ABORT || _la==K_FAIL || _la==K_ROLLBACK) ) {
 				_errHandler.recoverInline(this);
@@ -7042,16 +6956,16 @@ public class SQLiteParser extends Parser {
 					_errHandler.reportMatch(this);
 					consume();
 				}
-				setState(1443);
+				setState(1419);
 				match(COMMA);
-				setState(1444);
+				setState(1420);
 				error_message();
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
 			}
-			setState(1447);
+			setState(1423);
 			match(CLOSE_PAR);
 			}
 		}
@@ -7097,26 +7011,26 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1449);
+			setState(1425);
 			column_name();
-			setState(1452);
+			setState(1428);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==K_COLLATE) {
 				{
-				setState(1450);
+				setState(1426);
 				match(K_COLLATE);
-				setState(1451);
+				setState(1427);
 				collation_name();
 				}
 			}
 
-			setState(1455);
+			setState(1431);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==K_ASC || _la==K_DESC) {
 				{
-				setState(1454);
+				setState(1430);
 				_la = _input.LA(1);
 				if ( !(_la==K_ASC || _la==K_DESC) ) {
 				_errHandler.recoverInline(this);
@@ -7158,11 +7072,8 @@ public class SQLiteParser extends Parser {
 		}
 		public TerminalNode K_FOREIGN() { return getToken(SQLiteParser.K_FOREIGN, 0); }
 		public TerminalNode K_KEY() { return getToken(SQLiteParser.K_KEY, 0); }
-		public List<Column_nameContext> column_name() {
-			return getRuleContexts(Column_nameContext.class);
-		}
-		public Column_nameContext column_name(int i) {
-			return getRuleContext(Column_nameContext.class,i);
+		public Column_nameContext column_name() {
+			return getRuleContext(Column_nameContext.class,0);
 		}
 		public Foreign_key_clauseContext foreign_key_clause() {
 			return getRuleContext(Foreign_key_clauseContext.class,0);
@@ -7194,111 +7105,95 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1459);
+			setState(1435);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==K_CONSTRAINT) {
 				{
-				setState(1457);
+				setState(1433);
 				match(K_CONSTRAINT);
-				setState(1458);
+				setState(1434);
 				name();
 				}
 			}
 
-			setState(1497);
+			setState(1466);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case K_PRIMARY:
 			case K_UNIQUE:
 				{
-				setState(1464);
+				setState(1440);
 				_errHandler.sync(this);
 				switch (_input.LA(1)) {
 				case K_PRIMARY:
 					{
-					setState(1461);
+					setState(1437);
 					match(K_PRIMARY);
-					setState(1462);
+					setState(1438);
 					match(K_KEY);
 					}
 					break;
 				case K_UNIQUE:
 					{
-					setState(1463);
+					setState(1439);
 					match(K_UNIQUE);
 					}
 					break;
 				default:
 					throw new NoViableAltException(this);
 				}
-				setState(1466);
+				setState(1442);
 				match(OPEN_PAR);
-				setState(1467);
+				setState(1443);
 				indexed_column();
-				setState(1472);
+				setState(1448);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				while (_la==COMMA) {
 					{
 					{
-					setState(1468);
+					setState(1444);
 					match(COMMA);
-					setState(1469);
+					setState(1445);
 					indexed_column();
 					}
 					}
-					setState(1474);
+					setState(1450);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
-				setState(1475);
+				setState(1451);
 				match(CLOSE_PAR);
-				setState(1476);
+				setState(1452);
 				conflict_clause();
 				}
 				break;
 			case K_CHECK:
 				{
-				setState(1478);
+				setState(1454);
 				match(K_CHECK);
-				setState(1479);
+				setState(1455);
 				match(OPEN_PAR);
-				setState(1480);
+				setState(1456);
 				expr(0);
-				setState(1481);
+				setState(1457);
 				match(CLOSE_PAR);
 				}
 				break;
 			case K_FOREIGN:
 				{
-				setState(1483);
+				setState(1459);
 				match(K_FOREIGN);
-				setState(1484);
+				setState(1460);
 				match(K_KEY);
-				setState(1485);
+				setState(1461);
 				match(OPEN_PAR);
-				setState(1486);
+				setState(1462);
 				column_name();
-				setState(1491);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-				while (_la==COMMA) {
-					{
-					{
-					setState(1487);
-					match(COMMA);
-					setState(1488);
-					column_name();
-					}
-					}
-					setState(1493);
-					_errHandler.sync(this);
-					_la = _input.LA(1);
-				}
-				setState(1494);
+				setState(1463);
 				match(CLOSE_PAR);
-				setState(1495);
+				setState(1464);
 				foreign_key_clause();
 				}
 				break;
@@ -7358,49 +7253,49 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1499);
+			setState(1468);
 			match(K_WITH);
-			setState(1501);
+			setState(1470);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,202,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,197,_ctx) ) {
 			case 1:
 				{
-				setState(1500);
+				setState(1469);
 				match(K_RECURSIVE);
 				}
 				break;
 			}
-			setState(1503);
+			setState(1472);
 			cte_table_name();
-			setState(1504);
+			setState(1473);
 			match(K_AS);
-			setState(1505);
+			setState(1474);
 			match(OPEN_PAR);
-			setState(1506);
+			setState(1475);
 			select_stmt();
-			setState(1507);
+			setState(1476);
 			match(CLOSE_PAR);
-			setState(1517);
+			setState(1486);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==COMMA) {
 				{
 				{
-				setState(1508);
+				setState(1477);
 				match(COMMA);
-				setState(1509);
+				setState(1478);
 				cte_table_name();
-				setState(1510);
+				setState(1479);
 				match(K_AS);
-				setState(1511);
+				setState(1480);
 				match(OPEN_PAR);
-				setState(1512);
+				setState(1481);
 				select_stmt();
-				setState(1513);
+				setState(1482);
 				match(CLOSE_PAR);
 				}
 				}
-				setState(1519);
+				setState(1488);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -7450,38 +7345,38 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1523);
+			setState(1492);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,204,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,199,_ctx) ) {
 			case 1:
 				{
-				setState(1520);
+				setState(1489);
 				database_name();
-				setState(1521);
+				setState(1490);
 				match(DOT);
 				}
 				break;
 			}
-			setState(1525);
+			setState(1494);
 			table_name();
-			setState(1531);
+			setState(1500);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case K_INDEXED:
 				{
-				setState(1526);
+				setState(1495);
 				match(K_INDEXED);
-				setState(1527);
+				setState(1496);
 				match(K_BY);
-				setState(1528);
+				setState(1497);
 				index_name();
 				}
 				break;
 			case K_NOT:
 				{
-				setState(1529);
+				setState(1498);
 				match(K_NOT);
-				setState(1530);
+				setState(1499);
 				match(K_INDEXED);
 				}
 				break;
@@ -7562,26 +7457,26 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1533);
+			setState(1502);
 			expr(0);
-			setState(1536);
+			setState(1505);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==K_COLLATE) {
 				{
-				setState(1534);
+				setState(1503);
 				match(K_COLLATE);
-				setState(1535);
+				setState(1504);
 				collation_name();
 				}
 			}
 
-			setState(1539);
+			setState(1508);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==K_ASC || _la==K_DESC) {
 				{
-				setState(1538);
+				setState(1507);
 				_la = _input.LA(1);
 				if ( !(_la==K_ASC || _la==K_DESC) ) {
 				_errHandler.recoverInline(this);
@@ -7633,27 +7528,27 @@ public class SQLiteParser extends Parser {
 		Pragma_valueContext _localctx = new Pragma_valueContext(_ctx, getState());
 		enterRule(_localctx, 118, RULE_pragma_value);
 		try {
-			setState(1544);
+			setState(1513);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,208,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,203,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(1541);
+				setState(1510);
 				signed_number();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1542);
+				setState(1511);
 				name();
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(1543);
+				setState(1512);
 				match(STRING_LITERAL);
 				}
 				break;
@@ -7705,45 +7600,45 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1546);
+			setState(1515);
 			table_name();
-			setState(1558);
+			setState(1527);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==OPEN_PAR) {
 				{
-				setState(1547);
+				setState(1516);
 				match(OPEN_PAR);
-				setState(1548);
+				setState(1517);
 				column_name();
-				setState(1553);
+				setState(1522);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				while (_la==COMMA) {
 					{
 					{
-					setState(1549);
+					setState(1518);
 					match(COMMA);
-					setState(1550);
+					setState(1519);
 					column_name();
 					}
 					}
-					setState(1555);
+					setState(1524);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
-				setState(1556);
+				setState(1525);
 				match(CLOSE_PAR);
 				}
 			}
 
-			setState(1560);
+			setState(1529);
 			match(K_AS);
-			setState(1561);
+			setState(1530);
 			match(OPEN_PAR);
-			setState(1562);
+			setState(1531);
 			select_stmt();
-			setState(1563);
+			setState(1532);
 			match(CLOSE_PAR);
 			}
 		}
@@ -7788,48 +7683,48 @@ public class SQLiteParser extends Parser {
 		enterRule(_localctx, 122, RULE_result_column);
 		int _la;
 		try {
-			setState(1577);
+			setState(1546);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,213,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,208,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(1565);
+				setState(1534);
 				match(STAR);
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1566);
+				setState(1535);
 				table_name();
-				setState(1567);
+				setState(1536);
 				match(DOT);
-				setState(1568);
+				setState(1537);
 				match(STAR);
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(1570);
+				setState(1539);
 				expr(0);
-				setState(1575);
+				setState(1544);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==K_AS || _la==IDENTIFIER || _la==STRING_LITERAL) {
 					{
-					setState(1572);
+					setState(1541);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 					if (_la==K_AS) {
 						{
-						setState(1571);
+						setState(1540);
 						match(K_AS);
 						}
 					}
 
-					setState(1574);
+					setState(1543);
 					column_alias();
 					}
 				}
@@ -7897,64 +7792,64 @@ public class SQLiteParser extends Parser {
 		enterRule(_localctx, 124, RULE_table_or_subquery);
 		int _la;
 		try {
-			setState(1626);
+			setState(1595);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,224,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,219,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(1582);
+				setState(1551);
 				_errHandler.sync(this);
-				switch ( getInterpreter().adaptivePredict(_input,214,_ctx) ) {
+				switch ( getInterpreter().adaptivePredict(_input,209,_ctx) ) {
 				case 1:
 					{
-					setState(1579);
+					setState(1548);
 					database_name();
-					setState(1580);
+					setState(1549);
 					match(DOT);
 					}
 					break;
 				}
-				setState(1584);
+				setState(1553);
 				table_name();
-				setState(1589);
+				setState(1558);
 				_errHandler.sync(this);
-				switch ( getInterpreter().adaptivePredict(_input,216,_ctx) ) {
+				switch ( getInterpreter().adaptivePredict(_input,211,_ctx) ) {
 				case 1:
 					{
-					setState(1586);
+					setState(1555);
 					_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,215,_ctx) ) {
+					switch ( getInterpreter().adaptivePredict(_input,210,_ctx) ) {
 					case 1:
 						{
-						setState(1585);
+						setState(1554);
 						match(K_AS);
 						}
 						break;
 					}
-					setState(1588);
+					setState(1557);
 					table_alias();
 					}
 					break;
 				}
-				setState(1596);
+				setState(1565);
 				_errHandler.sync(this);
 				switch (_input.LA(1)) {
 				case K_INDEXED:
 					{
-					setState(1591);
+					setState(1560);
 					match(K_INDEXED);
-					setState(1592);
+					setState(1561);
 					match(K_BY);
-					setState(1593);
+					setState(1562);
 					index_name();
 					}
 					break;
 				case K_NOT:
 					{
-					setState(1594);
+					setState(1563);
 					match(K_NOT);
-					setState(1595);
+					setState(1564);
 					match(K_INDEXED);
 					}
 					break;
@@ -8011,28 +7906,28 @@ public class SQLiteParser extends Parser {
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1598);
+				setState(1567);
 				match(OPEN_PAR);
-				setState(1608);
+				setState(1577);
 				_errHandler.sync(this);
-				switch ( getInterpreter().adaptivePredict(_input,219,_ctx) ) {
+				switch ( getInterpreter().adaptivePredict(_input,214,_ctx) ) {
 				case 1:
 					{
-					setState(1599);
+					setState(1568);
 					table_or_subquery();
-					setState(1604);
+					setState(1573);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 					while (_la==COMMA) {
 						{
 						{
-						setState(1600);
+						setState(1569);
 						match(COMMA);
-						setState(1601);
+						setState(1570);
 						table_or_subquery();
 						}
 						}
-						setState(1606);
+						setState(1575);
 						_errHandler.sync(this);
 						_la = _input.LA(1);
 					}
@@ -8040,29 +7935,29 @@ public class SQLiteParser extends Parser {
 					break;
 				case 2:
 					{
-					setState(1607);
+					setState(1576);
 					join_clause();
 					}
 					break;
 				}
-				setState(1610);
+				setState(1579);
 				match(CLOSE_PAR);
-				setState(1615);
+				setState(1584);
 				_errHandler.sync(this);
-				switch ( getInterpreter().adaptivePredict(_input,221,_ctx) ) {
+				switch ( getInterpreter().adaptivePredict(_input,216,_ctx) ) {
 				case 1:
 					{
-					setState(1612);
+					setState(1581);
 					_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,220,_ctx) ) {
+					switch ( getInterpreter().adaptivePredict(_input,215,_ctx) ) {
 					case 1:
 						{
-						setState(1611);
+						setState(1580);
 						match(K_AS);
 						}
 						break;
 					}
-					setState(1614);
+					setState(1583);
 					table_alias();
 					}
 					break;
@@ -8072,28 +7967,28 @@ public class SQLiteParser extends Parser {
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(1617);
+				setState(1586);
 				match(OPEN_PAR);
-				setState(1618);
+				setState(1587);
 				select_stmt();
-				setState(1619);
+				setState(1588);
 				match(CLOSE_PAR);
-				setState(1624);
+				setState(1593);
 				_errHandler.sync(this);
-				switch ( getInterpreter().adaptivePredict(_input,223,_ctx) ) {
+				switch ( getInterpreter().adaptivePredict(_input,218,_ctx) ) {
 				case 1:
 					{
-					setState(1621);
+					setState(1590);
 					_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,222,_ctx) ) {
+					switch ( getInterpreter().adaptivePredict(_input,217,_ctx) ) {
 					case 1:
 						{
-						setState(1620);
+						setState(1589);
 						match(K_AS);
 						}
 						break;
 					}
-					setState(1623);
+					setState(1592);
 					table_alias();
 					}
 					break;
@@ -8153,23 +8048,23 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1628);
+			setState(1597);
 			table_or_subquery();
-			setState(1635);
+			setState(1604);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==COMMA || _la==K_CROSS || ((((_la - 94)) & ~0x3f) == 0 && ((1L << (_la - 94)) & ((1L << (K_INNER - 94)) | (1L << (K_JOIN - 94)) | (1L << (K_LEFT - 94)) | (1L << (K_NATURAL - 94)))) != 0)) {
 				{
 				{
-				setState(1629);
+				setState(1598);
 				join_operator();
-				setState(1630);
+				setState(1599);
 				table_or_subquery();
-				setState(1631);
+				setState(1600);
 				join_constraint();
 				}
 				}
-				setState(1637);
+				setState(1606);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -8212,13 +8107,13 @@ public class SQLiteParser extends Parser {
 		enterRule(_localctx, 128, RULE_join_operator);
 		int _la;
 		try {
-			setState(1651);
+			setState(1620);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case COMMA:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(1638);
+				setState(1607);
 				match(COMMA);
 				}
 				break;
@@ -8229,29 +8124,29 @@ public class SQLiteParser extends Parser {
 			case K_NATURAL:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1640);
+				setState(1609);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==K_NATURAL) {
 					{
-					setState(1639);
+					setState(1608);
 					match(K_NATURAL);
 					}
 				}
 
-				setState(1648);
+				setState(1617);
 				_errHandler.sync(this);
 				switch (_input.LA(1)) {
 				case K_LEFT:
 					{
-					setState(1642);
+					setState(1611);
 					match(K_LEFT);
-					setState(1644);
+					setState(1613);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 					if (_la==K_OUTER) {
 						{
-						setState(1643);
+						setState(1612);
 						match(K_OUTER);
 						}
 					}
@@ -8260,13 +8155,13 @@ public class SQLiteParser extends Parser {
 					break;
 				case K_INNER:
 					{
-					setState(1646);
+					setState(1615);
 					match(K_INNER);
 					}
 					break;
 				case K_CROSS:
 					{
-					setState(1647);
+					setState(1616);
 					match(K_CROSS);
 					}
 					break;
@@ -8275,7 +8170,7 @@ public class SQLiteParser extends Parser {
 				default:
 					break;
 				}
-				setState(1650);
+				setState(1619);
 				match(K_JOIN);
 				}
 				break;
@@ -8327,42 +8222,42 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1667);
+			setState(1636);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case K_ON:
 				{
-				setState(1653);
+				setState(1622);
 				match(K_ON);
-				setState(1654);
+				setState(1623);
 				expr(0);
 				}
 				break;
 			case K_USING:
 				{
-				setState(1655);
+				setState(1624);
 				match(K_USING);
-				setState(1656);
+				setState(1625);
 				match(OPEN_PAR);
-				setState(1657);
+				setState(1626);
 				column_name();
-				setState(1662);
+				setState(1631);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				while (_la==COMMA) {
 					{
 					{
-					setState(1658);
+					setState(1627);
 					match(COMMA);
-					setState(1659);
+					setState(1628);
 					column_name();
 					}
 					}
-					setState(1664);
+					setState(1633);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
-				setState(1665);
+				setState(1634);
 				match(CLOSE_PAR);
 				}
 				break;
@@ -8472,14 +8367,14 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1669);
+			setState(1638);
 			match(K_SELECT);
-			setState(1671);
+			setState(1640);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,232,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,227,_ctx) ) {
 			case 1:
 				{
-				setState(1670);
+				setState(1639);
 				_la = _input.LA(1);
 				if ( !(_la==K_ALL || _la==K_DISTINCT) ) {
 				_errHandler.recoverInline(this);
@@ -8492,51 +8387,51 @@ public class SQLiteParser extends Parser {
 				}
 				break;
 			}
-			setState(1673);
+			setState(1642);
 			result_column();
-			setState(1678);
+			setState(1647);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==COMMA) {
 				{
 				{
-				setState(1674);
+				setState(1643);
 				match(COMMA);
-				setState(1675);
+				setState(1644);
 				result_column();
 				}
 				}
-				setState(1680);
+				setState(1649);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(1693);
+			setState(1662);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==K_FROM) {
 				{
-				setState(1681);
+				setState(1650);
 				match(K_FROM);
-				setState(1691);
+				setState(1660);
 				_errHandler.sync(this);
-				switch ( getInterpreter().adaptivePredict(_input,235,_ctx) ) {
+				switch ( getInterpreter().adaptivePredict(_input,230,_ctx) ) {
 				case 1:
 					{
-					setState(1682);
+					setState(1651);
 					table_or_subquery();
-					setState(1687);
+					setState(1656);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 					while (_la==COMMA) {
 						{
 						{
-						setState(1683);
+						setState(1652);
 						match(COMMA);
-						setState(1684);
+						setState(1653);
 						table_or_subquery();
 						}
 						}
-						setState(1689);
+						setState(1658);
 						_errHandler.sync(this);
 						_la = _input.LA(1);
 					}
@@ -8544,7 +8439,7 @@ public class SQLiteParser extends Parser {
 					break;
 				case 2:
 					{
-					setState(1690);
+					setState(1659);
 					join_clause();
 					}
 					break;
@@ -8552,22 +8447,22 @@ public class SQLiteParser extends Parser {
 				}
 			}
 
-			setState(1696);
+			setState(1665);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==K_WHERE) {
 				{
-				setState(1695);
+				setState(1664);
 				select_core_where();
 				}
 			}
 
-			setState(1699);
+			setState(1668);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==K_GROUP) {
 				{
-				setState(1698);
+				setState(1667);
 				select_core_groud_by();
 				}
 			}
@@ -8616,36 +8511,36 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1701);
+			setState(1670);
 			match(K_GROUP);
-			setState(1702);
+			setState(1671);
 			match(K_BY);
-			setState(1703);
+			setState(1672);
 			expr(0);
-			setState(1708);
+			setState(1677);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==COMMA) {
 				{
 				{
-				setState(1704);
+				setState(1673);
 				match(COMMA);
-				setState(1705);
+				setState(1674);
 				expr(0);
 				}
 				}
-				setState(1710);
+				setState(1679);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(1713);
+			setState(1682);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==K_HAVING) {
 				{
-				setState(1711);
+				setState(1680);
 				match(K_HAVING);
-				setState(1712);
+				setState(1681);
 				expr(0);
 				}
 			}
@@ -8688,9 +8583,9 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1715);
+			setState(1684);
 			match(K_WHERE);
-			setState(1716);
+			setState(1685);
 			expr(0);
 			}
 		}
@@ -8728,36 +8623,36 @@ public class SQLiteParser extends Parser {
 		Compound_operatorContext _localctx = new Compound_operatorContext(_ctx, getState());
 		enterRule(_localctx, 138, RULE_compound_operator);
 		try {
-			setState(1723);
+			setState(1692);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,241,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,236,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(1718);
+				setState(1687);
 				match(K_UNION);
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1719);
+				setState(1688);
 				match(K_UNION);
-				setState(1720);
+				setState(1689);
 				match(K_ALL);
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(1721);
+				setState(1690);
 				match(K_INTERSECT);
 				}
 				break;
 			case 4:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(1722);
+				setState(1691);
 				match(K_EXCEPT);
 				}
 				break;
@@ -8805,34 +8700,34 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1725);
+			setState(1694);
 			table_name();
-			setState(1737);
+			setState(1706);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==OPEN_PAR) {
 				{
-				setState(1726);
+				setState(1695);
 				match(OPEN_PAR);
-				setState(1727);
+				setState(1696);
 				column_name();
-				setState(1732);
+				setState(1701);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				while (_la==COMMA) {
 					{
 					{
-					setState(1728);
+					setState(1697);
 					match(COMMA);
-					setState(1729);
+					setState(1698);
 					column_name();
 					}
 					}
-					setState(1734);
+					setState(1703);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
-				setState(1735);
+				setState(1704);
 				match(CLOSE_PAR);
 				}
 			}
@@ -8873,12 +8768,12 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1740);
+			setState(1709);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==PLUS || _la==MINUS) {
 				{
-				setState(1739);
+				setState(1708);
 				_la = _input.LA(1);
 				if ( !(_la==PLUS || _la==MINUS) ) {
 				_errHandler.recoverInline(this);
@@ -8891,7 +8786,7 @@ public class SQLiteParser extends Parser {
 				}
 			}
 
-			setState(1742);
+			setState(1711);
 			match(NUMERIC_LITERAL);
 			}
 		}
@@ -8935,7 +8830,7 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1744);
+			setState(1713);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << K_CURRENT_DATE) | (1L << K_CURRENT_TIME) | (1L << K_CURRENT_TIMESTAMP))) != 0) || ((((_la - 111)) & ~0x3f) == 0 && ((1L << (_la - 111)) & ((1L << (K_NULL - 111)) | (1L << (NUMERIC_LITERAL - 111)) | (1L << (STRING_LITERAL - 111)) | (1L << (BLOB_LITERAL - 111)))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -8981,7 +8876,7 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1746);
+			setState(1715);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << PLUS) | (1L << MINUS) | (1L << TILDE))) != 0) || _la==K_NOT) ) {
 			_errHandler.recoverInline(this);
@@ -9026,7 +8921,7 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1748);
+			setState(1717);
 			match(STRING_LITERAL);
 			}
 		}
@@ -9066,20 +8961,20 @@ public class SQLiteParser extends Parser {
 		Module_argumentContext _localctx = new Module_argumentContext(_ctx, getState());
 		enterRule(_localctx, 150, RULE_module_argument);
 		try {
-			setState(1752);
+			setState(1721);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,245,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,240,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(1750);
+				setState(1719);
 				expr(0);
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1751);
+				setState(1720);
 				column_def();
 				}
 				break;
@@ -9120,7 +9015,7 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1754);
+			setState(1723);
 			_la = _input.LA(1);
 			if ( !(_la==IDENTIFIER || _la==STRING_LITERAL) ) {
 			_errHandler.recoverInline(this);
@@ -9289,7 +9184,7 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1756);
+			setState(1725);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << K_ABORT) | (1L << K_ACTION) | (1L << K_ADD) | (1L << K_AFTER) | (1L << K_ALL) | (1L << K_ALTER) | (1L << K_SET) | (1L << K_ON) | (1L << K_ANALYZE) | (1L << K_AND) | (1L << K_AS) | (1L << K_ASC) | (1L << K_ATTACH) | (1L << K_AUTOINCREMENT) | (1L << K_BEFORE) | (1L << K_BEGIN) | (1L << K_BETWEEN) | (1L << K_BY) | (1L << K_CASCADE) | (1L << K_CASE) | (1L << K_CAST) | (1L << K_CHECK) | (1L << K_COLLATE) | (1L << K_COLUMN) | (1L << K_COMMIT) | (1L << K_CONFLICT) | (1L << K_CONSTRAINT) | (1L << K_CREATE) | (1L << K_CROSS) | (1L << K_CURRENT_DATE) | (1L << K_CURRENT_TIME) | (1L << K_CURRENT_TIMESTAMP) | (1L << K_DATABASE) | (1L << K_DEFAULT))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (K_DEFERRABLE - 64)) | (1L << (K_DEFERRED - 64)) | (1L << (K_DELETE - 64)) | (1L << (K_DESC - 64)) | (1L << (K_DETACH - 64)) | (1L << (K_DISTINCT - 64)) | (1L << (K_DROP - 64)) | (1L << (K_EACH - 64)) | (1L << (K_ELSE - 64)) | (1L << (K_END - 64)) | (1L << (K_ESCAPE - 64)) | (1L << (K_EXCEPT - 64)) | (1L << (K_EXCLUSIVE - 64)) | (1L << (K_EXISTS - 64)) | (1L << (K_EXPLAIN - 64)) | (1L << (K_FAIL - 64)) | (1L << (K_FOR - 64)) | (1L << (K_FOREIGN - 64)) | (1L << (K_FROM - 64)) | (1L << (K_FULL - 64)) | (1L << (K_GLOB - 64)) | (1L << (K_GROUP - 64)) | (1L << (K_HAVING - 64)) | (1L << (K_IF - 64)) | (1L << (K_IGNORE - 64)) | (1L << (K_IMMEDIATE - 64)) | (1L << (K_IN - 64)) | (1L << (K_INDEX - 64)) | (1L << (K_INDEXED - 64)) | (1L << (K_INITIALLY - 64)) | (1L << (K_INNER - 64)) | (1L << (K_INSERT - 64)) | (1L << (K_INSTEAD - 64)) | (1L << (K_INTERSECT - 64)) | (1L << (K_INTO - 64)) | (1L << (K_IS - 64)) | (1L << (K_ISNULL - 64)) | (1L << (K_JOIN - 64)) | (1L << (K_KEY - 64)) | (1L << (K_LEFT - 64)) | (1L << (K_LIKE - 64)) | (1L << (K_LIMIT - 64)) | (1L << (K_MATCH - 64)) | (1L << (K_NATURAL - 64)) | (1L << (K_NO - 64)) | (1L << (K_NOT - 64)) | (1L << (K_NOTNULL - 64)) | (1L << (K_NULL - 64)) | (1L << (K_OF - 64)) | (1L << (K_OFFSET - 64)) | (1L << (K_OR - 64)) | (1L << (K_ORDER - 64)) | (1L << (K_OUTER - 64)) | (1L << (K_PLAN - 64)) | (1L << (K_PRAGMA - 64)) | (1L << (K_PRIMARY - 64)) | (1L << (K_QUERY - 64)) | (1L << (K_RAISE - 64)) | (1L << (K_RECURSIVE - 64)) | (1L << (K_REFERENCES - 64)) | (1L << (K_REGEXP - 64)) | (1L << (K_REINDEX - 64)) | (1L << (K_RELEASE - 64)) | (1L << (K_RENAME - 64)))) != 0) || ((((_la - 128)) & ~0x3f) == 0 && ((1L << (_la - 128)) & ((1L << (K_REPLACE - 128)) | (1L << (K_RESTRICT - 128)) | (1L << (K_RIGHT - 128)) | (1L << (K_ROLLBACK - 128)) | (1L << (K_ROW - 128)) | (1L << (K_SAVEPOINT - 128)) | (1L << (K_SELECT - 128)) | (1L << (K_TABLE - 128)) | (1L << (K_TEMP - 128)) | (1L << (K_TEMPORARY - 128)) | (1L << (K_THEN - 128)) | (1L << (K_TO - 128)) | (1L << (K_TRANSACTION - 128)) | (1L << (K_TRIGGER - 128)) | (1L << (K_UNION - 128)) | (1L << (K_UNIQUE - 128)) | (1L << (K_UPDATE - 128)) | (1L << (K_USING - 128)) | (1L << (K_VACUUM - 128)) | (1L << (K_VALUES - 128)) | (1L << (K_VIEW - 128)) | (1L << (K_VIRTUAL - 128)) | (1L << (K_WHEN - 128)) | (1L << (K_WHERE - 128)) | (1L << (K_WITH - 128)) | (1L << (K_WITHOUT - 128)))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -9336,7 +9231,7 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1758);
+			setState(1727);
 			any_name();
 			}
 		}
@@ -9375,7 +9270,7 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1760);
+			setState(1729);
 			any_name();
 			}
 		}
@@ -9414,7 +9309,7 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1762);
+			setState(1731);
 			any_name();
 			}
 		}
@@ -9453,7 +9348,7 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1764);
+			setState(1733);
 			any_name();
 			}
 		}
@@ -9492,7 +9387,7 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1766);
+			setState(1735);
 			any_name();
 			}
 		}
@@ -9531,7 +9426,7 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1768);
+			setState(1737);
 			any_name();
 			}
 		}
@@ -9570,7 +9465,7 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1770);
+			setState(1739);
 			any_name();
 			}
 		}
@@ -9609,7 +9504,7 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1772);
+			setState(1741);
 			any_name();
 			}
 		}
@@ -9648,7 +9543,7 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1774);
+			setState(1743);
 			any_name();
 			}
 		}
@@ -9687,7 +9582,7 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1776);
+			setState(1745);
 			any_name();
 			}
 		}
@@ -9726,7 +9621,7 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1778);
+			setState(1747);
 			any_name();
 			}
 		}
@@ -9765,7 +9660,7 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1780);
+			setState(1749);
 			any_name();
 			}
 		}
@@ -9804,7 +9699,7 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1782);
+			setState(1751);
 			any_name();
 			}
 		}
@@ -9843,7 +9738,7 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1784);
+			setState(1753);
 			any_name();
 			}
 		}
@@ -9882,7 +9777,7 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1786);
+			setState(1755);
 			any_name();
 			}
 		}
@@ -9921,7 +9816,7 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1788);
+			setState(1757);
 			any_name();
 			}
 		}
@@ -9960,7 +9855,7 @@ public class SQLiteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1790);
+			setState(1759);
 			any_name();
 			}
 		}
@@ -10002,13 +9897,13 @@ public class SQLiteParser extends Parser {
 		Any_nameContext _localctx = new Any_nameContext(_ctx, getState());
 		enterRule(_localctx, 190, RULE_any_name);
 		try {
-			setState(1799);
+			setState(1768);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case IDENTIFIER:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(1792);
+				setState(1761);
 				match(IDENTIFIER);
 				}
 				break;
@@ -10138,25 +10033,25 @@ public class SQLiteParser extends Parser {
 			case K_WITHOUT:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1793);
+				setState(1762);
 				keyword();
 				}
 				break;
 			case STRING_LITERAL:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(1794);
+				setState(1763);
 				match(STRING_LITERAL);
 				}
 				break;
 			case OPEN_PAR:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(1795);
+				setState(1764);
 				match(OPEN_PAR);
-				setState(1796);
+				setState(1765);
 				any_name();
-				setState(1797);
+				setState(1766);
 				match(CLOSE_PAR);
 				}
 				break;
@@ -10217,7 +10112,7 @@ public class SQLiteParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\u00a5\u070c\4\2\t"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\u00a5\u06ed\4\2\t"+
 		"\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13"+
 		"\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
@@ -10298,180 +10193,177 @@ public class SQLiteParser extends Parser {
 		"\13.\3.\3.\5.\u043b\n.\3/\5/\u043e\n/\3/\3/\3/\3/\3/\3/\3/\3/\3/\3/\3"+
 		"/\5/\u044b\n/\3/\3/\3/\3/\3/\3/\3/\3/\3/\3/\7/\u0457\n/\f/\16/\u045a\13"+
 		"/\3/\3/\5/\u045e\n/\3/\3/\3/\3/\3/\7/\u0465\n/\f/\16/\u0468\13/\5/\u046a"+
-		"\n/\3/\3/\3/\3/\5/\u0470\n/\5/\u0472\n/\3\60\3\60\3\61\3\61\5\61\u0478"+
-		"\n\61\3\61\7\61\u047b\n\61\f\61\16\61\u047e\13\61\3\62\6\62\u0481\n\62"+
-		"\r\62\16\62\u0482\3\62\3\62\3\62\3\62\3\62\3\62\3\62\3\62\3\62\3\62\5"+
-		"\62\u048f\n\62\3\63\3\63\5\63\u0493\n\63\3\63\3\63\3\63\5\63\u0498\n\63"+
-		"\3\63\3\63\5\63\u049c\n\63\3\63\5\63\u049f\n\63\3\63\3\63\3\63\3\63\3"+
-		"\63\3\63\3\63\3\63\3\63\3\63\3\63\3\63\3\63\3\63\3\63\3\63\5\63\u04b1"+
-		"\n\63\3\63\3\63\3\63\5\63\u04b6\n\63\3\64\3\64\3\64\5\64\u04bb\n\64\3"+
-		"\65\3\65\3\65\3\65\3\65\3\65\5\65\u04c3\n\65\3\65\3\65\3\65\5\65\u04c8"+
-		"\n\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\5\65\u04d1\n\65\3\65\3\65\3\65"+
-		"\7\65\u04d6\n\65\f\65\16\65\u04d9\13\65\3\65\5\65\u04dc\n\65\3\65\3\65"+
-		"\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\5\65\u04ec"+
-		"\n\65\3\65\5\65\u04ef\n\65\3\65\3\65\3\65\3\65\3\65\3\65\5\65\u04f7\n"+
-		"\65\3\65\3\65\3\65\3\65\3\65\6\65\u04fe\n\65\r\65\16\65\u04ff\3\65\3\65"+
-		"\5\65\u0504\n\65\3\65\3\65\3\65\5\65\u0509\n\65\3\65\3\65\3\65\3\65\3"+
-		"\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3"+
-		"\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\5\65\u0527\n\65\3\65"+
-		"\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\5\65\u0533\n\65\3\65\3\65"+
-		"\3\65\5\65\u0538\n\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65"+
-		"\5\65\u0544\n\65\3\65\3\65\3\65\3\65\5\65\u054a\n\65\3\65\3\65\3\65\3"+
-		"\65\3\65\5\65\u0551\n\65\3\65\3\65\5\65\u0555\n\65\3\65\3\65\3\65\3\65"+
-		"\3\65\3\65\7\65\u055d\n\65\f\65\16\65\u0560\13\65\5\65\u0562\n\65\3\65"+
-		"\3\65\3\65\3\65\5\65\u0568\n\65\3\65\5\65\u056b\n\65\7\65\u056d\n\65\f"+
-		"\65\16\65\u0570\13\65\3\66\3\66\3\66\3\66\3\66\3\66\7\66\u0578\n\66\f"+
-		"\66\16\66\u057b\13\66\3\66\3\66\5\66\u057f\n\66\3\66\3\66\3\66\3\66\3"+
-		"\66\3\66\3\66\3\66\3\66\3\66\5\66\u058b\n\66\3\66\3\66\5\66\u058f\n\66"+
-		"\7\66\u0591\n\66\f\66\16\66\u0594\13\66\3\66\5\66\u0597\n\66\3\66\3\66"+
-		"\3\66\3\66\3\66\5\66\u059e\n\66\5\66\u05a0\n\66\3\67\3\67\3\67\3\67\3"+
-		"\67\3\67\5\67\u05a8\n\67\3\67\3\67\38\38\38\58\u05af\n8\38\58\u05b2\n"+
-		"8\39\39\59\u05b6\n9\39\39\39\59\u05bb\n9\39\39\39\39\79\u05c1\n9\f9\16"+
-		"9\u05c4\139\39\39\39\39\39\39\39\39\39\39\39\39\39\39\79\u05d4\n9\f9\16"+
-		"9\u05d7\139\39\39\39\59\u05dc\n9\3:\3:\5:\u05e0\n:\3:\3:\3:\3:\3:\3:\3"+
-		":\3:\3:\3:\3:\3:\7:\u05ee\n:\f:\16:\u05f1\13:\3;\3;\3;\5;\u05f6\n;\3;"+
-		"\3;\3;\3;\3;\3;\5;\u05fe\n;\3<\3<\3<\5<\u0603\n<\3<\5<\u0606\n<\3=\3="+
-		"\3=\5=\u060b\n=\3>\3>\3>\3>\3>\7>\u0612\n>\f>\16>\u0615\13>\3>\3>\5>\u0619"+
-		"\n>\3>\3>\3>\3>\3>\3?\3?\3?\3?\3?\3?\3?\5?\u0627\n?\3?\5?\u062a\n?\5?"+
-		"\u062c\n?\3@\3@\3@\5@\u0631\n@\3@\3@\5@\u0635\n@\3@\5@\u0638\n@\3@\3@"+
-		"\3@\3@\3@\5@\u063f\n@\3@\3@\3@\3@\7@\u0645\n@\f@\16@\u0648\13@\3@\5@\u064b"+
-		"\n@\3@\3@\5@\u064f\n@\3@\5@\u0652\n@\3@\3@\3@\3@\5@\u0658\n@\3@\5@\u065b"+
-		"\n@\5@\u065d\n@\3A\3A\3A\3A\3A\7A\u0664\nA\fA\16A\u0667\13A\3B\3B\5B\u066b"+
-		"\nB\3B\3B\5B\u066f\nB\3B\3B\5B\u0673\nB\3B\5B\u0676\nB\3C\3C\3C\3C\3C"+
-		"\3C\3C\7C\u067f\nC\fC\16C\u0682\13C\3C\3C\5C\u0686\nC\3D\3D\5D\u068a\n"+
-		"D\3D\3D\3D\7D\u068f\nD\fD\16D\u0692\13D\3D\3D\3D\3D\7D\u0698\nD\fD\16"+
-		"D\u069b\13D\3D\5D\u069e\nD\5D\u06a0\nD\3D\5D\u06a3\nD\3D\5D\u06a6\nD\3"+
-		"E\3E\3E\3E\3E\7E\u06ad\nE\fE\16E\u06b0\13E\3E\3E\5E\u06b4\nE\3F\3F\3F"+
-		"\3G\3G\3G\3G\3G\5G\u06be\nG\3H\3H\3H\3H\3H\7H\u06c5\nH\fH\16H\u06c8\13"+
-		"H\3H\3H\5H\u06cc\nH\3I\5I\u06cf\nI\3I\3I\3J\3J\3K\3K\3L\3L\3M\3M\5M\u06db"+
-		"\nM\3N\3N\3O\3O\3P\3P\3Q\3Q\3R\3R\3S\3S\3T\3T\3U\3U\3V\3V\3W\3W\3X\3X"+
-		"\3Y\3Y\3Z\3Z\3[\3[\3\\\3\\\3]\3]\3^\3^\3_\3_\3`\3`\3a\3a\3a\3a\3a\3a\3"+
-		"a\5a\u070a\na\3a\2\3hb\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \"$&(*,"+
-		".\60\62\64\668:<>@BDFHJLNPRTVXZ\\^`bdfhjlnprtvxz|~\u0080\u0082\u0084\u0086"+
-		"\u0088\u008a\u008c\u008e\u0090\u0092\u0094\u0096\u0098\u009a\u009c\u009e"+
-		"\u00a0\u00a2\u00a4\u00a6\u00a8\u00aa\u00ac\u00ae\u00b0\u00b2\u00b4\u00b6"+
-		"\u00b8\u00ba\u00bc\u00be\u00c0\2\26\3\2#$\5\2CCNN[[\4\2\65\65KK\4\2\7"+
-		"\7ss\3\2\u008b\u008c\4\2\u009e\u009e\u00a0\u00a0\4\2\37\37GG\4\2((EE\7"+
-		"\2\33\33QQZZ\u0082\u0082\u0085\u0085\4\2\t\t\16\17\3\2\n\13\3\2\20\23"+
-		"\3\2\24\27\6\2VVjjll~~\4\2DD\u0093\u0093\5\2\33\33QQ\u0085\u0085\6\2="+
-		"?qq\u009e\u009e\u00a0\u00a1\4\2\n\foo\4\2\u009d\u009d\u00a0\u00a0\b\2"+
-		"\33!##%\6799<\u0088\u008a\u009c\2\u080c\2\u00c6\3\2\2\2\4\u00cb\3\2\2"+
-		"\2\6\u00d1\3\2\2\2\b\u00eb\3\2\2\2\n\u010d\3\2\2\2\f\u010f\3\2\2\2\16"+
-		"\u0116\3\2\2\2\20\u011a\3\2\2\2\22\u011c\3\2\2\2\24\u011e\3\2\2\2\26\u0130"+
-		"\3\2\2\2\30\u0139\3\2\2\2\32\u0141\3\2\2\2\34\u014b\3\2\2\2\36\u015e\3"+
-		"\2\2\2 \u0182\3\2\2\2\"\u01a2\3\2\2\2$\u01d0\3\2\2\2&\u01d2\3\2\2\2(\u01dd"+
-		"\3\2\2\2*\u01e8\3\2\2\2,\u01f0\3\2\2\2.\u01f8\3\2\2\2\60\u01fa\3\2\2\2"+
-		"\62\u023f\3\2\2\2\64\u0252\3\2\2\2\66\u0270\3\2\2\28\u027a\3\2\2\2:\u0297"+
-		"\3\2\2\2<\u029d\3\2\2\2>\u02aa\3\2\2\2@\u02b9\3\2\2\2B\u02bc\3\2\2\2D"+
-		"\u02c9\3\2\2\2F\u02e2\3\2\2\2H\u0302\3\2\2\2J\u034c\3\2\2\2L\u035b\3\2"+
-		"\2\2N\u0368\3\2\2\2P\u036e\3\2\2\2R\u037c\3\2\2\2T\u038b\3\2\2\2V\u03ae"+
-		"\3\2\2\2X\u0417\3\2\2\2Z\u041a\3\2\2\2\\\u043d\3\2\2\2^\u0473\3\2\2\2"+
-		"`\u0475\3\2\2\2b\u0480\3\2\2\2d\u0492\3\2\2\2f\u04ba\3\2\2\2h\u0508\3"+
-		"\2\2\2j\u0571\3\2\2\2l\u05a1\3\2\2\2n\u05ab\3\2\2\2p\u05b5\3\2\2\2r\u05dd"+
-		"\3\2\2\2t\u05f5\3\2\2\2v\u05ff\3\2\2\2x\u060a\3\2\2\2z\u060c\3\2\2\2|"+
-		"\u062b\3\2\2\2~\u065c\3\2\2\2\u0080\u065e\3\2\2\2\u0082\u0675\3\2\2\2"+
-		"\u0084\u0685\3\2\2\2\u0086\u0687\3\2\2\2\u0088\u06a7\3\2\2\2\u008a\u06b5"+
-		"\3\2\2\2\u008c\u06bd\3\2\2\2\u008e\u06bf\3\2\2\2\u0090\u06ce\3\2\2\2\u0092"+
-		"\u06d2\3\2\2\2\u0094\u06d4\3\2\2\2\u0096\u06d6\3\2\2\2\u0098\u06da\3\2"+
-		"\2\2\u009a\u06dc\3\2\2\2\u009c\u06de\3\2\2\2\u009e\u06e0\3\2\2\2\u00a0"+
-		"\u06e2\3\2\2\2\u00a2\u06e4\3\2\2\2\u00a4\u06e6\3\2\2\2\u00a6\u06e8\3\2"+
-		"\2\2\u00a8\u06ea\3\2\2\2\u00aa\u06ec\3\2\2\2\u00ac\u06ee\3\2\2\2\u00ae"+
-		"\u06f0\3\2\2\2\u00b0\u06f2\3\2\2\2\u00b2\u06f4\3\2\2\2\u00b4\u06f6\3\2"+
-		"\2\2\u00b6\u06f8\3\2\2\2\u00b8\u06fa\3\2\2\2\u00ba\u06fc\3\2\2\2\u00bc"+
-		"\u06fe\3\2\2\2\u00be\u0700\3\2\2\2\u00c0\u0709\3\2\2\2\u00c2\u00c5\5\6"+
-		"\4\2\u00c3\u00c5\5\4\3\2\u00c4\u00c2\3\2\2\2\u00c4\u00c3\3\2\2\2\u00c5"+
-		"\u00c8\3\2\2\2\u00c6\u00c4\3\2\2\2\u00c6\u00c7\3\2\2\2\u00c7\u00c9\3\2"+
-		"\2\2\u00c8\u00c6\3\2\2\2\u00c9\u00ca\7\2\2\3\u00ca\3\3\2\2\2\u00cb\u00cc"+
-		"\7\u00a5\2\2\u00cc\u00cd\b\3\1\2\u00cd\5\3\2\2\2\u00ce\u00d0\7\3\2\2\u00cf"+
-		"\u00ce\3\2\2\2\u00d0\u00d3\3\2\2\2\u00d1\u00cf\3\2\2\2\u00d1\u00d2\3\2"+
-		"\2\2\u00d2\u00d4\3\2\2\2\u00d3\u00d1\3\2\2\2\u00d4\u00dd\5\b\5\2\u00d5"+
-		"\u00d7\7\3\2\2\u00d6\u00d5\3\2\2\2\u00d7\u00d8\3\2\2\2\u00d8\u00d6\3\2"+
-		"\2\2\u00d8\u00d9\3\2\2\2\u00d9\u00da\3\2\2\2\u00da\u00dc\5\b\5\2\u00db"+
-		"\u00d6\3\2\2\2\u00dc\u00df\3\2\2\2\u00dd\u00db\3\2\2\2\u00dd\u00de\3\2"+
-		"\2\2\u00de\u00e3\3\2\2\2\u00df\u00dd\3\2\2\2\u00e0\u00e2\7\3\2\2\u00e1"+
-		"\u00e0\3\2\2\2\u00e2\u00e5\3\2\2\2\u00e3\u00e1\3\2\2\2\u00e3\u00e4\3\2"+
-		"\2\2\u00e4\7\3\2\2\2\u00e5\u00e3\3\2\2\2\u00e6\u00e9\7P\2\2\u00e7\u00e8"+
-		"\7z\2\2\u00e8\u00ea\7w\2\2\u00e9\u00e7\3\2\2\2\u00e9\u00ea\3\2\2\2\u00ea"+
-		"\u00ec\3\2\2\2\u00eb\u00e6\3\2\2\2\u00eb\u00ec\3\2\2\2\u00ec\u0109\3\2"+
-		"\2\2\u00ed\u010a\5\26\f\2\u00ee\u010a\5\30\r\2\u00ef\u010a\5\32\16\2\u00f0"+
-		"\u010a\5\34\17\2\u00f1\u010a\5 \21\2\u00f2\u010a\5\"\22\2\u00f3\u010a"+
-		"\5\60\31\2\u00f4\u010a\5\62\32\2\u00f5\u010a\5\64\33\2\u00f6\u010a\5\66"+
-		"\34\2\u00f7\u010a\58\35\2\u00f8\u010a\5:\36\2\u00f9\u010a\5<\37\2\u00fa"+
-		"\u010a\5> \2\u00fb\u010a\5B\"\2\u00fc\u010a\5D#\2\u00fd\u010a\5F$\2\u00fe"+
-		"\u010a\5H%\2\u00ff\u010a\5J&\2\u0100\u010a\5L\'\2\u0101\u010a\5N(\2\u0102"+
-		"\u010a\5P)\2\u0103\u010a\5R*\2\u0104\u010a\5Z.\2\u0105\u010a\5\\/\2\u0106"+
-		"\u010a\5^\60\2\u0107\u010a\5\16\b\2\u0108\u010a\5\n\6\2\u0109\u00ed\3"+
-		"\2\2\2\u0109\u00ee\3\2\2\2\u0109\u00ef\3\2\2\2\u0109\u00f0\3\2\2\2\u0109"+
-		"\u00f1\3\2\2\2\u0109\u00f2\3\2\2\2\u0109\u00f3\3\2\2\2\u0109\u00f4\3\2"+
-		"\2\2\u0109\u00f5\3\2\2\2\u0109\u00f6\3\2\2\2\u0109\u00f7\3\2\2\2\u0109"+
-		"\u00f8\3\2\2\2\u0109\u00f9\3\2\2\2\u0109\u00fa\3\2\2\2\u0109\u00fb\3\2"+
-		"\2\2\u0109\u00fc\3\2\2\2\u0109\u00fd\3\2\2\2\u0109\u00fe\3\2\2\2\u0109"+
-		"\u00ff\3\2\2\2\u0109\u0100\3\2\2\2\u0109\u0101\3\2\2\2\u0109\u0102\3\2"+
-		"\2\2\u0109\u0103\3\2\2\2\u0109\u0104\3\2\2\2\u0109\u0105\3\2\2\2\u0109"+
-		"\u0106\3\2\2\2\u0109\u0107\3\2\2\2\u0109\u0108\3\2\2\2\u010a\t\3\2\2\2"+
-		"\u010b\u010e\5\24\13\2\u010c\u010e\5\f\7\2\u010d\u010b\3\2\2\2\u010d\u010c"+
-		"\3\2\2\2\u010e\13\3\2\2\2\u010f\u0110\7 \2\2\u0110\u0111\7\u0089\2\2\u0111"+
-		"\u0112\7!\2\2\u0112\u0113\5\u00c0a\2\u0113\u0114\7\b\2\2\u0114\u0115\5"+
-		"\u00c0a\2\u0115\r\3\2\2\2\u0116\u0117\7!\2\2\u0117\u0118\5\20\t\2\u0118"+
-		"\u0119\5\22\n\2\u0119\17\3\2\2\2\u011a\u011b\7\"\2\2\u011b\21\3\2\2\2"+
-		"\u011c\u011d\t\2\2\2\u011d\23\3\2\2\2\u011e\u011f\7 \2\2\u011f\u0123\7"+
-		"\u008a\2\2\u0120\u0121\5\u00a2R\2\u0121\u0122\7\4\2\2\u0122\u0124\3\2"+
-		"\2\2\u0123\u0120\3\2\2\2\u0123\u0124\3\2\2\2\u0124\u0125\3\2\2\2\u0125"+
-		"\u012e\5\u00a4S\2\u0126\u0127\7\u0081\2\2\u0127\u0128\7\u008e\2\2\u0128"+
-		"\u012f\5\u00a8U\2\u0129\u012b\7\35\2\2\u012a\u012c\7\64\2\2\u012b\u012a"+
-		"\3\2\2\2\u012b\u012c\3\2\2\2\u012c\u012d\3\2\2\2\u012d\u012f\5`\61\2\u012e"+
-		"\u0126\3\2\2\2\u012e\u0129\3\2\2\2\u012f\25\3\2\2\2\u0130\u0137\7%\2\2"+
-		"\u0131\u0138\5\u00a2R\2\u0132\u0138\5\u00a6T\2\u0133\u0134\5\u00a2R\2"+
-		"\u0134\u0135\7\4\2\2\u0135\u0136\5\u00a6T\2\u0136\u0138\3\2\2\2\u0137"+
-		"\u0131\3\2\2\2\u0137\u0132\3\2\2\2\u0137\u0133\3\2\2\2\u0137\u0138\3\2"+
-		"\2\2\u0138\27\3\2\2\2\u0139\u013b\7)\2\2\u013a\u013c\7@\2\2\u013b\u013a"+
-		"\3\2\2\2\u013b\u013c\3\2\2\2\u013c\u013d\3\2\2\2\u013d\u013e\5h\65\2\u013e"+
-		"\u013f\7\'\2\2\u013f\u0140\5\u00a2R\2\u0140\31\3\2\2\2\u0141\u0143\7,"+
-		"\2\2\u0142\u0144\t\3\2\2\u0143\u0142\3\2\2\2\u0143\u0144\3\2\2\2\u0144"+
-		"\u0149\3\2\2\2\u0145\u0147\7\u008f\2\2\u0146\u0148\5\u00be`\2\u0147\u0146"+
-		"\3\2\2\2\u0147\u0148\3\2\2\2\u0148\u014a\3\2\2\2\u0149\u0145\3\2\2\2\u0149"+
-		"\u014a\3\2\2\2\u014a\33\3\2\2\2\u014b\u0150\t\4\2\2\u014c\u014e\7\u008f"+
-		"\2\2\u014d\u014f\5\u00be`\2\u014e\u014d\3\2\2\2\u014e\u014f\3\2\2\2\u014f"+
-		"\u0151\3\2\2\2\u0150\u014c\3\2\2\2\u0150\u0151\3\2\2\2\u0151\35\3\2\2"+
-		"\2\u0152\u0154\7\u009b\2\2\u0153\u0155\7|\2\2\u0154\u0153\3\2\2\2\u0154"+
-		"\u0155\3\2\2\2\u0155\u0156\3\2\2\2\u0156\u015b\5z>\2\u0157\u0158\7\7\2"+
-		"\2\u0158\u015a\5z>\2\u0159\u0157\3\2\2\2\u015a\u015d\3\2\2\2\u015b\u0159"+
-		"\3\2\2\2\u015b\u015c\3\2\2\2\u015c\u015f\3\2\2\2\u015d\u015b\3\2\2\2\u015e"+
-		"\u0152\3\2\2\2\u015e\u015f\3\2\2\2\u015f\u0160\3\2\2\2\u0160\u016a\5\u0086"+
-		"D\2\u0161\u0163\7\u0091\2\2\u0162\u0164\7\37\2\2\u0163\u0162\3\2\2\2\u0163"+
-		"\u0164\3\2\2\2\u0164\u0168\3\2\2\2\u0165\u0168\7c\2\2\u0166\u0168\7M\2"+
-		"\2\u0167\u0161\3\2\2\2\u0167\u0165\3\2\2\2\u0167\u0166\3\2\2\2\u0168\u0169"+
-		"\3\2\2\2\u0169\u016b\5\u0086D\2\u016a\u0167\3\2\2\2\u016b\u016c\3\2\2"+
-		"\2\u016c\u016a\3\2\2\2\u016c\u016d\3\2\2\2\u016d\u0178\3\2\2\2\u016e\u016f"+
-		"\7u\2\2\u016f\u0170\7.\2\2\u0170\u0175\5v<\2\u0171\u0172\7\7\2\2\u0172"+
-		"\u0174\5v<\2\u0173\u0171\3\2\2\2\u0174\u0177\3\2\2\2\u0175\u0173\3\2\2"+
-		"\2\u0175\u0176\3\2\2\2\u0176\u0179\3\2\2\2\u0177\u0175\3\2\2\2\u0178\u016e"+
-		"\3\2\2\2\u0178\u0179\3\2\2\2\u0179\u0180\3\2\2\2\u017a\u017b\7k\2\2\u017b"+
-		"\u017e\5h\65\2\u017c\u017d\t\5\2\2\u017d\u017f\5h\65\2\u017e\u017c\3\2"+
-		"\2\2\u017e\u017f\3\2\2\2\u017f\u0181\3\2\2\2\u0180\u017a\3\2\2\2\u0180"+
-		"\u0181\3\2\2\2\u0181\37\3\2\2\2\u0182\u0184\79\2\2\u0183\u0185\7\u0092"+
-		"\2\2\u0184\u0183\3\2\2\2\u0184\u0185\3\2\2\2\u0185\u0186\3\2\2\2\u0186"+
-		"\u018a\7]\2\2\u0187\u0188\7Y\2\2\u0188\u0189\7o\2\2\u0189\u018b\7O\2\2"+
-		"\u018a\u0187\3\2\2\2\u018a\u018b\3\2\2\2\u018b\u018f\3\2\2\2\u018c\u018d"+
-		"\5\u00a2R\2\u018d\u018e\7\4\2\2\u018e\u0190\3\2\2\2\u018f\u018c\3\2\2"+
-		"\2\u018f\u0190\3\2\2\2\u0190\u0191\3\2\2\2\u0191\u0192\5\u00b0Y\2\u0192"+
-		"\u0193\7#\2\2\u0193\u0194\5\u00a4S\2\u0194\u0195\7\5\2\2\u0195\u019a\5"+
-		"n8\2\u0196\u0197\7\7\2\2\u0197\u0199\5n8\2\u0198\u0196\3\2\2\2\u0199\u019c"+
-		"\3\2\2\2\u019a\u0198\3\2\2\2\u019a\u019b\3\2\2\2\u019b\u019d\3\2\2\2\u019c"+
-		"\u019a\3\2\2\2\u019d\u01a0\7\6\2\2\u019e\u019f\7\u009a\2\2\u019f\u01a1"+
-		"\5h\65\2\u01a0\u019e\3\2\2\2\u01a0\u01a1\3\2\2\2\u01a1!\3\2\2\2\u01a2"+
-		"\u01a4\79\2\2\u01a3\u01a5\t\6\2\2\u01a4\u01a3\3\2\2\2\u01a4\u01a5\3\2"+
-		"\2\2\u01a5\u01a6\3\2\2\2\u01a6\u01aa\7\u008a\2\2\u01a7\u01a8\7Y\2\2\u01a8"+
-		"\u01a9\7o\2\2\u01a9\u01ab\7O\2\2\u01aa\u01a7\3\2\2\2\u01aa\u01ab\3\2\2"+
-		"\2\u01ab\u01af\3\2\2\2\u01ac\u01ad\5\u00a2R\2\u01ad\u01ae\7\4\2\2\u01ae"+
-		"\u01b0\3\2\2\2\u01af\u01ac\3\2\2\2\u01af\u01b0\3\2\2\2\u01b0\u01b1\3\2"+
-		"\2\2\u01b1\u01c9\5\u00a4S\2\u01b2\u01b3\7\5\2\2\u01b3\u01b8\5`\61\2\u01b4"+
-		"\u01b5\7\7\2\2\u01b5\u01b7\5`\61\2\u01b6\u01b4\3\2\2\2\u01b7\u01ba\3\2"+
-		"\2\2\u01b8\u01b6\3\2\2\2\u01b8\u01b9\3\2\2\2\u01b9\u01bf\3\2\2\2\u01ba"+
-		"\u01b8\3\2\2\2\u01bb\u01bc\7\7\2\2\u01bc\u01be\5p9\2\u01bd\u01bb\3\2\2"+
-		"\2\u01be\u01c1\3\2\2\2\u01bf\u01bd\3\2\2\2\u01bf\u01c0\3\2\2\2\u01c0\u01c2"+
-		"\3\2\2\2\u01c1\u01bf\3\2\2\2\u01c2\u01c5\7\6\2\2\u01c3\u01c4\7\u009c\2"+
-		"\2\u01c4\u01c6\7\u009d\2\2\u01c5\u01c3\3\2\2\2\u01c5\u01c6\3\2\2\2\u01c6"+
+		"\n/\3/\3/\3/\3/\5/\u0470\n/\5/\u0472\n/\3\60\3\60\3\61\3\61\3\61\3\62"+
+		"\3\62\3\62\3\62\3\62\5\62\u047e\n\62\3\63\3\63\5\63\u0482\n\63\3\63\3"+
+		"\63\3\63\5\63\u0487\n\63\3\63\3\63\5\63\u048b\n\63\3\63\5\63\u048e\n\63"+
+		"\3\63\3\63\3\63\3\63\3\63\3\63\3\63\3\63\3\63\3\63\3\63\3\63\3\63\3\63"+
+		"\3\63\3\63\5\63\u04a0\n\63\3\63\3\63\3\63\5\63\u04a5\n\63\3\64\3\64\3"+
+		"\64\5\64\u04aa\n\64\3\65\3\65\3\65\3\65\3\65\3\65\5\65\u04b2\n\65\3\65"+
+		"\3\65\3\65\5\65\u04b7\n\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\5\65\u04c0"+
+		"\n\65\3\65\3\65\3\65\7\65\u04c5\n\65\f\65\16\65\u04c8\13\65\3\65\5\65"+
+		"\u04cb\n\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65"+
+		"\3\65\3\65\5\65\u04db\n\65\3\65\5\65\u04de\n\65\3\65\3\65\3\65\3\65\3"+
+		"\65\3\65\5\65\u04e6\n\65\3\65\3\65\3\65\3\65\3\65\6\65\u04ed\n\65\r\65"+
+		"\16\65\u04ee\3\65\3\65\5\65\u04f3\n\65\3\65\3\65\3\65\5\65\u04f8\n\65"+
+		"\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65"+
+		"\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65"+
+		"\5\65\u0516\n\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\5\65"+
+		"\u0522\n\65\3\65\3\65\3\65\5\65\u0527\n\65\3\65\3\65\3\65\3\65\3\65\3"+
+		"\65\3\65\3\65\3\65\3\65\5\65\u0533\n\65\3\65\3\65\3\65\3\65\5\65\u0539"+
+		"\n\65\3\65\3\65\3\65\3\65\3\65\5\65\u0540\n\65\3\65\3\65\5\65\u0544\n"+
+		"\65\3\65\3\65\3\65\3\65\3\65\3\65\7\65\u054c\n\65\f\65\16\65\u054f\13"+
+		"\65\5\65\u0551\n\65\3\65\3\65\3\65\3\65\5\65\u0557\n\65\3\65\5\65\u055a"+
+		"\n\65\7\65\u055c\n\65\f\65\16\65\u055f\13\65\3\66\3\66\3\66\3\66\3\66"+
+		"\3\66\5\66\u0567\n\66\3\66\3\66\3\66\3\66\3\66\3\66\3\66\3\66\3\66\3\66"+
+		"\5\66\u0573\n\66\3\66\3\66\5\66\u0577\n\66\7\66\u0579\n\66\f\66\16\66"+
+		"\u057c\13\66\3\66\5\66\u057f\n\66\3\66\3\66\3\66\3\66\3\66\5\66\u0586"+
+		"\n\66\5\66\u0588\n\66\3\67\3\67\3\67\3\67\3\67\3\67\5\67\u0590\n\67\3"+
+		"\67\3\67\38\38\38\58\u0597\n8\38\58\u059a\n8\39\39\59\u059e\n9\39\39\3"+
+		"9\59\u05a3\n9\39\39\39\39\79\u05a9\n9\f9\169\u05ac\139\39\39\39\39\39"+
+		"\39\39\39\39\39\39\39\39\39\39\59\u05bd\n9\3:\3:\5:\u05c1\n:\3:\3:\3:"+
+		"\3:\3:\3:\3:\3:\3:\3:\3:\3:\7:\u05cf\n:\f:\16:\u05d2\13:\3;\3;\3;\5;\u05d7"+
+		"\n;\3;\3;\3;\3;\3;\3;\5;\u05df\n;\3<\3<\3<\5<\u05e4\n<\3<\5<\u05e7\n<"+
+		"\3=\3=\3=\5=\u05ec\n=\3>\3>\3>\3>\3>\7>\u05f3\n>\f>\16>\u05f6\13>\3>\3"+
+		">\5>\u05fa\n>\3>\3>\3>\3>\3>\3?\3?\3?\3?\3?\3?\3?\5?\u0608\n?\3?\5?\u060b"+
+		"\n?\5?\u060d\n?\3@\3@\3@\5@\u0612\n@\3@\3@\5@\u0616\n@\3@\5@\u0619\n@"+
+		"\3@\3@\3@\3@\3@\5@\u0620\n@\3@\3@\3@\3@\7@\u0626\n@\f@\16@\u0629\13@\3"+
+		"@\5@\u062c\n@\3@\3@\5@\u0630\n@\3@\5@\u0633\n@\3@\3@\3@\3@\5@\u0639\n"+
+		"@\3@\5@\u063c\n@\5@\u063e\n@\3A\3A\3A\3A\3A\7A\u0645\nA\fA\16A\u0648\13"+
+		"A\3B\3B\5B\u064c\nB\3B\3B\5B\u0650\nB\3B\3B\5B\u0654\nB\3B\5B\u0657\n"+
+		"B\3C\3C\3C\3C\3C\3C\3C\7C\u0660\nC\fC\16C\u0663\13C\3C\3C\5C\u0667\nC"+
+		"\3D\3D\5D\u066b\nD\3D\3D\3D\7D\u0670\nD\fD\16D\u0673\13D\3D\3D\3D\3D\7"+
+		"D\u0679\nD\fD\16D\u067c\13D\3D\5D\u067f\nD\5D\u0681\nD\3D\5D\u0684\nD"+
+		"\3D\5D\u0687\nD\3E\3E\3E\3E\3E\7E\u068e\nE\fE\16E\u0691\13E\3E\3E\5E\u0695"+
+		"\nE\3F\3F\3F\3G\3G\3G\3G\3G\5G\u069f\nG\3H\3H\3H\3H\3H\7H\u06a6\nH\fH"+
+		"\16H\u06a9\13H\3H\3H\5H\u06ad\nH\3I\5I\u06b0\nI\3I\3I\3J\3J\3K\3K\3L\3"+
+		"L\3M\3M\5M\u06bc\nM\3N\3N\3O\3O\3P\3P\3Q\3Q\3R\3R\3S\3S\3T\3T\3U\3U\3"+
+		"V\3V\3W\3W\3X\3X\3Y\3Y\3Z\3Z\3[\3[\3\\\3\\\3]\3]\3^\3^\3_\3_\3`\3`\3a"+
+		"\3a\3a\3a\3a\3a\3a\5a\u06eb\na\3a\2\3hb\2\4\6\b\n\f\16\20\22\24\26\30"+
+		"\32\34\36 \"$&(*,.\60\62\64\668:<>@BDFHJLNPRTVXZ\\^`bdfhjlnprtvxz|~\u0080"+
+		"\u0082\u0084\u0086\u0088\u008a\u008c\u008e\u0090\u0092\u0094\u0096\u0098"+
+		"\u009a\u009c\u009e\u00a0\u00a2\u00a4\u00a6\u00a8\u00aa\u00ac\u00ae\u00b0"+
+		"\u00b2\u00b4\u00b6\u00b8\u00ba\u00bc\u00be\u00c0\2\26\3\2#$\5\2CCNN[["+
+		"\4\2\65\65KK\4\2\7\7ss\3\2\u008b\u008c\4\2\u009e\u009e\u00a0\u00a0\4\2"+
+		"\37\37GG\4\2((EE\7\2\33\33QQZZ\u0082\u0082\u0085\u0085\4\2\t\t\16\17\3"+
+		"\2\n\13\3\2\20\23\3\2\24\27\6\2VVjjll~~\4\2DD\u0093\u0093\5\2\33\33QQ"+
+		"\u0085\u0085\6\2=?qq\u009e\u009e\u00a0\u00a1\4\2\n\foo\4\2\u009d\u009d"+
+		"\u00a0\u00a0\b\2\33!##%\6799<\u0088\u008a\u009c\2\u07e7\2\u00c6\3\2\2"+
+		"\2\4\u00cb\3\2\2\2\6\u00d1\3\2\2\2\b\u00eb\3\2\2\2\n\u010d\3\2\2\2\f\u010f"+
+		"\3\2\2\2\16\u0116\3\2\2\2\20\u011a\3\2\2\2\22\u011c\3\2\2\2\24\u011e\3"+
+		"\2\2\2\26\u0130\3\2\2\2\30\u0139\3\2\2\2\32\u0141\3\2\2\2\34\u014b\3\2"+
+		"\2\2\36\u015e\3\2\2\2 \u0182\3\2\2\2\"\u01a2\3\2\2\2$\u01d0\3\2\2\2&\u01d2"+
+		"\3\2\2\2(\u01dd\3\2\2\2*\u01e8\3\2\2\2,\u01f0\3\2\2\2.\u01f8\3\2\2\2\60"+
+		"\u01fa\3\2\2\2\62\u023f\3\2\2\2\64\u0252\3\2\2\2\66\u0270\3\2\2\28\u027a"+
+		"\3\2\2\2:\u0297\3\2\2\2<\u029d\3\2\2\2>\u02aa\3\2\2\2@\u02b9\3\2\2\2B"+
+		"\u02bc\3\2\2\2D\u02c9\3\2\2\2F\u02e2\3\2\2\2H\u0302\3\2\2\2J\u034c\3\2"+
+		"\2\2L\u035b\3\2\2\2N\u0368\3\2\2\2P\u036e\3\2\2\2R\u037c\3\2\2\2T\u038b"+
+		"\3\2\2\2V\u03ae\3\2\2\2X\u0417\3\2\2\2Z\u041a\3\2\2\2\\\u043d\3\2\2\2"+
+		"^\u0473\3\2\2\2`\u0475\3\2\2\2b\u0478\3\2\2\2d\u0481\3\2\2\2f\u04a9\3"+
+		"\2\2\2h\u04f7\3\2\2\2j\u0560\3\2\2\2l\u0589\3\2\2\2n\u0593\3\2\2\2p\u059d"+
+		"\3\2\2\2r\u05be\3\2\2\2t\u05d6\3\2\2\2v\u05e0\3\2\2\2x\u05eb\3\2\2\2z"+
+		"\u05ed\3\2\2\2|\u060c\3\2\2\2~\u063d\3\2\2\2\u0080\u063f\3\2\2\2\u0082"+
+		"\u0656\3\2\2\2\u0084\u0666\3\2\2\2\u0086\u0668\3\2\2\2\u0088\u0688\3\2"+
+		"\2\2\u008a\u0696\3\2\2\2\u008c\u069e\3\2\2\2\u008e\u06a0\3\2\2\2\u0090"+
+		"\u06af\3\2\2\2\u0092\u06b3\3\2\2\2\u0094\u06b5\3\2\2\2\u0096\u06b7\3\2"+
+		"\2\2\u0098\u06bb\3\2\2\2\u009a\u06bd\3\2\2\2\u009c\u06bf\3\2\2\2\u009e"+
+		"\u06c1\3\2\2\2\u00a0\u06c3\3\2\2\2\u00a2\u06c5\3\2\2\2\u00a4\u06c7\3\2"+
+		"\2\2\u00a6\u06c9\3\2\2\2\u00a8\u06cb\3\2\2\2\u00aa\u06cd\3\2\2\2\u00ac"+
+		"\u06cf\3\2\2\2\u00ae\u06d1\3\2\2\2\u00b0\u06d3\3\2\2\2\u00b2\u06d5\3\2"+
+		"\2\2\u00b4\u06d7\3\2\2\2\u00b6\u06d9\3\2\2\2\u00b8\u06db\3\2\2\2\u00ba"+
+		"\u06dd\3\2\2\2\u00bc\u06df\3\2\2\2\u00be\u06e1\3\2\2\2\u00c0\u06ea\3\2"+
+		"\2\2\u00c2\u00c5\5\6\4\2\u00c3\u00c5\5\4\3\2\u00c4\u00c2\3\2\2\2\u00c4"+
+		"\u00c3\3\2\2\2\u00c5\u00c8\3\2\2\2\u00c6\u00c4\3\2\2\2\u00c6\u00c7\3\2"+
+		"\2\2\u00c7\u00c9\3\2\2\2\u00c8\u00c6\3\2\2\2\u00c9\u00ca\7\2\2\3\u00ca"+
+		"\3\3\2\2\2\u00cb\u00cc\7\u00a5\2\2\u00cc\u00cd\b\3\1\2\u00cd\5\3\2\2\2"+
+		"\u00ce\u00d0\7\3\2\2\u00cf\u00ce\3\2\2\2\u00d0\u00d3\3\2\2\2\u00d1\u00cf"+
+		"\3\2\2\2\u00d1\u00d2\3\2\2\2\u00d2\u00d4\3\2\2\2\u00d3\u00d1\3\2\2\2\u00d4"+
+		"\u00dd\5\b\5\2\u00d5\u00d7\7\3\2\2\u00d6\u00d5\3\2\2\2\u00d7\u00d8\3\2"+
+		"\2\2\u00d8\u00d6\3\2\2\2\u00d8\u00d9\3\2\2\2\u00d9\u00da\3\2\2\2\u00da"+
+		"\u00dc\5\b\5\2\u00db\u00d6\3\2\2\2\u00dc\u00df\3\2\2\2\u00dd\u00db\3\2"+
+		"\2\2\u00dd\u00de\3\2\2\2\u00de\u00e3\3\2\2\2\u00df\u00dd\3\2\2\2\u00e0"+
+		"\u00e2\7\3\2\2\u00e1\u00e0\3\2\2\2\u00e2\u00e5\3\2\2\2\u00e3\u00e1\3\2"+
+		"\2\2\u00e3\u00e4\3\2\2\2\u00e4\7\3\2\2\2\u00e5\u00e3\3\2\2\2\u00e6\u00e9"+
+		"\7P\2\2\u00e7\u00e8\7z\2\2\u00e8\u00ea\7w\2\2\u00e9\u00e7\3\2\2\2\u00e9"+
+		"\u00ea\3\2\2\2\u00ea\u00ec\3\2\2\2\u00eb\u00e6\3\2\2\2\u00eb\u00ec\3\2"+
+		"\2\2\u00ec\u0109\3\2\2\2\u00ed\u010a\5\26\f\2\u00ee\u010a\5\30\r\2\u00ef"+
+		"\u010a\5\32\16\2\u00f0\u010a\5\34\17\2\u00f1\u010a\5 \21\2\u00f2\u010a"+
+		"\5\"\22\2\u00f3\u010a\5\60\31\2\u00f4\u010a\5\62\32\2\u00f5\u010a\5\64"+
+		"\33\2\u00f6\u010a\5\66\34\2\u00f7\u010a\58\35\2\u00f8\u010a\5:\36\2\u00f9"+
+		"\u010a\5<\37\2\u00fa\u010a\5> \2\u00fb\u010a\5B\"\2\u00fc\u010a\5D#\2"+
+		"\u00fd\u010a\5F$\2\u00fe\u010a\5H%\2\u00ff\u010a\5J&\2\u0100\u010a\5L"+
+		"\'\2\u0101\u010a\5N(\2\u0102\u010a\5P)\2\u0103\u010a\5R*\2\u0104\u010a"+
+		"\5Z.\2\u0105\u010a\5\\/\2\u0106\u010a\5^\60\2\u0107\u010a\5\16\b\2\u0108"+
+		"\u010a\5\n\6\2\u0109\u00ed\3\2\2\2\u0109\u00ee\3\2\2\2\u0109\u00ef\3\2"+
+		"\2\2\u0109\u00f0\3\2\2\2\u0109\u00f1\3\2\2\2\u0109\u00f2\3\2\2\2\u0109"+
+		"\u00f3\3\2\2\2\u0109\u00f4\3\2\2\2\u0109\u00f5\3\2\2\2\u0109\u00f6\3\2"+
+		"\2\2\u0109\u00f7\3\2\2\2\u0109\u00f8\3\2\2\2\u0109\u00f9\3\2\2\2\u0109"+
+		"\u00fa\3\2\2\2\u0109\u00fb\3\2\2\2\u0109\u00fc\3\2\2\2\u0109\u00fd\3\2"+
+		"\2\2\u0109\u00fe\3\2\2\2\u0109\u00ff\3\2\2\2\u0109\u0100\3\2\2\2\u0109"+
+		"\u0101\3\2\2\2\u0109\u0102\3\2\2\2\u0109\u0103\3\2\2\2\u0109\u0104\3\2"+
+		"\2\2\u0109\u0105\3\2\2\2\u0109\u0106\3\2\2\2\u0109\u0107\3\2\2\2\u0109"+
+		"\u0108\3\2\2\2\u010a\t\3\2\2\2\u010b\u010e\5\24\13\2\u010c\u010e\5\f\7"+
+		"\2\u010d\u010b\3\2\2\2\u010d\u010c\3\2\2\2\u010e\13\3\2\2\2\u010f\u0110"+
+		"\7 \2\2\u0110\u0111\7\u0089\2\2\u0111\u0112\7!\2\2\u0112\u0113\5\u00c0"+
+		"a\2\u0113\u0114\7\b\2\2\u0114\u0115\5\u00c0a\2\u0115\r\3\2\2\2\u0116\u0117"+
+		"\7!\2\2\u0117\u0118\5\20\t\2\u0118\u0119\5\22\n\2\u0119\17\3\2\2\2\u011a"+
+		"\u011b\7\"\2\2\u011b\21\3\2\2\2\u011c\u011d\t\2\2\2\u011d\23\3\2\2\2\u011e"+
+		"\u011f\7 \2\2\u011f\u0123\7\u008a\2\2\u0120\u0121\5\u00a2R\2\u0121\u0122"+
+		"\7\4\2\2\u0122\u0124\3\2\2\2\u0123\u0120\3\2\2\2\u0123\u0124\3\2\2\2\u0124"+
+		"\u0125\3\2\2\2\u0125\u012e\5\u00a4S\2\u0126\u0127\7\u0081\2\2\u0127\u0128"+
+		"\7\u008e\2\2\u0128\u012f\5\u00a8U\2\u0129\u012b\7\35\2\2\u012a\u012c\7"+
+		"\64\2\2\u012b\u012a\3\2\2\2\u012b\u012c\3\2\2\2\u012c\u012d\3\2\2\2\u012d"+
+		"\u012f\5`\61\2\u012e\u0126\3\2\2\2\u012e\u0129\3\2\2\2\u012f\25\3\2\2"+
+		"\2\u0130\u0137\7%\2\2\u0131\u0138\5\u00a2R\2\u0132\u0138\5\u00a6T\2\u0133"+
+		"\u0134\5\u00a2R\2\u0134\u0135\7\4\2\2\u0135\u0136\5\u00a6T\2\u0136\u0138"+
+		"\3\2\2\2\u0137\u0131\3\2\2\2\u0137\u0132\3\2\2\2\u0137\u0133\3\2\2\2\u0137"+
+		"\u0138\3\2\2\2\u0138\27\3\2\2\2\u0139\u013b\7)\2\2\u013a\u013c\7@\2\2"+
+		"\u013b\u013a\3\2\2\2\u013b\u013c\3\2\2\2\u013c\u013d\3\2\2\2\u013d\u013e"+
+		"\5h\65\2\u013e\u013f\7\'\2\2\u013f\u0140\5\u00a2R\2\u0140\31\3\2\2\2\u0141"+
+		"\u0143\7,\2\2\u0142\u0144\t\3\2\2\u0143\u0142\3\2\2\2\u0143\u0144\3\2"+
+		"\2\2\u0144\u0149\3\2\2\2\u0145\u0147\7\u008f\2\2\u0146\u0148\5\u00be`"+
+		"\2\u0147\u0146\3\2\2\2\u0147\u0148\3\2\2\2\u0148\u014a\3\2\2\2\u0149\u0145"+
+		"\3\2\2\2\u0149\u014a\3\2\2\2\u014a\33\3\2\2\2\u014b\u0150\t\4\2\2\u014c"+
+		"\u014e\7\u008f\2\2\u014d\u014f\5\u00be`\2\u014e\u014d\3\2\2\2\u014e\u014f"+
+		"\3\2\2\2\u014f\u0151\3\2\2\2\u0150\u014c\3\2\2\2\u0150\u0151\3\2\2\2\u0151"+
+		"\35\3\2\2\2\u0152\u0154\7\u009b\2\2\u0153\u0155\7|\2\2\u0154\u0153\3\2"+
+		"\2\2\u0154\u0155\3\2\2\2\u0155\u0156\3\2\2\2\u0156\u015b\5z>\2\u0157\u0158"+
+		"\7\7\2\2\u0158\u015a\5z>\2\u0159\u0157\3\2\2\2\u015a\u015d\3\2\2\2\u015b"+
+		"\u0159\3\2\2\2\u015b\u015c\3\2\2\2\u015c\u015f\3\2\2\2\u015d\u015b\3\2"+
+		"\2\2\u015e\u0152\3\2\2\2\u015e\u015f\3\2\2\2\u015f\u0160\3\2\2\2\u0160"+
+		"\u016a\5\u0086D\2\u0161\u0163\7\u0091\2\2\u0162\u0164\7\37\2\2\u0163\u0162"+
+		"\3\2\2\2\u0163\u0164\3\2\2\2\u0164\u0168\3\2\2\2\u0165\u0168\7c\2\2\u0166"+
+		"\u0168\7M\2\2\u0167\u0161\3\2\2\2\u0167\u0165\3\2\2\2\u0167\u0166\3\2"+
+		"\2\2\u0168\u0169\3\2\2\2\u0169\u016b\5\u0086D\2\u016a\u0167\3\2\2\2\u016b"+
+		"\u016c\3\2\2\2\u016c\u016a\3\2\2\2\u016c\u016d\3\2\2\2\u016d\u0178\3\2"+
+		"\2\2\u016e\u016f\7u\2\2\u016f\u0170\7.\2\2\u0170\u0175\5v<\2\u0171\u0172"+
+		"\7\7\2\2\u0172\u0174\5v<\2\u0173\u0171\3\2\2\2\u0174\u0177\3\2\2\2\u0175"+
+		"\u0173\3\2\2\2\u0175\u0176\3\2\2\2\u0176\u0179\3\2\2\2\u0177\u0175\3\2"+
+		"\2\2\u0178\u016e\3\2\2\2\u0178\u0179\3\2\2\2\u0179\u0180\3\2\2\2\u017a"+
+		"\u017b\7k\2\2\u017b\u017e\5h\65\2\u017c\u017d\t\5\2\2\u017d\u017f\5h\65"+
+		"\2\u017e\u017c\3\2\2\2\u017e\u017f\3\2\2\2\u017f\u0181\3\2\2\2\u0180\u017a"+
+		"\3\2\2\2\u0180\u0181\3\2\2\2\u0181\37\3\2\2\2\u0182\u0184\79\2\2\u0183"+
+		"\u0185\7\u0092\2\2\u0184\u0183\3\2\2\2\u0184\u0185\3\2\2\2\u0185\u0186"+
+		"\3\2\2\2\u0186\u018a\7]\2\2\u0187\u0188\7Y\2\2\u0188\u0189\7o\2\2\u0189"+
+		"\u018b\7O\2\2\u018a\u0187\3\2\2\2\u018a\u018b\3\2\2\2\u018b\u018f\3\2"+
+		"\2\2\u018c\u018d\5\u00a2R\2\u018d\u018e\7\4\2\2\u018e\u0190\3\2\2\2\u018f"+
+		"\u018c\3\2\2\2\u018f\u0190\3\2\2\2\u0190\u0191\3\2\2\2\u0191\u0192\5\u00b0"+
+		"Y\2\u0192\u0193\7#\2\2\u0193\u0194\5\u00a4S\2\u0194\u0195\7\5\2\2\u0195"+
+		"\u019a\5n8\2\u0196\u0197\7\7\2\2\u0197\u0199\5n8\2\u0198\u0196\3\2\2\2"+
+		"\u0199\u019c\3\2\2\2\u019a\u0198\3\2\2\2\u019a\u019b\3\2\2\2\u019b\u019d"+
+		"\3\2\2\2\u019c\u019a\3\2\2\2\u019d\u01a0\7\6\2\2\u019e\u019f\7\u009a\2"+
+		"\2\u019f\u01a1\5h\65\2\u01a0\u019e\3\2\2\2\u01a0\u01a1\3\2\2\2\u01a1!"+
+		"\3\2\2\2\u01a2\u01a4\79\2\2\u01a3\u01a5\t\6\2\2\u01a4\u01a3\3\2\2\2\u01a4"+
+		"\u01a5\3\2\2\2\u01a5\u01a6\3\2\2\2\u01a6\u01aa\7\u008a\2\2\u01a7\u01a8"+
+		"\7Y\2\2\u01a8\u01a9\7o\2\2\u01a9\u01ab\7O\2\2\u01aa\u01a7\3\2\2\2\u01aa"+
+		"\u01ab\3\2\2\2\u01ab\u01af\3\2\2\2\u01ac\u01ad\5\u00a2R\2\u01ad\u01ae"+
+		"\7\4\2\2\u01ae\u01b0\3\2\2\2\u01af\u01ac\3\2\2\2\u01af\u01b0\3\2\2\2\u01b0"+
+		"\u01b1\3\2\2\2\u01b1\u01c9\5\u00a4S\2\u01b2\u01b3\7\5\2\2\u01b3\u01b8"+
+		"\5`\61\2\u01b4\u01b5\7\7\2\2\u01b5\u01b7\5`\61\2\u01b6\u01b4\3\2\2\2\u01b7"+
+		"\u01ba\3\2\2\2\u01b8\u01b6\3\2\2\2\u01b8\u01b9\3\2\2\2\u01b9\u01bf\3\2"+
+		"\2\2\u01ba\u01b8\3\2\2\2\u01bb\u01bc\7\7\2\2\u01bc\u01be\5p9\2\u01bd\u01bb"+
+		"\3\2\2\2\u01be\u01c1\3\2\2\2\u01bf\u01bd\3\2\2\2\u01bf\u01c0\3\2\2\2\u01c0"+
+		"\u01c2\3\2\2\2\u01c1\u01bf\3\2\2\2\u01c2\u01c5\7\6\2\2\u01c3\u01c4\7\u009c"+
+		"\2\2\u01c4\u01c6\7\u009d\2\2\u01c5\u01c3\3\2\2\2\u01c5\u01c6\3\2\2\2\u01c6"+
 		"\u01ca\3\2\2\2\u01c7\u01c8\7\'\2\2\u01c8\u01ca\5V,\2\u01c9\u01b2\3\2\2"+
 		"\2\u01c9\u01c7\3\2\2\2\u01ca\u01cc\3\2\2\2\u01cb\u01cd\5$\23\2\u01cc\u01cb"+
 		"\3\2\2\2\u01cc\u01cd\3\2\2\2\u01cd#\3\2\2\2\u01ce\u01d1\5&\24\2\u01cf"+
@@ -10703,239 +10595,229 @@ public class SQLiteParser extends Parser {
 		"\2\2\u046b\u046c\7k\2\2\u046c\u046f\5h\65\2\u046d\u046e\t\5\2\2\u046e"+
 		"\u0470\5h\65\2\u046f\u046d\3\2\2\2\u046f\u0470\3\2\2\2\u0470\u0472\3\2"+
 		"\2\2\u0471\u0469\3\2\2\2\u0471\u0472\3\2\2\2\u0472]\3\2\2\2\u0473\u0474"+
-		"\7\u0095\2\2\u0474_\3\2\2\2\u0475\u0477\5\u00aaV\2\u0476\u0478\5b\62\2"+
-		"\u0477\u0476\3\2\2\2\u0477\u0478\3\2\2\2\u0478\u047c\3\2\2\2\u0479\u047b"+
-		"\5d\63\2\u047a\u0479\3\2\2\2\u047b\u047e\3\2\2\2\u047c\u047a\3\2\2\2\u047c"+
-		"\u047d\3\2\2\2\u047da\3\2\2\2\u047e\u047c\3\2\2\2\u047f\u0481\5\u009e"+
-		"P\2\u0480\u047f\3\2\2\2\u0481\u0482\3\2\2\2\u0482\u0480\3\2\2\2\u0482"+
-		"\u0483\3\2\2\2\u0483\u048e\3\2\2\2\u0484\u0485\7\5\2\2\u0485\u0486\5\u0090"+
-		"I\2\u0486\u0487\7\6\2\2\u0487\u048f\3\2\2\2\u0488\u0489\7\5\2\2\u0489"+
-		"\u048a\5\u0090I\2\u048a\u048b\7\7\2\2\u048b\u048c\5\u0090I\2\u048c\u048d"+
-		"\7\6\2\2\u048d\u048f\3\2\2\2\u048e\u0484\3\2\2\2\u048e\u0488\3\2\2\2\u048e"+
-		"\u048f\3\2\2\2\u048fc\3\2\2\2\u0490\u0491\7\67\2\2\u0491\u0493\5\u009e"+
-		"P\2\u0492\u0490\3\2\2\2\u0492\u0493\3\2\2\2\u0493\u04b5\3\2\2\2\u0494"+
-		"\u0495\7y\2\2\u0495\u0497\7h\2\2\u0496\u0498\t\t\2\2\u0497\u0496\3\2\2"+
-		"\2\u0497\u0498\3\2\2\2\u0498\u0499\3\2\2\2\u0499\u049b\5f\64\2\u049a\u049c"+
-		"\7*\2\2\u049b\u049a\3\2\2\2\u049b\u049c\3\2\2\2\u049c\u04b6\3\2\2\2\u049d"+
-		"\u049f\7o\2\2\u049e\u049d\3\2\2\2\u049e\u049f\3\2\2\2\u049f\u04a0\3\2"+
-		"\2\2\u04a0\u04a1\7q\2\2\u04a1\u04b6\5f\64\2\u04a2\u04a3\7\u0092\2\2\u04a3"+
-		"\u04b6\5f\64\2\u04a4\u04a5\7\62\2\2\u04a5\u04a6\7\5\2\2\u04a6\u04a7\5"+
-		"h\65\2\u04a7\u04a8\7\6\2\2\u04a8\u04b6\3\2\2\2\u04a9\u04b0\7A\2\2\u04aa"+
-		"\u04b1\5\u0090I\2\u04ab\u04b1\5\u0092J\2\u04ac\u04ad\7\5\2\2\u04ad\u04ae"+
-		"\5h\65\2\u04ae\u04af\7\6\2\2\u04af\u04b1\3\2\2\2\u04b0\u04aa\3\2\2\2\u04b0"+
-		"\u04ab\3\2\2\2\u04b0\u04ac\3\2\2\2\u04b1\u04b6\3\2\2\2\u04b2\u04b3\7\63"+
-		"\2\2\u04b3\u04b6\5\u00acW\2\u04b4\u04b6\5j\66\2\u04b5\u0494\3\2\2\2\u04b5"+
-		"\u049e\3\2\2\2\u04b5\u04a2\3\2\2\2\u04b5\u04a4\3\2\2\2\u04b5\u04a9\3\2"+
-		"\2\2\u04b5\u04b2\3\2\2\2\u04b5\u04b4\3\2\2\2\u04b6e\3\2\2\2\u04b7\u04b8"+
-		"\7#\2\2\u04b8\u04b9\7\66\2\2\u04b9\u04bb\t\n\2\2\u04ba\u04b7\3\2\2\2\u04ba"+
-		"\u04bb\3\2\2\2\u04bbg\3\2\2\2\u04bc\u04bd\b\65\1\2\u04bd\u0509\5\u0092"+
-		"J\2\u04be\u0509\7\u009f\2\2\u04bf\u04c0\5\u00a2R\2\u04c0\u04c1\7\4\2\2"+
-		"\u04c1\u04c3\3\2\2\2\u04c2\u04bf\3\2\2\2\u04c2\u04c3\3\2\2\2\u04c3\u04c4"+
-		"\3\2\2\2\u04c4\u04c5\5\u00a4S\2\u04c5\u04c6\7\4\2\2\u04c6\u04c8\3\2\2"+
-		"\2\u04c7\u04c2\3\2\2\2\u04c7\u04c8\3\2\2\2\u04c8\u04c9\3\2\2\2\u04c9\u0509"+
-		"\5\u00aaV\2\u04ca\u04cb\5\u0094K\2\u04cb\u04cc\5h\65\27\u04cc\u0509\3"+
-		"\2\2\2\u04cd\u04ce\5\u00a0Q\2\u04ce\u04db\7\5\2\2\u04cf\u04d1\7G\2\2\u04d0"+
-		"\u04cf\3\2\2\2\u04d0\u04d1\3\2\2\2\u04d1\u04d2\3\2\2\2\u04d2\u04d7\5h"+
-		"\65\2\u04d3\u04d4\7\7\2\2\u04d4\u04d6\5h\65\2\u04d5\u04d3\3\2\2\2\u04d6"+
-		"\u04d9\3\2\2\2\u04d7\u04d5\3\2\2\2\u04d7\u04d8\3\2\2\2\u04d8\u04dc\3\2"+
-		"\2\2\u04d9\u04d7\3\2\2\2\u04da\u04dc\7\t\2\2\u04db\u04d0\3\2\2\2\u04db"+
-		"\u04da\3\2\2\2\u04db\u04dc\3\2\2\2\u04dc\u04dd\3\2\2\2\u04dd\u04de\7\6"+
-		"\2\2\u04de\u0509\3\2\2\2\u04df\u04e0\7\5\2\2\u04e0\u04e1\5h\65\2\u04e1"+
-		"\u04e2\7\6\2\2\u04e2\u0509\3\2\2\2\u04e3\u04e4\7\61\2\2\u04e4\u04e5\7"+
-		"\5\2\2\u04e5\u04e6\5h\65\2\u04e6\u04e7\7\'\2\2\u04e7\u04e8\5b\62\2\u04e8"+
-		"\u04e9\7\6\2\2\u04e9\u0509\3\2\2\2\u04ea\u04ec\7o\2\2\u04eb\u04ea\3\2"+
-		"\2\2\u04eb\u04ec\3\2\2\2\u04ec\u04ed\3\2\2\2\u04ed\u04ef\7O\2\2\u04ee"+
-		"\u04eb\3\2\2\2\u04ee\u04ef\3\2\2\2\u04ef\u04f0\3\2\2\2\u04f0\u04f1\7\5"+
-		"\2\2\u04f1\u04f2\5V,\2\u04f2\u04f3\7\6\2\2\u04f3\u0509\3\2\2\2\u04f4\u04f6"+
-		"\7\60\2\2\u04f5\u04f7\5h\65\2\u04f6\u04f5\3\2\2\2\u04f6\u04f7\3\2\2\2"+
-		"\u04f7\u04fd\3\2\2\2\u04f8\u04f9\7\u0099\2\2\u04f9\u04fa\5h\65\2\u04fa"+
-		"\u04fb\7\u008d\2\2\u04fb\u04fc\5h\65\2\u04fc\u04fe\3\2\2\2\u04fd\u04f8"+
-		"\3\2\2\2\u04fe\u04ff\3\2\2\2\u04ff\u04fd\3\2\2\2\u04ff\u0500\3\2\2\2\u0500"+
-		"\u0503\3\2\2\2\u0501\u0502\7J\2\2\u0502\u0504\5h\65\2\u0503\u0501\3\2"+
-		"\2\2\u0503\u0504\3\2\2\2\u0504\u0505\3\2\2\2\u0505\u0506\7K\2\2\u0506"+
-		"\u0509\3\2\2\2\u0507\u0509\5l\67\2\u0508\u04bc\3\2\2\2\u0508\u04be\3\2"+
-		"\2\2\u0508\u04c7\3\2\2\2\u0508\u04ca\3\2\2\2\u0508\u04cd\3\2\2\2\u0508"+
-		"\u04df\3\2\2\2\u0508\u04e3\3\2\2\2\u0508\u04ee\3\2\2\2\u0508\u04f4\3\2"+
-		"\2\2\u0508\u0507\3\2\2\2\u0509\u056e\3\2\2\2\u050a\u050b\f\26\2\2\u050b"+
-		"\u050c\7\r\2\2\u050c\u056d\5h\65\27\u050d\u050e\f\25\2\2\u050e\u050f\t"+
-		"\13\2\2\u050f\u056d\5h\65\26\u0510\u0511\f\24\2\2\u0511\u0512\t\f\2\2"+
-		"\u0512\u056d\5h\65\25\u0513\u0514\f\23\2\2\u0514\u0515\t\r\2\2\u0515\u056d"+
-		"\5h\65\24\u0516\u0517\f\22\2\2\u0517\u0518\t\16\2\2\u0518\u056d\5h\65"+
-		"\23\u0519\u0526\f\21\2\2\u051a\u0527\7\b\2\2\u051b\u0527\7\30\2\2\u051c"+
-		"\u0527\7\31\2\2\u051d\u0527\7\32\2\2\u051e\u0527\7e\2\2\u051f\u0520\7"+
-		"e\2\2\u0520\u0527\7o\2\2\u0521\u0527\7\\\2\2\u0522\u0527\7j\2\2\u0523"+
-		"\u0527\7V\2\2\u0524\u0527\7l\2\2\u0525\u0527\7~\2\2\u0526\u051a\3\2\2"+
-		"\2\u0526\u051b\3\2\2\2\u0526\u051c\3\2\2\2\u0526\u051d\3\2\2\2\u0526\u051e"+
-		"\3\2\2\2\u0526\u051f\3\2\2\2\u0526\u0521\3\2\2\2\u0526\u0522\3\2\2\2\u0526"+
-		"\u0523\3\2\2\2\u0526\u0524\3\2\2\2\u0526\u0525\3\2\2\2\u0527\u0528\3\2"+
-		"\2\2\u0528\u056d\5h\65\22\u0529\u052a\f\20\2\2\u052a\u052b\7&\2\2\u052b"+
-		"\u056d\5h\65\21\u052c\u052d\f\17\2\2\u052d\u052e\7t\2\2\u052e\u056d\5"+
-		"h\65\20\u052f\u0530\f\b\2\2\u0530\u0532\7e\2\2\u0531\u0533\7o\2\2\u0532"+
-		"\u0531\3\2\2\2\u0532\u0533\3\2\2\2\u0533\u0534\3\2\2\2\u0534\u056d\5h"+
-		"\65\t\u0535\u0537\f\7\2\2\u0536\u0538\7o\2\2\u0537\u0536\3\2\2\2\u0537"+
-		"\u0538\3\2\2\2\u0538\u0539\3\2\2\2\u0539\u053a\7-\2\2\u053a\u053b\5h\65"+
-		"\2\u053b\u053c\7&\2\2\u053c\u053d\5h\65\b\u053d\u056d\3\2\2\2\u053e\u053f"+
-		"\f\13\2\2\u053f\u0540\7\63\2\2\u0540\u056d\5\u00acW\2\u0541\u0543\f\n"+
-		"\2\2\u0542\u0544\7o\2\2\u0543\u0542\3\2\2\2\u0543\u0544\3\2\2\2\u0544"+
-		"\u0545\3\2\2\2\u0545\u0546\t\17\2\2\u0546\u0549\5h\65\2\u0547\u0548\7"+
-		"L\2\2\u0548\u054a\5h\65\2\u0549\u0547\3\2\2\2\u0549\u054a\3\2\2\2\u054a"+
-		"\u056d\3\2\2\2\u054b\u0550\f\t\2\2\u054c\u0551\7f\2\2\u054d\u0551\7p\2"+
-		"\2\u054e\u054f\7o\2\2\u054f\u0551\7q\2\2\u0550\u054c\3\2\2\2\u0550\u054d"+
-		"\3\2\2\2\u0550\u054e\3\2\2\2\u0551\u056d\3\2\2\2\u0552\u0554\f\6\2\2\u0553"+
-		"\u0555\7o\2\2\u0554\u0553\3\2\2\2\u0554\u0555\3\2\2\2\u0555\u0556\3\2"+
-		"\2\2\u0556\u056a\7\\\2\2\u0557\u0561\7\5\2\2\u0558\u0562\5V,\2\u0559\u055e"+
-		"\5h\65\2\u055a\u055b\7\7\2\2\u055b\u055d\5h\65\2\u055c\u055a\3\2\2\2\u055d"+
-		"\u0560\3\2\2\2\u055e\u055c\3\2\2\2\u055e\u055f\3\2\2\2\u055f\u0562\3\2"+
-		"\2\2\u0560\u055e\3\2\2\2\u0561\u0558\3\2\2\2\u0561\u0559\3\2\2\2\u0561"+
-		"\u0562\3\2\2\2\u0562\u0563\3\2\2\2\u0563\u056b\7\6\2\2\u0564\u0565\5\u00a2"+
-		"R\2\u0565\u0566\7\4\2\2\u0566\u0568\3\2\2\2\u0567\u0564\3\2\2\2\u0567"+
-		"\u0568\3\2\2\2\u0568\u0569\3\2\2\2\u0569\u056b\5\u00a4S\2\u056a\u0557"+
-		"\3\2\2\2\u056a\u0567\3\2\2\2\u056b\u056d\3\2\2\2\u056c\u050a\3\2\2\2\u056c"+
-		"\u050d\3\2\2\2\u056c\u0510\3\2\2\2\u056c\u0513\3\2\2\2\u056c\u0516\3\2"+
-		"\2\2\u056c\u0519\3\2\2\2\u056c\u0529\3\2\2\2\u056c\u052c\3\2\2\2\u056c"+
-		"\u052f\3\2\2\2\u056c\u0535\3\2\2\2\u056c\u053e\3\2\2\2\u056c\u0541\3\2"+
-		"\2\2\u056c\u054b\3\2\2\2\u056c\u0552\3\2\2\2\u056d\u0570\3\2\2\2\u056e"+
-		"\u056c\3\2\2\2\u056e\u056f\3\2\2\2\u056fi\3\2\2\2\u0570\u056e\3\2\2\2"+
-		"\u0571\u0572\7}\2\2\u0572\u057e\5\u00aeX\2\u0573\u0574\7\5\2\2\u0574\u0579"+
-		"\5\u00aaV\2\u0575\u0576\7\7\2\2\u0576\u0578\5\u00aaV\2\u0577\u0575\3\2"+
-		"\2\2\u0578\u057b\3\2\2\2\u0579\u0577\3\2\2\2\u0579\u057a\3\2\2\2\u057a"+
-		"\u057c\3\2\2\2\u057b\u0579\3\2\2\2\u057c\u057d\7\6\2\2\u057d\u057f\3\2"+
-		"\2\2\u057e\u0573\3\2\2\2\u057e\u057f\3\2\2\2\u057f\u0592\3\2\2\2\u0580"+
-		"\u0581\7#\2\2\u0581\u058a\t\20\2\2\u0582\u0583\7!\2\2\u0583\u058b\7q\2"+
-		"\2\u0584\u0585\7!\2\2\u0585\u058b\7A\2\2\u0586\u058b\7/\2\2\u0587\u058b"+
-		"\7\u0083\2\2\u0588\u0589\7n\2\2\u0589\u058b\7\34\2\2\u058a\u0582\3\2\2"+
-		"\2\u058a\u0584\3\2\2\2\u058a\u0586\3\2\2\2\u058a\u0587\3\2\2\2\u058a\u0588"+
-		"\3\2\2\2\u058b\u058f\3\2\2\2\u058c\u058d\7l\2\2\u058d\u058f\5\u009eP\2"+
-		"\u058e\u0580\3\2\2\2\u058e\u058c\3\2\2\2\u058f\u0591\3\2\2\2\u0590\u058e"+
-		"\3\2\2\2\u0591\u0594\3\2\2\2\u0592\u0590\3\2\2\2\u0592\u0593\3\2\2\2\u0593"+
-		"\u059f\3\2\2\2\u0594\u0592\3\2\2\2\u0595\u0597\7o\2\2\u0596\u0595\3\2"+
-		"\2\2\u0596\u0597\3\2\2\2\u0597\u0598\3\2\2\2\u0598\u059d\7B\2\2\u0599"+
-		"\u059a\7_\2\2\u059a\u059e\7C\2\2\u059b\u059c\7_\2\2\u059c\u059e\7[\2\2"+
-		"\u059d\u0599\3\2\2\2\u059d\u059b\3\2\2\2\u059d\u059e\3\2\2\2\u059e\u05a0"+
-		"\3\2\2\2\u059f\u0596\3\2\2\2\u059f\u05a0\3\2\2\2\u05a0k\3\2\2\2\u05a1"+
-		"\u05a2\7{\2\2\u05a2\u05a7\7\5\2\2\u05a3\u05a8\7Z\2\2\u05a4\u05a5\t\21"+
-		"\2\2\u05a5\u05a6\7\7\2\2\u05a6\u05a8\5\u0096L\2\u05a7\u05a3\3\2\2\2\u05a7"+
-		"\u05a4\3\2\2\2\u05a8\u05a9\3\2\2\2\u05a9\u05aa\7\6\2\2\u05aam\3\2\2\2"+
-		"\u05ab\u05ae\5\u00aaV\2\u05ac\u05ad\7\63\2\2\u05ad\u05af\5\u00acW\2\u05ae"+
-		"\u05ac\3\2\2\2\u05ae\u05af\3\2\2\2\u05af\u05b1\3\2\2\2\u05b0\u05b2\t\t"+
-		"\2\2\u05b1\u05b0\3\2\2\2\u05b1\u05b2\3\2\2\2\u05b2o\3\2\2\2\u05b3\u05b4"+
-		"\7\67\2\2\u05b4\u05b6\5\u009eP\2\u05b5\u05b3\3\2\2\2\u05b5\u05b6\3\2\2"+
-		"\2\u05b6\u05db\3\2\2\2\u05b7\u05b8\7y\2\2\u05b8\u05bb\7h\2\2\u05b9\u05bb"+
-		"\7\u0092\2\2\u05ba\u05b7\3\2\2\2\u05ba\u05b9\3\2\2\2\u05bb\u05bc\3\2\2"+
-		"\2\u05bc\u05bd\7\5\2\2\u05bd\u05c2\5n8\2\u05be\u05bf\7\7\2\2\u05bf\u05c1"+
-		"\5n8\2\u05c0\u05be\3\2\2\2\u05c1\u05c4\3\2\2\2\u05c2\u05c0\3\2\2\2\u05c2"+
-		"\u05c3\3\2\2\2\u05c3\u05c5\3\2\2\2\u05c4\u05c2\3\2\2\2\u05c5\u05c6\7\6"+
-		"\2\2\u05c6\u05c7\5f\64\2\u05c7\u05dc\3\2\2\2\u05c8\u05c9\7\62\2\2\u05c9"+
-		"\u05ca\7\5\2\2\u05ca\u05cb\5h\65\2\u05cb\u05cc\7\6\2\2\u05cc\u05dc\3\2"+
-		"\2\2\u05cd\u05ce\7S\2\2\u05ce\u05cf\7h\2\2\u05cf\u05d0\7\5\2\2\u05d0\u05d5"+
-		"\5\u00aaV\2\u05d1\u05d2\7\7\2\2\u05d2\u05d4\5\u00aaV\2\u05d3\u05d1\3\2"+
-		"\2\2\u05d4\u05d7\3\2\2\2\u05d5\u05d3\3\2\2\2\u05d5\u05d6\3\2\2\2\u05d6"+
-		"\u05d8\3\2\2\2\u05d7\u05d5\3\2\2\2\u05d8\u05d9\7\6\2\2\u05d9\u05da\5j"+
-		"\66\2\u05da\u05dc\3\2\2\2\u05db\u05ba\3\2\2\2\u05db\u05c8\3\2\2\2\u05db"+
-		"\u05cd\3\2\2\2\u05dcq\3\2\2\2\u05dd\u05df\7\u009b\2\2\u05de\u05e0\7|\2"+
-		"\2\u05df\u05de\3\2\2\2\u05df\u05e0\3\2\2\2\u05e0\u05e1\3\2\2\2\u05e1\u05e2"+
-		"\5\u008eH\2\u05e2\u05e3\7\'\2\2\u05e3\u05e4\7\5\2\2\u05e4\u05e5\5V,\2"+
-		"\u05e5\u05ef\7\6\2\2\u05e6\u05e7\7\7\2\2\u05e7\u05e8\5\u008eH\2\u05e8"+
-		"\u05e9\7\'\2\2\u05e9\u05ea\7\5\2\2\u05ea\u05eb\5V,\2\u05eb\u05ec\7\6\2"+
-		"\2\u05ec\u05ee\3\2\2\2\u05ed\u05e6\3\2\2\2\u05ee\u05f1\3\2\2\2\u05ef\u05ed"+
-		"\3\2\2\2\u05ef\u05f0\3\2\2\2\u05f0s\3\2\2\2\u05f1\u05ef\3\2\2\2\u05f2"+
-		"\u05f3\5\u00a2R\2\u05f3\u05f4\7\4\2\2\u05f4\u05f6\3\2\2\2\u05f5\u05f2"+
-		"\3\2\2\2\u05f5\u05f6\3\2\2\2\u05f6\u05f7\3\2\2\2\u05f7\u05fd\5\u00a4S"+
-		"\2\u05f8\u05f9\7^\2\2\u05f9\u05fa\7.\2\2\u05fa\u05fe\5\u00b0Y\2\u05fb"+
-		"\u05fc\7o\2\2\u05fc\u05fe\7^\2\2\u05fd\u05f8\3\2\2\2\u05fd\u05fb\3\2\2"+
-		"\2\u05fd\u05fe\3\2\2\2\u05feu\3\2\2\2\u05ff\u0602\5h\65\2\u0600\u0601"+
-		"\7\63\2\2\u0601\u0603\5\u00acW\2\u0602\u0600\3\2\2\2\u0602\u0603\3\2\2"+
-		"\2\u0603\u0605\3\2\2\2\u0604\u0606\t\t\2\2\u0605\u0604\3\2\2\2\u0605\u0606"+
-		"\3\2\2\2\u0606w\3\2\2\2\u0607\u060b\5\u0090I\2\u0608\u060b\5\u009eP\2"+
-		"\u0609\u060b\7\u00a0\2\2\u060a\u0607\3\2\2\2\u060a\u0608\3\2\2\2\u060a"+
-		"\u0609\3\2\2\2\u060by\3\2\2\2\u060c\u0618\5\u00a4S\2\u060d\u060e\7\5\2"+
-		"\2\u060e\u0613\5\u00aaV\2\u060f\u0610\7\7\2\2\u0610\u0612\5\u00aaV\2\u0611"+
-		"\u060f\3\2\2\2\u0612\u0615\3\2\2\2\u0613\u0611\3\2\2\2\u0613\u0614\3\2"+
-		"\2\2\u0614\u0616\3\2\2\2\u0615\u0613\3\2\2\2\u0616\u0617\7\6\2\2\u0617"+
-		"\u0619\3\2\2\2\u0618\u060d\3\2\2\2\u0618\u0619\3\2\2\2\u0619\u061a\3\2"+
-		"\2\2\u061a\u061b\7\'\2\2\u061b\u061c\7\5\2\2\u061c\u061d\5V,\2\u061d\u061e"+
-		"\7\6\2\2\u061e{\3\2\2\2\u061f\u062c\7\t\2\2\u0620\u0621\5\u00a4S\2\u0621"+
-		"\u0622\7\4\2\2\u0622\u0623\7\t\2\2\u0623\u062c\3\2\2\2\u0624\u0629\5h"+
-		"\65\2\u0625\u0627\7\'\2\2\u0626\u0625\3\2\2\2\u0626\u0627\3\2\2\2\u0627"+
-		"\u0628\3\2\2\2\u0628\u062a\5\u009aN\2\u0629\u0626\3\2\2\2\u0629\u062a"+
-		"\3\2\2\2\u062a\u062c\3\2\2\2\u062b\u061f\3\2\2\2\u062b\u0620\3\2\2\2\u062b"+
-		"\u0624\3\2\2\2\u062c}\3\2\2\2\u062d\u062e\5\u00a2R\2\u062e\u062f\7\4\2"+
-		"\2\u062f\u0631\3\2\2\2\u0630\u062d\3\2\2\2\u0630\u0631\3\2\2\2\u0631\u0632"+
-		"\3\2\2\2\u0632\u0637\5\u00a4S\2\u0633\u0635\7\'\2\2\u0634\u0633\3\2\2"+
-		"\2\u0634\u0635\3\2\2\2\u0635\u0636\3\2\2\2\u0636\u0638\5\u00bc_\2\u0637"+
-		"\u0634\3\2\2\2\u0637\u0638\3\2\2\2\u0638\u063e\3\2\2\2\u0639\u063a\7^"+
-		"\2\2\u063a\u063b\7.\2\2\u063b\u063f\5\u00b0Y\2\u063c\u063d\7o\2\2\u063d"+
-		"\u063f\7^\2\2\u063e\u0639\3\2\2\2\u063e\u063c\3\2\2\2\u063e\u063f\3\2"+
-		"\2\2\u063f\u065d\3\2\2\2\u0640\u064a\7\5\2\2\u0641\u0646\5~@\2\u0642\u0643"+
-		"\7\7\2\2\u0643\u0645\5~@\2\u0644\u0642\3\2\2\2\u0645\u0648\3\2\2\2\u0646"+
-		"\u0644\3\2\2\2\u0646\u0647\3\2\2\2\u0647\u064b\3\2\2\2\u0648\u0646\3\2"+
-		"\2\2\u0649\u064b\5\u0080A\2\u064a\u0641\3\2\2\2\u064a\u0649\3\2\2\2\u064b"+
-		"\u064c\3\2\2\2\u064c\u0651\7\6\2\2\u064d\u064f\7\'\2\2\u064e\u064d\3\2"+
-		"\2\2\u064e\u064f\3\2\2\2\u064f\u0650\3\2\2\2\u0650\u0652\5\u00bc_\2\u0651"+
-		"\u064e\3\2\2\2\u0651\u0652\3\2\2\2\u0652\u065d\3\2\2\2\u0653\u0654\7\5"+
-		"\2\2\u0654\u0655\5V,\2\u0655\u065a\7\6\2\2\u0656\u0658\7\'\2\2\u0657\u0656"+
-		"\3\2\2\2\u0657\u0658\3\2\2\2\u0658\u0659\3\2\2\2\u0659\u065b\5\u00bc_"+
-		"\2\u065a\u0657\3\2\2\2\u065a\u065b\3\2\2\2\u065b\u065d\3\2\2\2\u065c\u0630"+
-		"\3\2\2\2\u065c\u0640\3\2\2\2\u065c\u0653\3\2\2\2\u065d\177\3\2\2\2\u065e"+
-		"\u0665\5~@\2\u065f\u0660\5\u0082B\2\u0660\u0661\5~@\2\u0661\u0662\5\u0084"+
-		"C\2\u0662\u0664\3\2\2\2\u0663\u065f\3\2\2\2\u0664\u0667\3\2\2\2\u0665"+
-		"\u0663\3\2\2\2\u0665\u0666\3\2\2\2\u0666\u0081\3\2\2\2\u0667\u0665\3\2"+
-		"\2\2\u0668\u0676\7\7\2\2\u0669\u066b\7m\2\2\u066a\u0669\3\2\2\2\u066a"+
-		"\u066b\3\2\2\2\u066b\u0672\3\2\2\2\u066c\u066e\7i\2\2\u066d\u066f\7v\2"+
-		"\2\u066e\u066d\3\2\2\2\u066e\u066f\3\2\2\2\u066f\u0673\3\2\2\2\u0670\u0673"+
-		"\7`\2\2\u0671\u0673\7<\2\2\u0672\u066c\3\2\2\2\u0672\u0670\3\2\2\2\u0672"+
-		"\u0671\3\2\2\2\u0672\u0673\3\2\2\2\u0673\u0674\3\2\2\2\u0674\u0676\7g"+
-		"\2\2\u0675\u0668\3\2\2\2\u0675\u066a\3\2\2\2\u0676\u0083\3\2\2\2\u0677"+
-		"\u0678\7#\2\2\u0678\u0686\5h\65\2\u0679\u067a\7\u0094\2\2\u067a\u067b"+
-		"\7\5\2\2\u067b\u0680\5\u00aaV\2\u067c\u067d\7\7\2\2\u067d\u067f\5\u00aa"+
-		"V\2\u067e\u067c\3\2\2\2\u067f\u0682\3\2\2\2\u0680\u067e\3\2\2\2\u0680"+
-		"\u0681\3\2\2\2\u0681\u0683\3\2\2\2\u0682\u0680\3\2\2\2\u0683\u0684\7\6"+
-		"\2\2\u0684\u0686\3\2\2\2\u0685\u0677\3\2\2\2\u0685\u0679\3\2\2\2\u0685"+
-		"\u0686\3\2\2\2\u0686\u0085\3\2\2\2\u0687\u0689\7\u0088\2\2\u0688\u068a"+
-		"\t\b\2\2\u0689\u0688\3\2\2\2\u0689\u068a\3\2\2\2\u068a\u068b\3\2\2\2\u068b"+
-		"\u0690\5|?\2\u068c\u068d\7\7\2\2\u068d\u068f\5|?\2\u068e\u068c\3\2\2\2"+
-		"\u068f\u0692\3\2\2\2\u0690\u068e\3\2\2\2\u0690\u0691\3\2\2\2\u0691\u069f"+
-		"\3\2\2\2\u0692\u0690\3\2\2\2\u0693\u069d\7T\2\2\u0694\u0699\5~@\2\u0695"+
-		"\u0696\7\7\2\2\u0696\u0698\5~@\2\u0697\u0695\3\2\2\2\u0698\u069b\3\2\2"+
-		"\2\u0699\u0697\3\2\2\2\u0699\u069a\3\2\2\2\u069a\u069e\3\2\2\2\u069b\u0699"+
-		"\3\2\2\2\u069c\u069e\5\u0080A\2\u069d\u0694\3\2\2\2\u069d\u069c\3\2\2"+
-		"\2\u069e\u06a0\3\2\2\2\u069f\u0693\3\2\2\2\u069f\u06a0\3\2\2\2\u06a0\u06a2"+
-		"\3\2\2\2\u06a1\u06a3\5\u008aF\2\u06a2\u06a1\3\2\2\2\u06a2\u06a3\3\2\2"+
-		"\2\u06a3\u06a5\3\2\2\2\u06a4\u06a6\5\u0088E\2\u06a5\u06a4\3\2\2\2\u06a5"+
-		"\u06a6\3\2\2\2\u06a6\u0087\3\2\2\2\u06a7\u06a8\7W\2\2\u06a8\u06a9\7.\2"+
-		"\2\u06a9\u06ae\5h\65\2\u06aa\u06ab\7\7\2\2\u06ab\u06ad\5h\65\2\u06ac\u06aa"+
-		"\3\2\2\2\u06ad\u06b0\3\2\2\2\u06ae\u06ac\3\2\2\2\u06ae\u06af\3\2\2\2\u06af"+
-		"\u06b3\3\2\2\2\u06b0\u06ae\3\2\2\2\u06b1\u06b2\7X\2\2\u06b2\u06b4\5h\65"+
-		"\2\u06b3\u06b1\3\2\2\2\u06b3\u06b4\3\2\2\2\u06b4\u0089\3\2\2\2\u06b5\u06b6"+
-		"\7\u009a\2\2\u06b6\u06b7\5h\65\2\u06b7\u008b\3\2\2\2\u06b8\u06be\7\u0091"+
-		"\2\2\u06b9\u06ba\7\u0091\2\2\u06ba\u06be\7\37\2\2\u06bb\u06be\7c\2\2\u06bc"+
-		"\u06be\7M\2\2\u06bd\u06b8\3\2\2\2\u06bd\u06b9\3\2\2\2\u06bd\u06bb\3\2"+
-		"\2\2\u06bd\u06bc\3\2\2\2\u06be\u008d\3\2\2\2\u06bf\u06cb\5\u00a4S\2\u06c0"+
-		"\u06c1\7\5\2\2\u06c1\u06c6\5\u00aaV\2\u06c2\u06c3\7\7\2\2\u06c3\u06c5"+
-		"\5\u00aaV\2\u06c4\u06c2\3\2\2\2\u06c5\u06c8\3\2\2\2\u06c6\u06c4\3\2\2"+
-		"\2\u06c6\u06c7\3\2\2\2\u06c7\u06c9\3\2\2\2\u06c8\u06c6\3\2\2\2\u06c9\u06ca"+
-		"\7\6\2\2\u06ca\u06cc\3\2\2\2\u06cb\u06c0\3\2\2\2\u06cb\u06cc\3\2\2\2\u06cc"+
-		"\u008f\3\2\2\2\u06cd\u06cf\t\f\2\2\u06ce\u06cd\3\2\2\2\u06ce\u06cf\3\2"+
-		"\2\2\u06cf\u06d0\3\2\2\2\u06d0\u06d1\7\u009e\2\2\u06d1\u0091\3\2\2\2\u06d2"+
-		"\u06d3\t\22\2\2\u06d3\u0093\3\2\2\2\u06d4\u06d5\t\23\2\2\u06d5\u0095\3"+
-		"\2\2\2\u06d6\u06d7\7\u00a0\2\2\u06d7\u0097\3\2\2\2\u06d8\u06db\5h\65\2"+
-		"\u06d9\u06db\5`\61\2\u06da\u06d8\3\2\2\2\u06da\u06d9\3\2\2\2\u06db\u0099"+
-		"\3\2\2\2\u06dc\u06dd\t\24\2\2\u06dd\u009b\3\2\2\2\u06de\u06df\t\25\2\2"+
-		"\u06df\u009d\3\2\2\2\u06e0\u06e1\5\u00c0a\2\u06e1\u009f\3\2\2\2\u06e2"+
-		"\u06e3\5\u00c0a\2\u06e3\u00a1\3\2\2\2\u06e4\u06e5\5\u00c0a\2\u06e5\u00a3"+
-		"\3\2\2\2\u06e6\u06e7\5\u00c0a\2\u06e7\u00a5\3\2\2\2\u06e8\u06e9\5\u00c0"+
-		"a\2\u06e9\u00a7\3\2\2\2\u06ea\u06eb\5\u00c0a\2\u06eb\u00a9\3\2\2\2\u06ec"+
-		"\u06ed\5\u00c0a\2\u06ed\u00ab\3\2\2\2\u06ee\u06ef\5\u00c0a\2\u06ef\u00ad"+
-		"\3\2\2\2\u06f0\u06f1\5\u00c0a\2\u06f1\u00af\3\2\2\2\u06f2\u06f3\5\u00c0"+
-		"a\2\u06f3\u00b1\3\2\2\2\u06f4\u06f5\5\u00c0a\2\u06f5\u00b3\3\2\2\2\u06f6"+
-		"\u06f7\5\u00c0a\2\u06f7\u00b5\3\2\2\2\u06f8\u06f9\5\u00c0a\2\u06f9\u00b7"+
-		"\3\2\2\2\u06fa\u06fb\5\u00c0a\2\u06fb\u00b9\3\2\2\2\u06fc\u06fd\5\u00c0"+
-		"a\2\u06fd\u00bb\3\2\2\2\u06fe\u06ff\5\u00c0a\2\u06ff\u00bd\3\2\2\2\u0700"+
-		"\u0701\5\u00c0a\2\u0701\u00bf\3\2\2\2\u0702\u070a\7\u009d\2\2\u0703\u070a"+
-		"\5\u009cO\2\u0704\u070a\7\u00a0\2\2\u0705\u0706\7\5\2\2\u0706\u0707\5"+
-		"\u00c0a\2\u0707\u0708\7\6\2\2\u0708\u070a\3\2\2\2\u0709\u0702\3\2\2\2"+
-		"\u0709\u0703\3\2\2\2\u0709\u0704\3\2\2\2\u0709\u0705\3\2\2\2\u070a\u00c1"+
-		"\3\2\2\2\u00f9\u00c4\u00c6\u00d1\u00d8\u00dd\u00e3\u00e9\u00eb\u0109\u010d"+
+		"\7\u0095\2\2\u0474_\3\2\2\2\u0475\u0476\5\u00aaV\2\u0476\u0477\5b\62\2"+
+		"\u0477a\3\2\2\2\u0478\u047d\5\u009eP\2\u0479\u047a\7\5\2\2\u047a\u047b"+
+		"\5\u0090I\2\u047b\u047c\7\6\2\2\u047c\u047e\3\2\2\2\u047d\u0479\3\2\2"+
+		"\2\u047d\u047e\3\2\2\2\u047ec\3\2\2\2\u047f\u0480\7\67\2\2\u0480\u0482"+
+		"\5\u009eP\2\u0481\u047f\3\2\2\2\u0481\u0482\3\2\2\2\u0482\u04a4\3\2\2"+
+		"\2\u0483\u0484\7y\2\2\u0484\u0486\7h\2\2\u0485\u0487\t\t\2\2\u0486\u0485"+
+		"\3\2\2\2\u0486\u0487\3\2\2\2\u0487\u0488\3\2\2\2\u0488\u048a\5f\64\2\u0489"+
+		"\u048b\7*\2\2\u048a\u0489\3\2\2\2\u048a\u048b\3\2\2\2\u048b\u04a5\3\2"+
+		"\2\2\u048c\u048e\7o\2\2\u048d\u048c\3\2\2\2\u048d\u048e\3\2\2\2\u048e"+
+		"\u048f\3\2\2\2\u048f\u0490\7q\2\2\u0490\u04a5\5f\64\2\u0491\u0492\7\u0092"+
+		"\2\2\u0492\u04a5\5f\64\2\u0493\u0494\7\62\2\2\u0494\u0495\7\5\2\2\u0495"+
+		"\u0496\5h\65\2\u0496\u0497\7\6\2\2\u0497\u04a5\3\2\2\2\u0498\u049f\7A"+
+		"\2\2\u0499\u04a0\5\u0090I\2\u049a\u04a0\5\u0092J\2\u049b\u049c\7\5\2\2"+
+		"\u049c\u049d\5h\65\2\u049d\u049e\7\6\2\2\u049e\u04a0\3\2\2\2\u049f\u0499"+
+		"\3\2\2\2\u049f\u049a\3\2\2\2\u049f\u049b\3\2\2\2\u04a0\u04a5\3\2\2\2\u04a1"+
+		"\u04a2\7\63\2\2\u04a2\u04a5\5\u00acW\2\u04a3\u04a5\5j\66\2\u04a4\u0483"+
+		"\3\2\2\2\u04a4\u048d\3\2\2\2\u04a4\u0491\3\2\2\2\u04a4\u0493\3\2\2\2\u04a4"+
+		"\u0498\3\2\2\2\u04a4\u04a1\3\2\2\2\u04a4\u04a3\3\2\2\2\u04a5e\3\2\2\2"+
+		"\u04a6\u04a7\7#\2\2\u04a7\u04a8\7\66\2\2\u04a8\u04aa\t\n\2\2\u04a9\u04a6"+
+		"\3\2\2\2\u04a9\u04aa\3\2\2\2\u04aag\3\2\2\2\u04ab\u04ac\b\65\1\2\u04ac"+
+		"\u04f8\5\u0092J\2\u04ad\u04f8\7\u009f\2\2\u04ae\u04af\5\u00a2R\2\u04af"+
+		"\u04b0\7\4\2\2\u04b0\u04b2\3\2\2\2\u04b1\u04ae\3\2\2\2\u04b1\u04b2\3\2"+
+		"\2\2\u04b2\u04b3\3\2\2\2\u04b3\u04b4\5\u00a4S\2\u04b4\u04b5\7\4\2\2\u04b5"+
+		"\u04b7\3\2\2\2\u04b6\u04b1\3\2\2\2\u04b6\u04b7\3\2\2\2\u04b7\u04b8\3\2"+
+		"\2\2\u04b8\u04f8\5\u00aaV\2\u04b9\u04ba\5\u0094K\2\u04ba\u04bb\5h\65\27"+
+		"\u04bb\u04f8\3\2\2\2\u04bc\u04bd\5\u00a0Q\2\u04bd\u04ca\7\5\2\2\u04be"+
+		"\u04c0\7G\2\2\u04bf\u04be\3\2\2\2\u04bf\u04c0\3\2\2\2\u04c0\u04c1\3\2"+
+		"\2\2\u04c1\u04c6\5h\65\2\u04c2\u04c3\7\7\2\2\u04c3\u04c5\5h\65\2\u04c4"+
+		"\u04c2\3\2\2\2\u04c5\u04c8\3\2\2\2\u04c6\u04c4\3\2\2\2\u04c6\u04c7\3\2"+
+		"\2\2\u04c7\u04cb\3\2\2\2\u04c8\u04c6\3\2\2\2\u04c9\u04cb\7\t\2\2\u04ca"+
+		"\u04bf\3\2\2\2\u04ca\u04c9\3\2\2\2\u04ca\u04cb\3\2\2\2\u04cb\u04cc\3\2"+
+		"\2\2\u04cc\u04cd\7\6\2\2\u04cd\u04f8\3\2\2\2\u04ce\u04cf\7\5\2\2\u04cf"+
+		"\u04d0\5h\65\2\u04d0\u04d1\7\6\2\2\u04d1\u04f8\3\2\2\2\u04d2\u04d3\7\61"+
+		"\2\2\u04d3\u04d4\7\5\2\2\u04d4\u04d5\5h\65\2\u04d5\u04d6\7\'\2\2\u04d6"+
+		"\u04d7\5b\62\2\u04d7\u04d8\7\6\2\2\u04d8\u04f8\3\2\2\2\u04d9\u04db\7o"+
+		"\2\2\u04da\u04d9\3\2\2\2\u04da\u04db\3\2\2\2\u04db\u04dc\3\2\2\2\u04dc"+
+		"\u04de\7O\2\2\u04dd\u04da\3\2\2\2\u04dd\u04de\3\2\2\2\u04de\u04df\3\2"+
+		"\2\2\u04df\u04e0\7\5\2\2\u04e0\u04e1\5V,\2\u04e1\u04e2\7\6\2\2\u04e2\u04f8"+
+		"\3\2\2\2\u04e3\u04e5\7\60\2\2\u04e4\u04e6\5h\65\2\u04e5\u04e4\3\2\2\2"+
+		"\u04e5\u04e6\3\2\2\2\u04e6\u04ec\3\2\2\2\u04e7\u04e8\7\u0099\2\2\u04e8"+
+		"\u04e9\5h\65\2\u04e9\u04ea\7\u008d\2\2\u04ea\u04eb\5h\65\2\u04eb\u04ed"+
+		"\3\2\2\2\u04ec\u04e7\3\2\2\2\u04ed\u04ee\3\2\2\2\u04ee\u04ec\3\2\2\2\u04ee"+
+		"\u04ef\3\2\2\2\u04ef\u04f2\3\2\2\2\u04f0\u04f1\7J\2\2\u04f1\u04f3\5h\65"+
+		"\2\u04f2\u04f0\3\2\2\2\u04f2\u04f3\3\2\2\2\u04f3\u04f4\3\2\2\2\u04f4\u04f5"+
+		"\7K\2\2\u04f5\u04f8\3\2\2\2\u04f6\u04f8\5l\67\2\u04f7\u04ab\3\2\2\2\u04f7"+
+		"\u04ad\3\2\2\2\u04f7\u04b6\3\2\2\2\u04f7\u04b9\3\2\2\2\u04f7\u04bc\3\2"+
+		"\2\2\u04f7\u04ce\3\2\2\2\u04f7\u04d2\3\2\2\2\u04f7\u04dd\3\2\2\2\u04f7"+
+		"\u04e3\3\2\2\2\u04f7\u04f6\3\2\2\2\u04f8\u055d\3\2\2\2\u04f9\u04fa\f\26"+
+		"\2\2\u04fa\u04fb\7\r\2\2\u04fb\u055c\5h\65\27\u04fc\u04fd\f\25\2\2\u04fd"+
+		"\u04fe\t\13\2\2\u04fe\u055c\5h\65\26\u04ff\u0500\f\24\2\2\u0500\u0501"+
+		"\t\f\2\2\u0501\u055c\5h\65\25\u0502\u0503\f\23\2\2\u0503\u0504\t\r\2\2"+
+		"\u0504\u055c\5h\65\24\u0505\u0506\f\22\2\2\u0506\u0507\t\16\2\2\u0507"+
+		"\u055c\5h\65\23\u0508\u0515\f\21\2\2\u0509\u0516\7\b\2\2\u050a\u0516\7"+
+		"\30\2\2\u050b\u0516\7\31\2\2\u050c\u0516\7\32\2\2\u050d\u0516\7e\2\2\u050e"+
+		"\u050f\7e\2\2\u050f\u0516\7o\2\2\u0510\u0516\7\\\2\2\u0511\u0516\7j\2"+
+		"\2\u0512\u0516\7V\2\2\u0513\u0516\7l\2\2\u0514\u0516\7~\2\2\u0515\u0509"+
+		"\3\2\2\2\u0515\u050a\3\2\2\2\u0515\u050b\3\2\2\2\u0515\u050c\3\2\2\2\u0515"+
+		"\u050d\3\2\2\2\u0515\u050e\3\2\2\2\u0515\u0510\3\2\2\2\u0515\u0511\3\2"+
+		"\2\2\u0515\u0512\3\2\2\2\u0515\u0513\3\2\2\2\u0515\u0514\3\2\2\2\u0516"+
+		"\u0517\3\2\2\2\u0517\u055c\5h\65\22\u0518\u0519\f\20\2\2\u0519\u051a\7"+
+		"&\2\2\u051a\u055c\5h\65\21\u051b\u051c\f\17\2\2\u051c\u051d\7t\2\2\u051d"+
+		"\u055c\5h\65\20\u051e\u051f\f\b\2\2\u051f\u0521\7e\2\2\u0520\u0522\7o"+
+		"\2\2\u0521\u0520\3\2\2\2\u0521\u0522\3\2\2\2\u0522\u0523\3\2\2\2\u0523"+
+		"\u055c\5h\65\t\u0524\u0526\f\7\2\2\u0525\u0527\7o\2\2\u0526\u0525\3\2"+
+		"\2\2\u0526\u0527\3\2\2\2\u0527\u0528\3\2\2\2\u0528\u0529\7-\2\2\u0529"+
+		"\u052a\5h\65\2\u052a\u052b\7&\2\2\u052b\u052c\5h\65\b\u052c\u055c\3\2"+
+		"\2\2\u052d\u052e\f\13\2\2\u052e\u052f\7\63\2\2\u052f\u055c\5\u00acW\2"+
+		"\u0530\u0532\f\n\2\2\u0531\u0533\7o\2\2\u0532\u0531\3\2\2\2\u0532\u0533"+
+		"\3\2\2\2\u0533\u0534\3\2\2\2\u0534\u0535\t\17\2\2\u0535\u0538\5h\65\2"+
+		"\u0536\u0537\7L\2\2\u0537\u0539\5h\65\2\u0538\u0536\3\2\2\2\u0538\u0539"+
+		"\3\2\2\2\u0539\u055c\3\2\2\2\u053a\u053f\f\t\2\2\u053b\u0540\7f\2\2\u053c"+
+		"\u0540\7p\2\2\u053d\u053e\7o\2\2\u053e\u0540\7q\2\2\u053f\u053b\3\2\2"+
+		"\2\u053f\u053c\3\2\2\2\u053f\u053d\3\2\2\2\u0540\u055c\3\2\2\2\u0541\u0543"+
+		"\f\6\2\2\u0542\u0544\7o\2\2\u0543\u0542\3\2\2\2\u0543\u0544\3\2\2\2\u0544"+
+		"\u0545\3\2\2\2\u0545\u0559\7\\\2\2\u0546\u0550\7\5\2\2\u0547\u0551\5V"+
+		",\2\u0548\u054d\5h\65\2\u0549\u054a\7\7\2\2\u054a\u054c\5h\65\2\u054b"+
+		"\u0549\3\2\2\2\u054c\u054f\3\2\2\2\u054d\u054b\3\2\2\2\u054d\u054e\3\2"+
+		"\2\2\u054e\u0551\3\2\2\2\u054f\u054d\3\2\2\2\u0550\u0547\3\2\2\2\u0550"+
+		"\u0548\3\2\2\2\u0550\u0551\3\2\2\2\u0551\u0552\3\2\2\2\u0552\u055a\7\6"+
+		"\2\2\u0553\u0554\5\u00a2R\2\u0554\u0555\7\4\2\2\u0555\u0557\3\2\2\2\u0556"+
+		"\u0553\3\2\2\2\u0556\u0557\3\2\2\2\u0557\u0558\3\2\2\2\u0558\u055a\5\u00a4"+
+		"S\2\u0559\u0546\3\2\2\2\u0559\u0556\3\2\2\2\u055a\u055c\3\2\2\2\u055b"+
+		"\u04f9\3\2\2\2\u055b\u04fc\3\2\2\2\u055b\u04ff\3\2\2\2\u055b\u0502\3\2"+
+		"\2\2\u055b\u0505\3\2\2\2\u055b\u0508\3\2\2\2\u055b\u0518\3\2\2\2\u055b"+
+		"\u051b\3\2\2\2\u055b\u051e\3\2\2\2\u055b\u0524\3\2\2\2\u055b\u052d\3\2"+
+		"\2\2\u055b\u0530\3\2\2\2\u055b\u053a\3\2\2\2\u055b\u0541\3\2\2\2\u055c"+
+		"\u055f\3\2\2\2\u055d\u055b\3\2\2\2\u055d\u055e\3\2\2\2\u055ei\3\2\2\2"+
+		"\u055f\u055d\3\2\2\2\u0560\u0561\7}\2\2\u0561\u0566\5\u00aeX\2\u0562\u0563"+
+		"\7\5\2\2\u0563\u0564\5\u00aaV\2\u0564\u0565\7\6\2\2\u0565\u0567\3\2\2"+
+		"\2\u0566\u0562\3\2\2\2\u0566\u0567\3\2\2\2\u0567\u057a\3\2\2\2\u0568\u0569"+
+		"\7#\2\2\u0569\u0572\t\20\2\2\u056a\u056b\7!\2\2\u056b\u0573\7q\2\2\u056c"+
+		"\u056d\7!\2\2\u056d\u0573\7A\2\2\u056e\u0573\7/\2\2\u056f\u0573\7\u0083"+
+		"\2\2\u0570\u0571\7n\2\2\u0571\u0573\7\34\2\2\u0572\u056a\3\2\2\2\u0572"+
+		"\u056c\3\2\2\2\u0572\u056e\3\2\2\2\u0572\u056f\3\2\2\2\u0572\u0570\3\2"+
+		"\2\2\u0573\u0577\3\2\2\2\u0574\u0575\7l\2\2\u0575\u0577\5\u009eP\2\u0576"+
+		"\u0568\3\2\2\2\u0576\u0574\3\2\2\2\u0577\u0579\3\2\2\2\u0578\u0576\3\2"+
+		"\2\2\u0579\u057c\3\2\2\2\u057a\u0578\3\2\2\2\u057a\u057b\3\2\2\2\u057b"+
+		"\u0587\3\2\2\2\u057c\u057a\3\2\2\2\u057d\u057f\7o\2\2\u057e\u057d\3\2"+
+		"\2\2\u057e\u057f\3\2\2\2\u057f\u0580\3\2\2\2\u0580\u0585\7B\2\2\u0581"+
+		"\u0582\7_\2\2\u0582\u0586\7C\2\2\u0583\u0584\7_\2\2\u0584\u0586\7[\2\2"+
+		"\u0585\u0581\3\2\2\2\u0585\u0583\3\2\2\2\u0585\u0586\3\2\2\2\u0586\u0588"+
+		"\3\2\2\2\u0587\u057e\3\2\2\2\u0587\u0588\3\2\2\2\u0588k\3\2\2\2\u0589"+
+		"\u058a\7{\2\2\u058a\u058f\7\5\2\2\u058b\u0590\7Z\2\2\u058c\u058d\t\21"+
+		"\2\2\u058d\u058e\7\7\2\2\u058e\u0590\5\u0096L\2\u058f\u058b\3\2\2\2\u058f"+
+		"\u058c\3\2\2\2\u0590\u0591\3\2\2\2\u0591\u0592\7\6\2\2\u0592m\3\2\2\2"+
+		"\u0593\u0596\5\u00aaV\2\u0594\u0595\7\63\2\2\u0595\u0597\5\u00acW\2\u0596"+
+		"\u0594\3\2\2\2\u0596\u0597\3\2\2\2\u0597\u0599\3\2\2\2\u0598\u059a\t\t"+
+		"\2\2\u0599\u0598\3\2\2\2\u0599\u059a\3\2\2\2\u059ao\3\2\2\2\u059b\u059c"+
+		"\7\67\2\2\u059c\u059e\5\u009eP\2\u059d\u059b\3\2\2\2\u059d\u059e\3\2\2"+
+		"\2\u059e\u05bc\3\2\2\2\u059f\u05a0\7y\2\2\u05a0\u05a3\7h\2\2\u05a1\u05a3"+
+		"\7\u0092\2\2\u05a2\u059f\3\2\2\2\u05a2\u05a1\3\2\2\2\u05a3\u05a4\3\2\2"+
+		"\2\u05a4\u05a5\7\5\2\2\u05a5\u05aa\5n8\2\u05a6\u05a7\7\7\2\2\u05a7\u05a9"+
+		"\5n8\2\u05a8\u05a6\3\2\2\2\u05a9\u05ac\3\2\2\2\u05aa\u05a8\3\2\2\2\u05aa"+
+		"\u05ab\3\2\2\2\u05ab\u05ad\3\2\2\2\u05ac\u05aa\3\2\2\2\u05ad\u05ae\7\6"+
+		"\2\2\u05ae\u05af\5f\64\2\u05af\u05bd\3\2\2\2\u05b0\u05b1\7\62\2\2\u05b1"+
+		"\u05b2\7\5\2\2\u05b2\u05b3\5h\65\2\u05b3\u05b4\7\6\2\2\u05b4\u05bd\3\2"+
+		"\2\2\u05b5\u05b6\7S\2\2\u05b6\u05b7\7h\2\2\u05b7\u05b8\7\5\2\2\u05b8\u05b9"+
+		"\5\u00aaV\2\u05b9\u05ba\7\6\2\2\u05ba\u05bb\5j\66\2\u05bb\u05bd\3\2\2"+
+		"\2\u05bc\u05a2\3\2\2\2\u05bc\u05b0\3\2\2\2\u05bc\u05b5\3\2\2\2\u05bdq"+
+		"\3\2\2\2\u05be\u05c0\7\u009b\2\2\u05bf\u05c1\7|\2\2\u05c0\u05bf\3\2\2"+
+		"\2\u05c0\u05c1\3\2\2\2\u05c1\u05c2\3\2\2\2\u05c2\u05c3\5\u008eH\2\u05c3"+
+		"\u05c4\7\'\2\2\u05c4\u05c5\7\5\2\2\u05c5\u05c6\5V,\2\u05c6\u05d0\7\6\2"+
+		"\2\u05c7\u05c8\7\7\2\2\u05c8\u05c9\5\u008eH\2\u05c9\u05ca\7\'\2\2\u05ca"+
+		"\u05cb\7\5\2\2\u05cb\u05cc\5V,\2\u05cc\u05cd\7\6\2\2\u05cd\u05cf\3\2\2"+
+		"\2\u05ce\u05c7\3\2\2\2\u05cf\u05d2\3\2\2\2\u05d0\u05ce\3\2\2\2\u05d0\u05d1"+
+		"\3\2\2\2\u05d1s\3\2\2\2\u05d2\u05d0\3\2\2\2\u05d3\u05d4\5\u00a2R\2\u05d4"+
+		"\u05d5\7\4\2\2\u05d5\u05d7\3\2\2\2\u05d6\u05d3\3\2\2\2\u05d6\u05d7\3\2"+
+		"\2\2\u05d7\u05d8\3\2\2\2\u05d8\u05de\5\u00a4S\2\u05d9\u05da\7^\2\2\u05da"+
+		"\u05db\7.\2\2\u05db\u05df\5\u00b0Y\2\u05dc\u05dd\7o\2\2\u05dd\u05df\7"+
+		"^\2\2\u05de\u05d9\3\2\2\2\u05de\u05dc\3\2\2\2\u05de\u05df\3\2\2\2\u05df"+
+		"u\3\2\2\2\u05e0\u05e3\5h\65\2\u05e1\u05e2\7\63\2\2\u05e2\u05e4\5\u00ac"+
+		"W\2\u05e3\u05e1\3\2\2\2\u05e3\u05e4\3\2\2\2\u05e4\u05e6\3\2\2\2\u05e5"+
+		"\u05e7\t\t\2\2\u05e6\u05e5\3\2\2\2\u05e6\u05e7\3\2\2\2\u05e7w\3\2\2\2"+
+		"\u05e8\u05ec\5\u0090I\2\u05e9\u05ec\5\u009eP\2\u05ea\u05ec\7\u00a0\2\2"+
+		"\u05eb\u05e8\3\2\2\2\u05eb\u05e9\3\2\2\2\u05eb\u05ea\3\2\2\2\u05ecy\3"+
+		"\2\2\2\u05ed\u05f9\5\u00a4S\2\u05ee\u05ef\7\5\2\2\u05ef\u05f4\5\u00aa"+
+		"V\2\u05f0\u05f1\7\7\2\2\u05f1\u05f3\5\u00aaV\2\u05f2\u05f0\3\2\2\2\u05f3"+
+		"\u05f6\3\2\2\2\u05f4\u05f2\3\2\2\2\u05f4\u05f5\3\2\2\2\u05f5\u05f7\3\2"+
+		"\2\2\u05f6\u05f4\3\2\2\2\u05f7\u05f8\7\6\2\2\u05f8\u05fa\3\2\2\2\u05f9"+
+		"\u05ee\3\2\2\2\u05f9\u05fa\3\2\2\2\u05fa\u05fb\3\2\2\2\u05fb\u05fc\7\'"+
+		"\2\2\u05fc\u05fd\7\5\2\2\u05fd\u05fe\5V,\2\u05fe\u05ff\7\6\2\2\u05ff{"+
+		"\3\2\2\2\u0600\u060d\7\t\2\2\u0601\u0602\5\u00a4S\2\u0602\u0603\7\4\2"+
+		"\2\u0603\u0604\7\t\2\2\u0604\u060d\3\2\2\2\u0605\u060a\5h\65\2\u0606\u0608"+
+		"\7\'\2\2\u0607\u0606\3\2\2\2\u0607\u0608\3\2\2\2\u0608\u0609\3\2\2\2\u0609"+
+		"\u060b\5\u009aN\2\u060a\u0607\3\2\2\2\u060a\u060b\3\2\2\2\u060b\u060d"+
+		"\3\2\2\2\u060c\u0600\3\2\2\2\u060c\u0601\3\2\2\2\u060c\u0605\3\2\2\2\u060d"+
+		"}\3\2\2\2\u060e\u060f\5\u00a2R\2\u060f\u0610\7\4\2\2\u0610\u0612\3\2\2"+
+		"\2\u0611\u060e\3\2\2\2\u0611\u0612\3\2\2\2\u0612\u0613\3\2\2\2\u0613\u0618"+
+		"\5\u00a4S\2\u0614\u0616\7\'\2\2\u0615\u0614\3\2\2\2\u0615\u0616\3\2\2"+
+		"\2\u0616\u0617\3\2\2\2\u0617\u0619\5\u00bc_\2\u0618\u0615\3\2\2\2\u0618"+
+		"\u0619\3\2\2\2\u0619\u061f\3\2\2\2\u061a\u061b\7^\2\2\u061b\u061c\7.\2"+
+		"\2\u061c\u0620\5\u00b0Y\2\u061d\u061e\7o\2\2\u061e\u0620\7^\2\2\u061f"+
+		"\u061a\3\2\2\2\u061f\u061d\3\2\2\2\u061f\u0620\3\2\2\2\u0620\u063e\3\2"+
+		"\2\2\u0621\u062b\7\5\2\2\u0622\u0627\5~@\2\u0623\u0624\7\7\2\2\u0624\u0626"+
+		"\5~@\2\u0625\u0623\3\2\2\2\u0626\u0629\3\2\2\2\u0627\u0625\3\2\2\2\u0627"+
+		"\u0628\3\2\2\2\u0628\u062c\3\2\2\2\u0629\u0627\3\2\2\2\u062a\u062c\5\u0080"+
+		"A\2\u062b\u0622\3\2\2\2\u062b\u062a\3\2\2\2\u062c\u062d\3\2\2\2\u062d"+
+		"\u0632\7\6\2\2\u062e\u0630\7\'\2\2\u062f\u062e\3\2\2\2\u062f\u0630\3\2"+
+		"\2\2\u0630\u0631\3\2\2\2\u0631\u0633\5\u00bc_\2\u0632\u062f\3\2\2\2\u0632"+
+		"\u0633\3\2\2\2\u0633\u063e\3\2\2\2\u0634\u0635\7\5\2\2\u0635\u0636\5V"+
+		",\2\u0636\u063b\7\6\2\2\u0637\u0639\7\'\2\2\u0638\u0637\3\2\2\2\u0638"+
+		"\u0639\3\2\2\2\u0639\u063a\3\2\2\2\u063a\u063c\5\u00bc_\2\u063b\u0638"+
+		"\3\2\2\2\u063b\u063c\3\2\2\2\u063c\u063e\3\2\2\2\u063d\u0611\3\2\2\2\u063d"+
+		"\u0621\3\2\2\2\u063d\u0634\3\2\2\2\u063e\177\3\2\2\2\u063f\u0646\5~@\2"+
+		"\u0640\u0641\5\u0082B\2\u0641\u0642\5~@\2\u0642\u0643\5\u0084C\2\u0643"+
+		"\u0645\3\2\2\2\u0644\u0640\3\2\2\2\u0645\u0648\3\2\2\2\u0646\u0644\3\2"+
+		"\2\2\u0646\u0647\3\2\2\2\u0647\u0081\3\2\2\2\u0648\u0646\3\2\2\2\u0649"+
+		"\u0657\7\7\2\2\u064a\u064c\7m\2\2\u064b\u064a\3\2\2\2\u064b\u064c\3\2"+
+		"\2\2\u064c\u0653\3\2\2\2\u064d\u064f\7i\2\2\u064e\u0650\7v\2\2\u064f\u064e"+
+		"\3\2\2\2\u064f\u0650\3\2\2\2\u0650\u0654\3\2\2\2\u0651\u0654\7`\2\2\u0652"+
+		"\u0654\7<\2\2\u0653\u064d\3\2\2\2\u0653\u0651\3\2\2\2\u0653\u0652\3\2"+
+		"\2\2\u0653\u0654\3\2\2\2\u0654\u0655\3\2\2\2\u0655\u0657\7g\2\2\u0656"+
+		"\u0649\3\2\2\2\u0656\u064b\3\2\2\2\u0657\u0083\3\2\2\2\u0658\u0659\7#"+
+		"\2\2\u0659\u0667\5h\65\2\u065a\u065b\7\u0094\2\2\u065b\u065c\7\5\2\2\u065c"+
+		"\u0661\5\u00aaV\2\u065d\u065e\7\7\2\2\u065e\u0660\5\u00aaV\2\u065f\u065d"+
+		"\3\2\2\2\u0660\u0663\3\2\2\2\u0661\u065f\3\2\2\2\u0661\u0662\3\2\2\2\u0662"+
+		"\u0664\3\2\2\2\u0663\u0661\3\2\2\2\u0664\u0665\7\6\2\2\u0665\u0667\3\2"+
+		"\2\2\u0666\u0658\3\2\2\2\u0666\u065a\3\2\2\2\u0666\u0667\3\2\2\2\u0667"+
+		"\u0085\3\2\2\2\u0668\u066a\7\u0088\2\2\u0669\u066b\t\b\2\2\u066a\u0669"+
+		"\3\2\2\2\u066a\u066b\3\2\2\2\u066b\u066c\3\2\2\2\u066c\u0671\5|?\2\u066d"+
+		"\u066e\7\7\2\2\u066e\u0670\5|?\2\u066f\u066d\3\2\2\2\u0670\u0673\3\2\2"+
+		"\2\u0671\u066f\3\2\2\2\u0671\u0672\3\2\2\2\u0672\u0680\3\2\2\2\u0673\u0671"+
+		"\3\2\2\2\u0674\u067e\7T\2\2\u0675\u067a\5~@\2\u0676\u0677\7\7\2\2\u0677"+
+		"\u0679\5~@\2\u0678\u0676\3\2\2\2\u0679\u067c\3\2\2\2\u067a\u0678\3\2\2"+
+		"\2\u067a\u067b\3\2\2\2\u067b\u067f\3\2\2\2\u067c\u067a\3\2\2\2\u067d\u067f"+
+		"\5\u0080A\2\u067e\u0675\3\2\2\2\u067e\u067d\3\2\2\2\u067f\u0681\3\2\2"+
+		"\2\u0680\u0674\3\2\2\2\u0680\u0681\3\2\2\2\u0681\u0683\3\2\2\2\u0682\u0684"+
+		"\5\u008aF\2\u0683\u0682\3\2\2\2\u0683\u0684\3\2\2\2\u0684\u0686\3\2\2"+
+		"\2\u0685\u0687\5\u0088E\2\u0686\u0685\3\2\2\2\u0686\u0687\3\2\2\2\u0687"+
+		"\u0087\3\2\2\2\u0688\u0689\7W\2\2\u0689\u068a\7.\2\2\u068a\u068f\5h\65"+
+		"\2\u068b\u068c\7\7\2\2\u068c\u068e\5h\65\2\u068d\u068b\3\2\2\2\u068e\u0691"+
+		"\3\2\2\2\u068f\u068d\3\2\2\2\u068f\u0690\3\2\2\2\u0690\u0694\3\2\2\2\u0691"+
+		"\u068f\3\2\2\2\u0692\u0693\7X\2\2\u0693\u0695\5h\65\2\u0694\u0692\3\2"+
+		"\2\2\u0694\u0695\3\2\2\2\u0695\u0089\3\2\2\2\u0696\u0697\7\u009a\2\2\u0697"+
+		"\u0698\5h\65\2\u0698\u008b\3\2\2\2\u0699\u069f\7\u0091\2\2\u069a\u069b"+
+		"\7\u0091\2\2\u069b\u069f\7\37\2\2\u069c\u069f\7c\2\2\u069d\u069f\7M\2"+
+		"\2\u069e\u0699\3\2\2\2\u069e\u069a\3\2\2\2\u069e\u069c\3\2\2\2\u069e\u069d"+
+		"\3\2\2\2\u069f\u008d\3\2\2\2\u06a0\u06ac\5\u00a4S\2\u06a1\u06a2\7\5\2"+
+		"\2\u06a2\u06a7\5\u00aaV\2\u06a3\u06a4\7\7\2\2\u06a4\u06a6\5\u00aaV\2\u06a5"+
+		"\u06a3\3\2\2\2\u06a6\u06a9\3\2\2\2\u06a7\u06a5\3\2\2\2\u06a7\u06a8\3\2"+
+		"\2\2\u06a8\u06aa\3\2\2\2\u06a9\u06a7\3\2\2\2\u06aa\u06ab\7\6\2\2\u06ab"+
+		"\u06ad\3\2\2\2\u06ac\u06a1\3\2\2\2\u06ac\u06ad\3\2\2\2\u06ad\u008f\3\2"+
+		"\2\2\u06ae\u06b0\t\f\2\2\u06af\u06ae\3\2\2\2\u06af\u06b0\3\2\2\2\u06b0"+
+		"\u06b1\3\2\2\2\u06b1\u06b2\7\u009e\2\2\u06b2\u0091\3\2\2\2\u06b3\u06b4"+
+		"\t\22\2\2\u06b4\u0093\3\2\2\2\u06b5\u06b6\t\23\2\2\u06b6\u0095\3\2\2\2"+
+		"\u06b7\u06b8\7\u00a0\2\2\u06b8\u0097\3\2\2\2\u06b9\u06bc\5h\65\2\u06ba"+
+		"\u06bc\5`\61\2\u06bb\u06b9\3\2\2\2\u06bb\u06ba\3\2\2\2\u06bc\u0099\3\2"+
+		"\2\2\u06bd\u06be\t\24\2\2\u06be\u009b\3\2\2\2\u06bf\u06c0\t\25\2\2\u06c0"+
+		"\u009d\3\2\2\2\u06c1\u06c2\5\u00c0a\2\u06c2\u009f\3\2\2\2\u06c3\u06c4"+
+		"\5\u00c0a\2\u06c4\u00a1\3\2\2\2\u06c5\u06c6\5\u00c0a\2\u06c6\u00a3\3\2"+
+		"\2\2\u06c7\u06c8\5\u00c0a\2\u06c8\u00a5\3\2\2\2\u06c9\u06ca\5\u00c0a\2"+
+		"\u06ca\u00a7\3\2\2\2\u06cb\u06cc\5\u00c0a\2\u06cc\u00a9\3\2\2\2\u06cd"+
+		"\u06ce\5\u00c0a\2\u06ce\u00ab\3\2\2\2\u06cf\u06d0\5\u00c0a\2\u06d0\u00ad"+
+		"\3\2\2\2\u06d1\u06d2\5\u00c0a\2\u06d2\u00af\3\2\2\2\u06d3\u06d4\5\u00c0"+
+		"a\2\u06d4\u00b1\3\2\2\2\u06d5\u06d6\5\u00c0a\2\u06d6\u00b3\3\2\2\2\u06d7"+
+		"\u06d8\5\u00c0a\2\u06d8\u00b5\3\2\2\2\u06d9\u06da\5\u00c0a\2\u06da\u00b7"+
+		"\3\2\2\2\u06db\u06dc\5\u00c0a\2\u06dc\u00b9\3\2\2\2\u06dd\u06de\5\u00c0"+
+		"a\2\u06de\u00bb\3\2\2\2\u06df\u06e0\5\u00c0a\2\u06e0\u00bd\3\2\2\2\u06e1"+
+		"\u06e2\5\u00c0a\2\u06e2\u00bf\3\2\2\2\u06e3\u06eb\7\u009d\2\2\u06e4\u06eb"+
+		"\5\u009cO\2\u06e5\u06eb\7\u00a0\2\2\u06e6\u06e7\7\5\2\2\u06e7\u06e8\5"+
+		"\u00c0a\2\u06e8\u06e9\7\6\2\2\u06e9\u06eb\3\2\2\2\u06ea\u06e3\3\2\2\2"+
+		"\u06ea\u06e4\3\2\2\2\u06ea\u06e5\3\2\2\2\u06ea\u06e6\3\2\2\2\u06eb\u00c1"+
+		"\3\2\2\2\u00f4\u00c4\u00c6\u00d1\u00d8\u00dd\u00e3\u00e9\u00eb\u0109\u010d"+
 		"\u0123\u012b\u012e\u0137\u013b\u0143\u0147\u0149\u014e\u0150\u0154\u015b"+
 		"\u015e\u0163\u0167\u016c\u0175\u0178\u017e\u0180\u0184\u018a\u018f\u019a"+
 		"\u01a0\u01a4\u01aa\u01af\u01b8\u01bf\u01c5\u01c9\u01cc\u01d0\u01d9\u01e3"+
@@ -10947,15 +10829,15 @@ public class SQLiteParser extends Parser {
 		"\u036a\u0371\u0373\u0377\u037a\u0381\u0388\u038b\u0395\u0398\u039e\u03a0"+
 		"\u03a4\u03ab\u03ae\u03b6\u03c0\u03c3\u03c9\u03cb\u03cf\u03d6\u03df\u03e3"+
 		"\u03e5\u03e9\u03f2\u03f7\u03f9\u0402\u040d\u0414\u0417\u041a\u0427\u0435"+
-		"\u043a\u043d\u044a\u0458\u045d\u0466\u0469\u046f\u0471\u0477\u047c\u0482"+
-		"\u048e\u0492\u0497\u049b\u049e\u04b0\u04b5\u04ba\u04c2\u04c7\u04d0\u04d7"+
-		"\u04db\u04eb\u04ee\u04f6\u04ff\u0503\u0508\u0526\u0532\u0537\u0543\u0549"+
-		"\u0550\u0554\u055e\u0561\u0567\u056a\u056c\u056e\u0579\u057e\u058a\u058e"+
-		"\u0592\u0596\u059d\u059f\u05a7\u05ae\u05b1\u05b5\u05ba\u05c2\u05d5\u05db"+
-		"\u05df\u05ef\u05f5\u05fd\u0602\u0605\u060a\u0613\u0618\u0626\u0629\u062b"+
-		"\u0630\u0634\u0637\u063e\u0646\u064a\u064e\u0651\u0657\u065a\u065c\u0665"+
-		"\u066a\u066e\u0672\u0675\u0680\u0685\u0689\u0690\u0699\u069d\u069f\u06a2"+
-		"\u06a5\u06ae\u06b3\u06bd\u06c6\u06cb\u06ce\u06da\u0709";
+		"\u043a\u043d\u044a\u0458\u045d\u0466\u0469\u046f\u0471\u047d\u0481\u0486"+
+		"\u048a\u048d\u049f\u04a4\u04a9\u04b1\u04b6\u04bf\u04c6\u04ca\u04da\u04dd"+
+		"\u04e5\u04ee\u04f2\u04f7\u0515\u0521\u0526\u0532\u0538\u053f\u0543\u054d"+
+		"\u0550\u0556\u0559\u055b\u055d\u0566\u0572\u0576\u057a\u057e\u0585\u0587"+
+		"\u058f\u0596\u0599\u059d\u05a2\u05aa\u05bc\u05c0\u05d0\u05d6\u05de\u05e3"+
+		"\u05e6\u05eb\u05f4\u05f9\u0607\u060a\u060c\u0611\u0615\u0618\u061f\u0627"+
+		"\u062b\u062f\u0632\u0638\u063b\u063d\u0646\u064b\u064f\u0653\u0656\u0661"+
+		"\u0666\u066a\u0671\u067a\u067e\u0680\u0683\u0686\u068f\u0694\u069e\u06a7"+
+		"\u06ac\u06af\u06bb\u06ea";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

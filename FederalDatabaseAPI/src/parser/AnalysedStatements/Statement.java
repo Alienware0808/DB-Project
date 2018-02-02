@@ -29,7 +29,7 @@ public abstract class Statement  {
         return tree;
     }
     
-    protected boolean IsTerminalNode(ParseTree node, int terminalNodeId)
+    protected static boolean IsTerminalNode(ParseTree node, int terminalNodeId)
     {
         if(node instanceof TerminalNodeImpl)
         {

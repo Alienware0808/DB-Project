@@ -42,7 +42,7 @@ public class CreateStatement extends Statement {
         
         while(!(tree.getChild(i) instanceof  SQLiteParser.Column_defContext))
         {
-            if(IsTerminalNode(tree.getChild(i), SQLiteParser.K_IF)) // Dann würde K_NOT und K_EXISTS kommen ...
+            if(Statement.IsTerminalNode(tree.getChild(i), SQLiteParser.K_IF)) // Dann würde K_NOT und K_EXISTS kommen ...
                 isIfNotExistContained = true;
             else if(tree.getChild(i) instanceof SQLiteParser.Table_nameContext)
                 tableName = tree.getChild(i).getText();
@@ -55,7 +55,7 @@ public class CreateStatement extends Statement {
                 break;
             if(tree.getChild(i) instanceof SQLiteParser.Column_defContext)
             {
-                ColumnDefinition coldef = new ColumnDefinition(tree.getChild(i));
+                ColumnDefinition coldef = new ColumnDefinition(tree.getChild(i), tableName);
                 coldef.name = tree.getChild(i).getChild(0).getText();
                 ParseTree typethingi = tree.getChild(i).getChild(1);
                 String typestr = typethingi.getChild(0).getText().toLowerCase();
@@ -303,15 +303,42 @@ public class CreateStatement extends Statement {
         return null;
     }
     
-    public class ColumnDefinition extends Statement
+    public interface IColumnDefinition
+    {
+        public String getName();
+        public String getTableName();
+    }
+    
+    public class ForeignColumnDefinition implements IColumnDefinition
     {
         private String name;
+        private String tableName;
+
+        public ForeignColumnDefinition(String name, String tableName) {
+            this.name = name;
+            this.tableName = tableName;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getTableName() {
+            return tableName;
+        }
+    }
+    
+    public class ColumnDefinition extends Statement implements IColumnDefinition
+    {
+        private String name;
+        private String tableName;
         private Class type;
         private int typeLength;
 
-        public ColumnDefinition(ParseTree tree) throws ContextException {
+        public ColumnDefinition(ParseTree tree, String tableName) throws ContextException {
             super(tree);
             name = tree.getChild(0).getText();
+            this.tableName = tableName;
             if(tree.getChild(1) != null)
             {
                 String strtype = tree.getChild(1).getChild(0).getText();
@@ -334,6 +361,10 @@ public class CreateStatement extends Statement {
             return name;
         }
 
+        public String getTableName() {
+            return tableName;
+        }
+
         public Class getType() {
             return type;
         }
@@ -343,9 +374,11 @@ public class CreateStatement extends Statement {
         }
     }
     
-    public class TableConstraint extends Statement
+    public abstract class TableConstraint extends Statement
     {
         private String name;
+        public abstract boolean getCanBeLocal();
+        public abstract List<IColumnDefinition> getColumns();
         
         public TableConstraint(ParseTree tree) {
             super(tree);
@@ -358,14 +391,24 @@ public class CreateStatement extends Statement {
     
     public class TableConstraintPrimaryKey extends TableConstraint
     {
-        private List<ColumnDefinition> primaryKeys;
+        private List<IColumnDefinition> primaryKeys;
         
         public TableConstraintPrimaryKey(ParseTree tree) {
             super(tree);
             this.primaryKeys = new ArrayList<>();
         }
 
-        public List<ColumnDefinition> getPrimaryKeys() {
+        public List<IColumnDefinition> getPrimaryKeys() {
+            return primaryKeys;
+        }
+
+        @Override
+        public boolean getCanBeLocal() {
+            return false;
+        }
+
+        @Override
+        public List<IColumnDefinition> getColumns() {
             return primaryKeys;
         }
     }
@@ -387,6 +430,20 @@ public class CreateStatement extends Statement {
         public Object getReferenceTo() {
             return referenceToTable;
         }
+        
+        @Override
+        public boolean getCanBeLocal() {
+            return false;
+        }
+        
+        @Override
+        public List<IColumnDefinition> getColumns() {
+            List<IColumnDefinition> cols = new ArrayList<>();
+            cols.add(from);
+            ForeignColumnDefinition fcol = new ForeignColumnDefinition(referenceToTable.TableName, referenceToColumn);
+            cols.add(fcol);// TODO mach mal hier das in ein ColumnDefinition objekt
+            return cols;
+        }
     }
     
     public class TableConstraintNullConstraint extends TableConstraint
@@ -407,6 +464,18 @@ public class CreateStatement extends Statement {
         public boolean isIsNotNullSet() {
             return isNotNullSet;
         }
+        
+        @Override
+        public boolean getCanBeLocal() {
+            return true;
+        }
+
+        @Override
+        public List<IColumnDefinition> getColumns() {
+            List<IColumnDefinition> cols = new ArrayList<>();
+            cols.add(forColumn);
+            return cols;
+        }
     }
     
     public class TableConstraintCompare extends TableConstraint
@@ -419,6 +488,16 @@ public class CreateStatement extends Statement {
 
         public Condition getCondition() {
             return condition;
+        }
+
+        @Override
+        public boolean getCanBeLocal() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public List<IColumnDefinition> getColumns() {
+            return null;
         }
     }
     
@@ -444,6 +523,18 @@ public class CreateStatement extends Statement {
 
         public Object getMin() {
             return min;
+        }
+        
+        @Override
+        public boolean getCanBeLocal() {
+            return true;
+        }
+
+        @Override
+        public List<IColumnDefinition> getColumns() {
+            List<IColumnDefinition> cols = new ArrayList<>();
+            cols.add(forColumn);
+            return cols;
         }
     }
     

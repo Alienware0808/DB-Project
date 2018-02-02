@@ -5,6 +5,7 @@
  */
 package parser;
 
+import FederalDB.FedException;
 import java.util.ArrayList;
 import java.util.List;
 

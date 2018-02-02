@@ -18,7 +18,7 @@ import parser.SQLiteParser;
 public class InsertStatement extends Statement{
     public final MetaDataEntry tableDescription;
     public List<Object> values;
-
+ 
     public InsertStatement(ParseTree tree) {
         super(tree);
         values = new ArrayList<>();
