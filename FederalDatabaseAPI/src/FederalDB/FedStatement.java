@@ -73,10 +73,14 @@ public class FedStatement implements FedStatementInterface
         } else if (statements[0] instanceof InsertStatement)
         {
             InsertStatement insstmt = (InsertStatement) statements[0];
-            if (insstmt.tableDescription == null)
+            try
             {
-
+                handleInsert(insstmt);
+            } catch (SQLException ex)
+            {
+                Logger.getLogger(FedStatement.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
         }
 
         if (sql.startsWith("drop"))
@@ -162,8 +166,12 @@ public class FedStatement implements FedStatementInterface
                 }
                 for (int i = 0; i < createstmt.tableConstrains.size(); i++)
                 {
-                    if (createstmt.tableConstrains.get(i).getCanBeLocal())
+                    if (createstmt.tableConstrains.get(i).getCanBeLocal() && 
+                            vert.getDistributionLists().get(j).contains(
+                                    createstmt.tableConstrains.get(i).getColumns().get(0)))
+                    {
                         createsql[j] += ", " + createstmt.tableConstrains.get(i).getText();
+                    }
                 }
                 createsql[j] += ")";
             }
@@ -191,6 +199,14 @@ public class FedStatement implements FedStatementInterface
             {
                 Logger.getLogger(FedStatement.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
+    }
+    
+    private void handleInsert(InsertStatement insstmt) throws FedException, SQLException
+    {
+        if (insstmt.tableDescription == null)
+        {
+            
         }
     }
 

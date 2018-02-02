@@ -128,16 +128,15 @@ public class CreateStatement extends Statement {
                 {
                     j++; // skip "CHECK" 
                     j++; // skip "("
-                    if(IsTerminalNode(contree.getChild(j+1), SQLiteParser.K_BETWEEN))
+                    ParseTree expr = contree.getChild(j);
+                    if(IsTerminalNode(expr.getChild(1), SQLiteParser.K_BETWEEN))
                     {
-                        ColumnDefinition coldef = getColumnDefinitionByName(contree.getChild(j).getText());
+                        ColumnDefinition coldef = getColumnDefinitionByName(expr.getChild(0).getText());
                         if(coldef == null)
                             throw new ContextException("Column Definition not found in between statement");
                         TableConstraintBetween between = new TableConstraintBetween(contree, coldef);
-                        j++;
-                        j++; // skip "BETWEEN"
-                        between.min = contree.getChild(j).getText();
-                        between.max = contree.getChild(j+2).getText();
+                        between.min = expr.getChild(2).getText();
+                        between.max = expr.getChild(4).getText();
                         try
                         {
                             between.min = Integer.parseInt(between.min.toString());
@@ -146,21 +145,20 @@ public class CreateStatement extends Statement {
                         {}
                         this.tableConstrains.add(between);
                     }
-                    if(IsTerminalNode(contree.getChild(j+1), SQLiteParser.K_IS))
+                    if(IsTerminalNode(expr.getChild(1), SQLiteParser.K_IS))
                     {
-                        ColumnDefinition coldef = getColumnDefinitionByName(contree.getChild(j).getText());
+                        ColumnDefinition coldef = getColumnDefinitionByName(expr.getChild(0).getText());
                         if(coldef == null)
                             throw new ContextException("Column Definition not found in null statement");
                         TableConstraintNullConstraint nullcon = new TableConstraintNullConstraint(contree, coldef);
-                        j++;
-                        j++; // skip "IS"
-                        nullcon.isNotNullSet = IsTerminalNode(contree.getChild(j), SQLiteParser.K_NOT);
+                        
+                        nullcon.isNotNullSet = IsTerminalNode(expr.getChild(2), SQLiteParser.K_NOT);
                         this.tableConstrains.add(nullcon);
                     }
                     else
                     {
                         TableConstraintCompare comparecon = new TableConstraintCompare(contree);
-                        comparecon.condition = parseCondition(contree.getChild(j));
+                        comparecon.condition = parseCondition(expr);
                         this.tableConstrains.add(comparecon);
                     }
                 }
