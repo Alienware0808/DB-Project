@@ -17,9 +17,12 @@ import MetaData.MetaDataEntry;
 import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.antlr.v4.runtime.tree.ParseTree;
 import parser.ContextException;
 import parser.SQLiteParser;
+import parser.Walker;
 
 /**
  *
@@ -301,12 +304,7 @@ public class CreateStatement extends Statement {
         return null;
     }
     
-    public interface IGetTextable
-    {
-        public String getText();
-    }
-    
-    public class CreateColumnDefinition extends MetaData.ColumnDefinition implements IGetTextable
+    public class CreateColumnDefinition extends MetaData.ColumnDefinition
     {
         private Class type;
         private int typeLength;
@@ -343,10 +341,34 @@ public class CreateStatement extends Statement {
             return typeLength;
         }
 
-        @Override
         public String getText()
         {
-            return tree.getText();
+            String sql = "";
+            Walker walker = new Walker(tree, new Walker.IEvents() {
+                @Override
+                public Object nodeFound(ParseTree tree, Object workValue) throws Exception {
+                    return workValue;
+                }
+
+                @Override
+                public Object finalNodeFound(ParseTree tree, Object workValue) throws Exception {
+                    workValue += tree.getText() + " ";
+                    return workValue;
+                }
+
+                @Override
+                public Object finalLiteraFound(String text, Object workValue) throws Exception {
+                    //workValue += tree.getText() + " ";
+                    return workValue;
+                }
+            });
+            walker.workValue = sql;
+            try {
+                walker.run();
+            } catch (Exception ex) {
+                Logger.getLogger(Statement.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return walker.workValue.toString();
         }
     }
     
