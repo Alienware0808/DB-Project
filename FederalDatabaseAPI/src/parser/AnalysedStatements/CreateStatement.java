@@ -12,6 +12,7 @@ import Conditions.Condition;
 import Conditions.JunctionCondition;
 import Conditions.SingleValueDescriptor;
 import Conditions.IValue;
+import FederalDB.FedConnection;
 import MetaData.ColumnDefinition;
 import MetaData.MetaDataEntry;
 import com.sun.javafx.scene.control.skin.VirtualFlow;
@@ -34,11 +35,12 @@ public class CreateStatement extends Statement {
     public final List<TableConstraint> tableConstrains;
     public final List<CreateColumnDefinition> columnDefinitions;
     public Object fedStatement;
+    private FedConnection fedConnection;
     
-    public CreateStatement(ParseTree tree) throws ContextException {
+    public CreateStatement(ParseTree tree, FedConnection fedConnection) throws ContextException {
         super(tree);
         int i = 0;
-        
+        this.fedConnection = fedConnection;
         isIfNotExistContained = false;
         columnDefinitions = new ArrayList<>();
         tableConstrains = new ArrayList<>();
@@ -121,7 +123,7 @@ public class CreateStatement extends Statement {
                     j++;
                     j++; // skip ")"
                     j++; // skip "references"
-                    foreignkey.referenceToTable = MetaData.MetaDataManager.MetaManager.getMetaData(contree.getChild(j).getText());
+                    foreignkey.referenceToTable = fedConnection.metaDataManger.getMetaData(contree.getChild(j).getText());
                     j++; // skip tablename
                     j++; // skip "("
                     foreignkey.referenceToColumn = contree.getChild(j).getText();

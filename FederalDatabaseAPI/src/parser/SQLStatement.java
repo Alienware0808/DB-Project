@@ -5,6 +5,7 @@
  */
 package parser;
 
+import FederalDB.FedConnection;
 import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.util.ArrayList;
 import java.util.BitSet;
@@ -36,12 +37,13 @@ public class SQLStatement {
      * Accepts any complete SQL-Statements and creates a Statement-Class instance for each SQL-Statement
      * @param sql
      * Any SQL-Statement
+     * @param connection
      * @return
      * An Array with Statement-Class instances for each individual SQL-Statement
      * @throws ParseException 
      * If any Errors occour this Exception will be thrown. Including an Error-List with all Problems included
      */
-    public static Statement[] parseString(String sql)
+    public static Statement[] parseString(String sql, FedConnection connection)
             throws ParseException, ContextException, Exception
     {
         CharStream stream = new ANTLRInputStream(sql);
@@ -95,7 +97,7 @@ public class SQLStatement {
                 if(sql_stmt instanceof SQLiteParser.Factored_select_stmtContext)
                 {
                     SQLiteParser.Select_coreContext select_stmt = (SQLiteParser.Select_coreContext)sql_stmt.getChild(0);
-                    statements.add(new SelectStatement(select_stmt));
+                    statements.add(new SelectStatement(select_stmt, connection));
                 }
                 
                 //alter session
@@ -108,13 +110,13 @@ public class SQLStatement {
 
                 //create table
                 else if(sql_stmt instanceof SQLiteParser.Create_table_stmtContext)
-                    statements.add(new CreateStatement(sql_stmt));
+                    statements.add(new CreateStatement(sql_stmt, connection));
                 //insert into
                 else if(sql_stmt instanceof SQLiteParser.Insert_stmtContext)
-                    statements.add(new InsertStatement(sql_stmt));
+                    statements.add(new InsertStatement(sql_stmt, connection));
                 //update
                 else if(sql_stmt instanceof SQLiteParser.Update_stmtContext)
-                    statements.add(new UpdateStatement(sql_stmt));
+                    statements.add(new UpdateStatement(sql_stmt, connection));
            }
         }
         Statement[] stockArr = new Statement[statements.size()];

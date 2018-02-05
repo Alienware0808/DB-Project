@@ -13,6 +13,7 @@ import Conditions.Condition;
 import Conditions.JunctionCondition;
 import Conditions.SingleValueDescriptor;
 import Conditions.IValue;
+import FederalDB.FedConnection;
 import MetaData.MetaDataEntry;
 import org.antlr.v4.runtime.tree.ParseTree;
 import parser.ContextException;
@@ -27,10 +28,12 @@ public class UpdateStatement extends Statement {
     public final String column;
     public final String valueString;
     public final Condition where;
+    private FedConnection fedConnection;
 
-    public UpdateStatement(ParseTree tree) throws ContextException {
+    public UpdateStatement(ParseTree tree, FedConnection fedConnection) throws ContextException {
         super(tree);
-        table = MetaData.MetaDataManager.MetaManager.getMetaData(tree.getChild(1).getText()); // TODO read table from metadata via name
+        this.fedConnection = fedConnection;
+        table = fedConnection.metaDataManger.getMetaData(tree.getChild(1).getText()); // TODO read table from metadata via name
         column = tree.getChild(3).getText(); // TODO read column from metadata via colname and tablename
         valueString = tree.getChild(5).getText();
         if(IsTerminalNode(tree.getChild(6), SQLiteParser.K_WHERE))

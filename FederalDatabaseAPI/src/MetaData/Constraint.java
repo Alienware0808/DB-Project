@@ -7,6 +7,7 @@ package MetaData;
 
 import FederalDB.FedConnection;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -20,5 +21,5 @@ public abstract class Constraint {
         columns = new ArrayList<>();
     }
     
-    public abstract boolean check(FedConnection fedConnection, ArrayList<ColumnValue> values);
+    public abstract boolean check(FedConnection fedConnection, List<ColumnValue> values);
 }

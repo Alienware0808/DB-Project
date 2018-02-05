@@ -16,13 +16,14 @@ import java.sql.Statement;
 
 public class FedStatement implements FedStatementInterface
 {
-    
-    private Connection con[] = new Connection[3];
+    private FedConnection parent;
+    private Connection[] con;
     public final MetaDataManager metaDataManger;
 
-    public FedStatement(Connection conn[], MetaDataManager metaDataManager) 
+    public FedStatement(FedConnection parent, Connection[] con, MetaDataManager metaDataManager) 
     {
-        this.con = conn;
+        this.con = con;
+        this.parent = parent;
         this.metaDataManger = metaDataManager;
     }
 
@@ -33,7 +34,7 @@ public class FedStatement implements FedStatementInterface
         parser.AnalysedStatements.Statement[] statements;
         try
         {
-            statements = SQLStatement.parseString(sql);
+            statements = SQLStatement.parseString(sql, parent);
         } catch (Exception ex)
         {
             Logger.getLogger(FedStatement.class.getName()).log(Level.SEVERE, null, ex);

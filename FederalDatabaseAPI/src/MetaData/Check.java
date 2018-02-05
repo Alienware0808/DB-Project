@@ -7,6 +7,7 @@ package MetaData;
 
 import FederalDB.FedConnection;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -16,7 +17,7 @@ public class Check extends Constraint {
     
     
     @Override
-    public boolean check(FedConnection fc, ArrayList<ColumnValue> cList){
+    public boolean check(FedConnection fc, List<ColumnValue> cList){
         return true;
     }
 
