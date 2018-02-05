@@ -5,8 +5,10 @@
  */
 package MetaData;
 
+import Data.FedHelper;
 import FederalDB.FedConnection;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -16,7 +18,7 @@ public class PrimaryKey extends Constraint {
     
     
     @Override
-    public boolean check(FedConnection fedConnection, ArrayList<ColumnValue> values){
+    public boolean check(FedConnection fedConnection, List<ColumnValue> values){
         return true;
     }
 

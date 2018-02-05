@@ -25,7 +25,7 @@ public class InsertStatement extends Statement{
         tableDescription = MetaData.MetaDataManager.MetaManager.getMetaData(tree.getChild(2).getText());
         for(int i = 4; i < tree.getChildCount(); i++)
         {
-            if(tree.getChild(i) instanceof SQLiteParser.Literal_valueContext)
+            if(tree.getChild(i).getChild(0) instanceof SQLiteParser.Literal_valueContext)
             {
                 String valstr = tree.getChild(i).getText();
                 if(valstr.startsWith("'"))
