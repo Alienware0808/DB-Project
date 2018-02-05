@@ -19,9 +19,11 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.tool.GrammarParserInterpreter;
 import parser.AnalysedStatements.CreateStatement;
+import parser.AnalysedStatements.InsertStatement;
 import parser.AnalysedStatements.LazyPreparedStatement;
 import parser.AnalysedStatements.SelectStatement;
 import parser.AnalysedStatements.Statement;
+import parser.AnalysedStatements.UpdateStatement;
 import parser.SQLiteParser.ErrorContext;
 
 /**
@@ -106,13 +108,13 @@ public class SQLStatement {
 
                 //create table
                 else if(sql_stmt instanceof SQLiteParser.Create_table_stmtContext)
-                {
                     statements.add(new CreateStatement(sql_stmt));
-                }
                 //insert into
-                
+                else if(sql_stmt instanceof SQLiteParser.Insert_stmtContext)
+                    statements.add(new InsertStatement(sql_stmt));
                 //update
-
+                else if(sql_stmt instanceof SQLiteParser.Update_stmtContext)
+                    statements.add(new UpdateStatement(sql_stmt));
            }
         }
         Statement[] stockArr = new Statement[statements.size()];

@@ -29,11 +29,11 @@ public class App {
             final FedTestEnvironment fedTestEvironment = new FedTestEnvironment(fedConnection);
 
             fedTestEvironment.run("SQL Test/DRPTABS.SQL", false);
-            fedTestEvironment.run("SQL Test/CREPARTABS.SQL", false);
+            //fedTestEvironment.run("SQL Test/CREPARTABS.SQL", false);
 
-            /*
-            fedTestEvironment.run("Test/INSERTAIRPORTS.SQL", false);
-            fedTestEvironment.run("Test/INSERTAIRLINES.SQL", false);
+            
+            fedTestEvironment.run("SQL Test/INSERTAIRPORTS.SQL", false);
+           /* fedTestEvironment.run("Test/INSERTAIRLINES.SQL", false);
             fedTestEvironment.run("Test/INSERTPASSENGERS.SQL", false);
             fedTestEvironment.run("Test/INSERTFLIGHTS.SQL", false);
             fedTestEvironment.run("Test/INSERTBOOKINGS.SQL", false);
