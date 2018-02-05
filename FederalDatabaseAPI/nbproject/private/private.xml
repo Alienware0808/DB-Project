@@ -3,11 +3,27 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/D:/Dateien/DB-Project/FederalDatabaseAPI/src/parser/AnalysedStatements/Statement.java</file>
             <file>file:/D:/Dateien/DB-Project/FederalDatabaseAPI/src/MetaData/PrimaryKey.java</file>
             <file>file:/D:/Dateien/DB-Project/FederalDatabaseAPI/src/MetaData/MetaDataManager.java</file>
             <file>file:/D:/Dateien/DB-Project/FederalDatabaseAPI/src/FederalDB/App.java</file>
             <file>file:/D:/Dateien/DB-Project/FederalDatabaseAPI/src/FederalDB/FedStatement.java</file>
+=======
+            <file>file:/C:/Users/Admin/Documents/GitHub/DB-Project/FederalDatabaseAPI/src/Data/FedHelper.java</file>
+            <file>file:/C:/Users/Admin/Documents/GitHub/DB-Project/FederalDatabaseAPI/src/parser/ParseException.java</file>
+            <file>file:/C:/Users/Admin/Documents/GitHub/DB-Project/FederalDatabaseAPI/src/parser/SQLStatement.java</file>
+            <file>file:/C:/Users/Admin/Documents/GitHub/DB-Project/FederalDatabaseAPI/src/MetaData/ColumnDefinition.java</file>
+            <file>file:/C:/Users/Admin/Documents/GitHub/DB-Project/FederalDatabaseAPI/src/MetaData/PrimaryKey.java</file>
+            <file>file:/C:/Users/Admin/Documents/GitHub/DB-Project/FederalDatabaseAPI/src/parser/AnalysedStatements/InsertStatement.java</file>
+            <file>file:/C:/Users/Admin/Documents/GitHub/DB-Project/FederalDatabaseAPI/src/parser/SQLiteBaseListener.java</file>
+            <file>file:/C:/Users/Admin/Documents/GitHub/DB-Project/FederalDatabaseAPI/src/MetaData/Check.java</file>
+            <file>file:/C:/Users/Admin/Documents/GitHub/DB-Project/FederalDatabaseAPI/src/Data/SQLHelper.java</file>
+            <file>file:/C:/Users/Admin/Documents/GitHub/DB-Project/FederalDatabaseAPI/src/parser/AnalysedStatements/CreateStatement.java</file>
+            <file>file:/C:/Users/Admin/Documents/GitHub/DB-Project/FederalDatabaseAPI/src/parser/AnalysedStatements/UpdateStatement.java</file>
+            <file>file:/C:/Users/Admin/Documents/GitHub/DB-Project/FederalDatabaseAPI/src/MetaData/MetaDataManager.java</file>
+            <file>file:/C:/Users/Admin/Documents/GitHub/DB-Project/FederalDatabaseAPI/src/MetaData/MetaDataEntry.java</file>
+>>>>>>> e63b4526155417f466a42bd05a8f497b00bfcb75
         </group>
     </open-files>
 </project-private>
