@@ -20,5 +20,5 @@ public abstract class Constraint {
         columns = new ArrayList<>();
     }
     
-    public abstract boolean check(FedConnection fc, ArrayList<ColumnValue> cList);
+    public abstract boolean check(FedConnection fedConnection, ArrayList<ColumnValue> values);
 }

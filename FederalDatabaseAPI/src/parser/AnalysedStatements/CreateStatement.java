@@ -100,7 +100,7 @@ public class CreateStatement extends Statement {
                             break;
                         if(contree.getChild(j) instanceof SQLiteParser.Indexed_columnContext)
                         {
-                            ColumnDefinition coldef = getColumnDefinitionByName(contree.getChild(j).getText());
+                            CreateColumnDefinition coldef = getColumnDefinitionByName(contree.getChild(j).getText());
                             if(coldef == null)
                                 throw new ContextException("Column not found");
                             primkey.primaryKeys.add(coldef);
@@ -292,9 +292,9 @@ public class CreateStatement extends Statement {
         }
     }
     
-    public ColumnDefinition getColumnDefinitionByName(String name)
+    public CreateColumnDefinition getColumnDefinitionByName(String name)
     {
-        for (ColumnDefinition col : this.columnDefinitions) {
+        for (CreateColumnDefinition col : this.columnDefinitions) {
             if(col.name.equals(name))
                 return col;
         }
@@ -385,7 +385,7 @@ public class CreateStatement extends Statement {
 
         @Override
         public List<ColumnDefinition> getColumns() {
-            return primaryKeys;
+            return (List<ColumnDefinition>)(List<?>) primaryKeys;
         }
     }
     

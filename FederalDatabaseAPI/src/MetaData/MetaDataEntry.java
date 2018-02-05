@@ -34,7 +34,7 @@ public class MetaDataEntry {
     public MetaDataEntry(){ constraints = new ArrayList<>();}
     
     // constructor when all values are available
-    public MetaDataEntry(PrimaryKeys pKey, String type, String[] entry, List<ForeignKey> FKs, List<Check> checks){
+    public MetaDataEntry(PrimaryKey pKey, String type, String[] entry, List<ForeignKey> FKs, List<Check> checks){
         Type = type;
         Attr1 = entry[0];
         Attr2 = entry[1];
