@@ -37,11 +37,12 @@ public final class SelectHelper {
                 select_sql += ", ";
         }
         select_sql += " from " + table.toLowerCase();
+        return null;
     }
     
-    private static PreparedStatement getPrepStatement(Connection connection)
-    {
-        for(PreparedStatement prepStat : preparedStatments)
-            if(prepStat.getConnection() == i)
-    }
+//    private static PreparedStatement getPrepStatement(Connection connection)
+//    {
+//        for(PreparedStatement prepStat : preparedStatments)
+//            if(prepStat.getConnection() == i)
+//    }
 }

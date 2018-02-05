@@ -15,7 +15,7 @@ public class FedTestEnvironment {
             this.fedConnection.setAutoCommit(false);
         } catch (FedException fedException) {
             System.out.flush();
-
+            
             System.err.println(fedException.getMessage());
             System.err.flush();
         }

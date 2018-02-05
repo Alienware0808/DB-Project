@@ -1,20 +1,23 @@
 package FederalDB;
 
 
+import MetaData.MetaDataManager;
 import java.sql.Connection;
 import java.sql.SQLException;
 
 
 public class FedConnection implements FedConnectionInterface{
     private Connection conn[] = new Connection[3];
+    public final MetaDataManager metaDataManger;
 
     public FedConnection(Connection[] conns){
         this.conn = conns;
+        metaDataManger = new MetaDataManager(conn[0]);
     }
 
     @Override
     public FedStatement getStatement(){
-        FedStatement statement= new FedStatement(conn);
+        FedStatement statement= new FedStatement(conn,metaDataManger);
         return statement;
     }
 

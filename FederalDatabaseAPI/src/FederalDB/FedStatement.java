@@ -1,6 +1,7 @@
 package FederalDB;
 
 import MetaData.ColumnDefinition;
+import MetaData.MetaDataManager;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -11,22 +12,25 @@ import java.util.List;
 import parser.*;
 import parser.AnalysedStatements.*;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import java.sql.Statement; 
 
 public class FedStatement implements FedStatementInterface
 {
-
+    
     private Connection con[] = new Connection[3];
+    public final MetaDataManager metaDataManger;
 
-    public FedStatement(Connection conn[])
+    public FedStatement(Connection conn[], MetaDataManager metaDataManager) 
     {
         this.con = conn;
+        this.metaDataManger = metaDataManager;
     }
 
     @Override
     public int executeUpdate(String sql) throws FedException
     {
 
-        Statement[] statements;
+        parser.AnalysedStatements.Statement[] statements;
         try
         {
             statements = SQLStatement.parseString(sql);
@@ -97,7 +101,7 @@ public class FedStatement implements FedStatementInterface
         if (createstmt.fedStatement instanceof CreateStatement.FedHorizontal)
         {
             CreateStatement.FedHorizontal hori = (CreateStatement.FedHorizontal) createstmt.fedStatement;
-            if (MetaData.MetaDataManager.MetaManager.getMetaData(createstmt.tableName) == null)
+            if (metaDataManger.getMetaData(createstmt.tableName) == null)
             {
                 List<Object> intervalls = hori.getIntervall();
                 String createsql = "create table " + createstmt.tableName + " (";

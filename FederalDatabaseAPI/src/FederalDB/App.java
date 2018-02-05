@@ -19,6 +19,7 @@ public class App {
         final String passwordValidation = "VDBSA09";
 
         FedConnection fedConnection;
+        
 
         /*
          * Test schema
@@ -32,7 +33,7 @@ public class App {
             //fedTestEvironment.run("SQL Test/CREPARTABS.SQL", false);
 
             
-            fedTestEvironment.run("SQL Test/INSERTAIRPORTS.SQL", false);
+            //fedTestEvironment.run("SQL Test/INSERTAIRPORTS.SQL", false);
            /* fedTestEvironment.run("Test/INSERTAIRLINES.SQL", false);
             fedTestEvironment.run("Test/INSERTPASSENGERS.SQL", false);
             fedTestEvironment.run("Test/INSERTFLIGHTS.SQL", false);

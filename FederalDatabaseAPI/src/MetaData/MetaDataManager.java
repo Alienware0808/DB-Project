@@ -9,6 +9,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  *
@@ -16,24 +19,22 @@ import java.io.PrintWriter;
  */
 public class MetaDataManager {
     private MetaDataSet metaDataSet;
-    private String metaDataFilePath; 
-    public static final MetaDataManager MetaManager = new MetaDataManager("myjson.json");
+    private final Connection conn;
     
-    public MetaDataManager(String metaDataFilePath){
-        this.metaDataFilePath = metaDataFilePath;
-        String metaFileString;
+    
+    public MetaDataManager(Connection conn){
+        this.conn=conn;
+        String sql = "CREATE table meta (entry long)"; 
+        String sqlI = "Insert into meta values ('')";
         
         try{
-            metaFileString = getMetaDataStringFromFile(metaDataFilePath);
-            metaDataSet = new GsonBuilder().create().fromJson(metaFileString, MetaDataSet.class);
-
-        }catch(Exception e){
-            System.out.println("There is no metaData File. Empty dataset will be created");
-            metaDataSet = new MetaDataSet();
+            Statement stmt = conn.createStatement();
+            stmt.executeUpdate(sql);
+            stmt.executeUpdate(sqlI);
         }
-
-        
-        System.out.println("MetaData read: "+metaDataSet);
+        catch(SQLException e){
+            e.printStackTrace();
+        }
     }
     
     // Adds a new metadataentry to the gson hashmap
@@ -56,12 +57,9 @@ public class MetaDataManager {
     // to save the JavaObject of the metaData onto the json file
     public void saveMetaData() throws Exception {
         String metaDataString = new GsonBuilder().create().toJson(metaDataSet);
-        System.out.println(metaDataString);
-        FileWriter fileWriter = new FileWriter(metaDataFilePath);
-        PrintWriter printWriter = new PrintWriter(fileWriter);
-        printWriter.write(metaDataString);
-        printWriter.close();
-        System.out.println("MetaData successfully saved to "+metaDataFilePath+"!");
+        String sql = "update META set ENTRY= "+ metaDataString;
+        Statement stmt = conn.createStatement();
+        stmt.executeUpdate(sql);
     }
     
     private String getMetaDataStringFromFile(String path) throws Exception{
