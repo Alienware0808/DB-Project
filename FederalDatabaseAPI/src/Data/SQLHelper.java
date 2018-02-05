@@ -37,7 +37,7 @@ public final class SQLHelper {
      * @return The Results as a FedResultSet
      * @throws java.sql.SQLException 
      */
-    public static FedResultSet select(
+    public static ResultSet select(
             Connection connection, List<ColumnDefinition> columns, 
             String table) throws SQLException
     {
@@ -51,7 +51,7 @@ public final class SQLHelper {
         select_sql += SQString.columnList(columns);
         select_sql += " from " + table.toLowerCase().trim();
         PreparedStatement prepStat = getPrepStatement(connection, select_sql);
-        return new FedResultSet(prepStat.executeQuery());
+        return prepStat.executeQuery();
     }
     
     /**
@@ -62,7 +62,7 @@ public final class SQLHelper {
      * @param table Select from this table
      * @return null if something goes wrong or the Results as a FedResultSet
      */
-    public static FedResultSet trySelect(
+    public static ResultSet trySelect(
             Connection connection, List<ColumnDefinition> columns, 
             String table)
     {
@@ -81,7 +81,7 @@ public final class SQLHelper {
      * @param table Select from this table
      * @return null if something goes wrong or the Results as a FedResultSet
      */
-    public static FedResultSet trySelectAll(
+    public static ResultSet trySelectAll(
             Connection connection, String table)
     {
         try
@@ -98,7 +98,7 @@ public final class SQLHelper {
      * @return
      * @throws SQLException 
      */
-    public static FedResultSet selectAll(Connection connection, String table) throws SQLException
+    public static ResultSet selectAll(Connection connection, String table) throws SQLException
     {
         if(table == null || table.isEmpty())
             throw new NullPointerException("Table name cannot be null or an empty String");
@@ -106,7 +106,7 @@ public final class SQLHelper {
             throw new NullPointerException("connection cannot be null or closed");
         String select_sql = "select * from " + table.toLowerCase().trim();
         PreparedStatement prepStat = getPrepStatement(connection, select_sql);
-        return new FedResultSet(prepStat.executeQuery());
+        return prepStat.executeQuery();
     }
     
     /**

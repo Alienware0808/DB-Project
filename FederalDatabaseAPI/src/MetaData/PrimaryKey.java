@@ -17,7 +17,7 @@ public class PrimaryKey extends Constraint {
     
     @Override
     public boolean check(FedConnection fedConnection, ArrayList<ColumnValue> values){
-        return true;
+        
     }
 
 }
