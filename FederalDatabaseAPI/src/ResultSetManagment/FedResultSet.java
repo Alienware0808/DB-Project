@@ -14,7 +14,6 @@ import java.util.List;
  */
 
 public class FedResultSet implements FedResultSetInterface {
-
     private final List<ResultSetColumn> resultTable;
     private boolean isDisposed;
     private int index;
