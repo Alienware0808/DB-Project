@@ -54,7 +54,8 @@ class SqlResultWrapper implements FedResultSetExtendedInterface {
     @Override
     public int getColumnCount() throws FedException {
         try {
-            return resultSet.getMetaData().getColumnCount();
+            int colcount = resultSet.getMetaData().getColumnCount();
+            return colcount;
         } catch (SQLException ex) {
             throw new FedException(ex);
         }

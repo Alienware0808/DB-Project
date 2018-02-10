@@ -14,7 +14,7 @@ import java.util.ArrayList;
  *
  * @author Admin
  */
-class FedVerticalResultSet implements FedResultSetInterface {
+public class FedVerticalResultSet implements FedResultSetExtendedInterface {
 
     /**
      * Map the Indexes to ignore the primary keys in the right map
@@ -30,7 +30,7 @@ class FedVerticalResultSet implements FedResultSetInterface {
         left.first();
         right.first();
         ArrayList<Integer> indexes = new ArrayList();
-        for(int i = 1; i < right.getColumnCount(); i++)
+        for(int i = 1; i <= right.getColumnCount(); i++)
             indexes.add(i);
         ArrayList<Integer> PrimIndexes = getPrimIndexes();
         for(int i = 0; i < PrimIndexes.size(); i++)
@@ -41,6 +41,16 @@ class FedVerticalResultSet implements FedResultSetInterface {
     public FedVerticalResultSet(ResultSet left, ResultSet right) throws FedException
     {
         this(new SqlResultWrapper(left), new SqlResultWrapper(right));
+    }
+    
+    public FedVerticalResultSet(FedResultSetExtendedInterface left, ResultSet right) throws FedException
+    {
+        this(left, new SqlResultWrapper(right));
+    }
+    
+    public FedVerticalResultSet(ResultSet left, FedResultSetExtendedInterface right) throws FedException
+    {
+        this(new SqlResultWrapper(left), right);
     }
     
     private ArrayList<Integer> getPrimIndexes() throws FedException
@@ -63,7 +73,8 @@ class FedVerticalResultSet implements FedResultSetInterface {
     
     private int getRightIndex(int columnIndex) throws FedException
     {
-        return rightIndexMap.get(columnIndex - left.getColumnCount() - 1);
+        int leftCount = left.getColumnCount();
+        return rightIndexMap.get(columnIndex - leftCount - 1);
     }
     
     @Override
@@ -74,33 +85,35 @@ class FedVerticalResultSet implements FedResultSetInterface {
 
     @Override
     public String getString(int columnIndex) throws FedException {
-        if(left.getColumnCount() > columnIndex)
+        if(columnIndex > left.getColumnCount())
             return right.getString(getRightIndex(columnIndex));
         return left.getString(columnIndex);
     }
 
     @Override
     public int getInt(int columnIndex) throws FedException {
-        if(left.getColumnCount() > columnIndex)
+        if(columnIndex > left.getColumnCount())
             return right.getInt(getRightIndex(columnIndex));
         return left.getInt(columnIndex);
     }
 
     @Override
     public int getColumnCount() throws FedException {
-        return left.getColumnCount() + this.rightIndexMap.size();
+        int leftCount = left.getColumnCount();
+        int rightCount = this.rightIndexMap.size();
+        return leftCount + rightCount;
     }
 
     @Override
     public String getColumnName(int index) throws FedException {
-        if(left.getColumnCount() > index)
+        if(index > left.getColumnCount())
             return right.getColumnName(getRightIndex(index));
         return left.getColumnName(index);
     }
 
     @Override
     public int getColumnType(int index) throws FedException {
-        if(left.getColumnCount() > index)
+        if(index > left.getColumnCount())
             return right.getColumnType(getRightIndex(index));
         return left.getColumnType(index);
     }
@@ -109,6 +122,12 @@ class FedVerticalResultSet implements FedResultSetInterface {
     public void close() throws FedException {
         right.close();
         left.close();
+    }
+
+    @Override
+    public boolean first() throws FedException {
+        left.first();
+        return right.first();
     }
     
 }

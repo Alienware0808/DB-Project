@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -55,25 +56,131 @@ public final class SQLHelper {
     }
     
     /**
+     * Selects from the Connection the given fields from the given Tables
+     * @param connection The Database Connection to use
+     * @param column1 The Columns which have to be selected
+     * @param table Select from this table
+     * @return The Results as a FedResultSet
+     * @throws java.sql.SQLException 
+     */
+    public static ResultSet select(
+            Connection connection, String column1, 
+            String table) throws SQLException
+    {
+        List<ColumnDefinition> columns = new ArrayList<>();
+        columns.add(new ColumnDefinition(column1, table));
+        return select(connection, columns, table);
+    }
+    
+    /**
+     * Selects from the Connection the given fields from the given Tables
+     * @param connection The Database Connection to use
+     * @param column1 The Columns which have to be selected
+     * @param column2 The Columns which have to be selected
+     * @param table Select from this table
+     * @return The Results as a FedResultSet
+     * @throws java.sql.SQLException 
+     */
+    public static ResultSet select(
+            Connection connection, String column1, String column2, 
+            String table) throws SQLException
+    {
+        List<ColumnDefinition> columns = new ArrayList<>();
+        columns.add(new ColumnDefinition(column1, table));        
+        columns.add(new ColumnDefinition(column2, table));
+        return select(connection, columns, table);
+    }
+    
+    /**
+     * Selects from the Connection the given fields from the given Tables
+     * @param connection The Database Connection to use
+     * @param column1 The Columns which have to be selected
+     * @param column2 The Columns which have to be selected
+     * @param column3 The Columns which have to be selected
+     * @param table Select from this table
+     * @return The Results as a FedResultSet
+     * @throws java.sql.SQLException 
+     */
+    public static ResultSet select(
+            Connection connection, String column1, String column2, String column3, 
+            String table) throws SQLException
+    {
+        List<ColumnDefinition> columns = new ArrayList<>();
+        columns.add(new ColumnDefinition(column1, table));        
+        columns.add(new ColumnDefinition(column2, table));   
+        columns.add(new ColumnDefinition(column3, table));
+        return select(connection, columns, table);
+    }
+    
+    /**
      * Tries to Select from the Connection the given fields from the given Tables
      * If it fails it returns null. All Errors are discarded
      * @param connection The Database Connection to use
-     * @param columns The Columns which have to be selected
+     * @param column1 The Columns which have to be selected
      * @param table Select from this table
      * @return null if something goes wrong or the Results as a FedResultSet
      */
     public static ResultSet trySelect(
-            Connection connection, List<ColumnDefinition> columns, 
+            Connection connection, String column1, 
             String table)
     {
+        List<ColumnDefinition> coldefs = new ArrayList<>();
+        coldefs.add(new ColumnDefinition(column1.toLowerCase().trim(), table.toLowerCase().trim()));
         try
         {
-            return select(connection, columns, table);
+            return select(connection, coldefs, table);
         } catch (Exception ex) {}
         return null;
     }
     
-        
+    /**
+     * Tries to Select from the Connection the given fields from the given Tables
+     * If it fails it returns null. All Errors are discarded
+     * @param connection The Database Connection to use
+     * @param column1 The Columns which have to be selected
+     * @param column2 The Columns which have to be selected
+     * @param table Select from this table
+     * @return null if something goes wrong or the Results as a FedResultSet
+     */
+    public static ResultSet trySelect(
+            Connection connection, String column1, String column2, 
+            String table)
+    {
+        List<ColumnDefinition> coldefs = new ArrayList<>();
+        coldefs.add(new ColumnDefinition(column1.toLowerCase().trim(), table.toLowerCase().trim()));
+        coldefs.add(new ColumnDefinition(column2.toLowerCase().trim(), table.toLowerCase().trim()));
+        try
+        {
+            return select(connection, coldefs, table);
+        } catch (Exception ex) {}
+        return null;
+    }
+    
+        /**
+     * Tries to Select from the Connection the given fields from the given Tables
+     * If it fails it returns null. All Errors are discarded
+     * @param connection The Database Connection to use
+     * @param column1 The Columns which have to be selected
+     * @param column2 The Columns which have to be selected
+     * @param column3 The Columns which have to be selected
+     * @param table Select from this table
+     * @return null if something goes wrong or the Results as a FedResultSet
+     */
+    public static ResultSet trySelect(
+            Connection connection, String column1, String column2, String column3, 
+            String table)
+    {
+        List<ColumnDefinition> coldefs = new ArrayList<>();
+        coldefs.add(new ColumnDefinition(column1.toLowerCase().trim(), table.toLowerCase().trim()));
+        coldefs.add(new ColumnDefinition(column2.toLowerCase().trim(), table.toLowerCase().trim()));
+        coldefs.add(new ColumnDefinition(column3.toLowerCase().trim(), table.toLowerCase().trim()));
+        try
+        {
+            return select(connection, coldefs, table);
+        } catch (Exception ex) {}
+        return null;
+    }
+    
     /**
      * Tries to Select all Columns from the given Table from the given Connection
      * If it fails it returns null. All Errors are discarded
@@ -202,12 +309,16 @@ public final class SQLHelper {
     private static PreparedStatement getPrepStatement(Connection connection, String sql) throws SQLException
     {
         List<PreparedStatement> preps = preparedStatements.get(sql);
-        for(PreparedStatement prepStat : preps)
-            try {
-                if(prepStat.getConnection() == connection)
-                    return prepStat;
-            } catch (SQLException ex) {}
-        PreparedStatement prepStat = connection.prepareStatement(sql);
+        if(preps != null)
+        {
+            for(PreparedStatement prepStat : preps)
+                try {
+                    if(prepStat.getConnection() == connection)
+                        return prepStat;
+                } catch (SQLException ex) {}
+        }
+        PreparedStatement prepStat = connection.prepareStatement(sql, 
+                ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
         if(preps != null)
             preps.add(prepStat);
         else

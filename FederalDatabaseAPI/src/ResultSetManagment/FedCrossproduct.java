@@ -49,33 +49,35 @@ public class FedCrossproduct implements FedResultSetExtendedInterface {
 
     @Override
     public String getString(int columnIndex) throws FedException {
-        if(left.getColumnCount() > columnIndex)
+        if(columnIndex > left.getColumnCount())
             return right.getString(columnIndex - left.getColumnCount());
         return left.getString(columnIndex);
     }
 
     @Override
     public int getInt(int columnIndex) throws FedException {
-        if(left.getColumnCount() > columnIndex)
+        if(columnIndex > left.getColumnCount())
             return right.getInt(columnIndex - left.getColumnCount());
         return left.getInt(columnIndex);
     }
 
     @Override
     public int getColumnCount() throws FedException {
-        return right.getColumnCount() + left.getColumnCount();
+        int rightCount = right.getColumnCount();
+        int leftCount = left.getColumnCount();
+        return rightCount + leftCount;
     }
 
     @Override
     public String getColumnName(int index) throws FedException {
-        if(left.getColumnCount() > index)
+        if(index > left.getColumnCount())
             return right.getColumnName(index - left.getColumnCount());
         return left.getColumnName(index);
     }
 
     @Override
     public int getColumnType(int index) throws FedException {
-        if(left.getColumnCount() > index)
+        if(index > left.getColumnCount())
             return right.getColumnType(index - left.getColumnCount());
         return left.getColumnType(index);
     }

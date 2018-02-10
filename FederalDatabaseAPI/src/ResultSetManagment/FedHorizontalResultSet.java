@@ -33,6 +33,16 @@ public class FedHorizontalResultSet implements FedResultSetExtendedInterface {
         this(new SqlResultWrapper(left), new SqlResultWrapper(right));
     }
     
+    public FedHorizontalResultSet(FedResultSetExtendedInterface first, ResultSet right) throws FedException
+    {
+        this(first, new SqlResultWrapper(right));
+    }
+    
+    public FedHorizontalResultSet(ResultSet left, FedResultSetExtendedInterface right) throws FedException
+    {
+        this(new SqlResultWrapper(left), right);
+    }
+    
     @Override
     public boolean next() throws FedException {
         if(isAtFirst)
@@ -40,6 +50,7 @@ public class FedHorizontalResultSet implements FedResultSetExtendedInterface {
             if(first.next())
                 return true;
             isAtFirst = false;
+            return secound.first();
         }
         if(secound.next())
             return true;
@@ -84,6 +95,7 @@ public class FedHorizontalResultSet implements FedResultSetExtendedInterface {
     @Override
     public boolean first() throws FedException {
         boolean res = first.first();
+        isAtFirst = true;
         if(secound.first())
             return true;
         return res;
