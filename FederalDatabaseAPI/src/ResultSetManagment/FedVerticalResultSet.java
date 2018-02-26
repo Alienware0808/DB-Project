@@ -129,5 +129,10 @@ public class FedVerticalResultSet implements FedResultSetExtendedInterface {
         left.first();
         return right.first();
     }
+
+    @Override
+    public int getCursorPosition() throws FedException {
+        return this.left.getCursorPosition();
+    }
     
 }

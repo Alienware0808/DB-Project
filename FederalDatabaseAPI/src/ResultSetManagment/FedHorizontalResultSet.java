@@ -100,4 +100,11 @@ public class FedHorizontalResultSet implements FedResultSetExtendedInterface {
             return true;
         return res;
     }
+
+    @Override
+    public int getCursorPosition() throws FedException {
+        if(isAtFirst)
+            return first.getCursorPosition();
+        else return first.getCursorPosition() + secound.getCursorPosition();
+    }
 }

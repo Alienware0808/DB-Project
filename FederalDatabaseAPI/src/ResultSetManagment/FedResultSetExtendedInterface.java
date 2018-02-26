@@ -12,7 +12,7 @@ import FederalDB.FedResultSetInterface;
  *
  * @author Admin
  */
-interface FedResultSetExtendedInterface extends FedResultSetInterface {
+public interface FedResultSetExtendedInterface extends FedResultSetInterface {
     
     /**
      * Moves the cursor to the first row in
@@ -28,4 +28,6 @@ interface FedResultSetExtendedInterface extends FedResultSetInterface {
      * @since 1.2
      */
     boolean first() throws FedException;
+    
+    int getCursorPosition() throws FedException;
 }

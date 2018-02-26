@@ -96,4 +96,13 @@ public class SqlResultWrapper implements FedResultSetExtendedInterface {
             throw new FedException(ex);
         }
     }
+
+    @Override
+    public int getCursorPosition() throws FedException {
+        try {
+            return this.resultSet.getRow();
+        } catch (SQLException ex) {
+            throw new FedException(ex);
+        }
+    }
 }

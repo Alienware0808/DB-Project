@@ -5,6 +5,7 @@
  */
 package Conditions;
 
+import FederalDB.FedResultSetInterface;
 import ResultSetManagment.FedResultSet;
 
 /**
@@ -12,5 +13,5 @@ import ResultSetManagment.FedResultSet;
  * @author Tobias Habermann
  */
 public interface IValue {
-    Object getValue(FedResultSet resultSet);
+    Object getValue(FedResultSetInterface resultSet);
 }

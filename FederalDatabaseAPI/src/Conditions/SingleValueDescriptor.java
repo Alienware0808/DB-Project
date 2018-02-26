@@ -5,6 +5,7 @@
  */
 package Conditions;
 
+import FederalDB.FedResultSetInterface;
 import ResultSetManagment.FedResultSet;
 
 /**
@@ -22,7 +23,7 @@ public class SingleValueDescriptor implements IValue {
     }
 
     @Override
-    public Object getValue(FedResultSet resultSet) {
+    public Object getValue(FedResultSetInterface resultSet) {
         return value;
     }
 }

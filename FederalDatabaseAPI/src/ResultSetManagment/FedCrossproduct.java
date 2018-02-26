@@ -40,10 +40,12 @@ public class FedCrossproduct implements FedResultSetExtendedInterface {
 
     @Override
     public boolean next() throws FedException {
+        currentIndex++;
         if(right.next()) // Next in the right
             return true;
         if(left.next()) // Next in the left
             return right.first(); // Reset the left
+        currentIndex--;
         return false;
     }
 
@@ -86,6 +88,11 @@ public class FedCrossproduct implements FedResultSetExtendedInterface {
     public void close() throws FedException {
         right.close();
         left.close();
+    }
+
+    @Override
+    public int getCursorPosition() throws FedException {
+        return currentIndex;
     }
     
 }

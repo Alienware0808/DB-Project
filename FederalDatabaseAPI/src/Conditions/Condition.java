@@ -5,7 +5,9 @@
  */
 package Conditions;
 
-import java.sql.ResultSet;
+import FederalDB.FedException;
+import ResultSetManagment.FedResultSetExtendedInterface;
+import java.util.List;
 
 /**
  *
@@ -13,8 +15,6 @@ import java.sql.ResultSet;
  */
 public abstract class Condition {
     
-    public void Execute()
-    {
-        // TODO Implement the Execution here!!!
-    }
+    public abstract List<Integer> execute(FedResultSetExtendedInterface resultSet)
+            throws FedException;
 }
