@@ -193,6 +193,14 @@ public class FedStatement implements FedStatementInterface
             }
         }
     }
+    
+    private void handleInsert(InsertStatement insstmt) throws FedException, SQLException
+    {
+        if (insstmt.tableDescription == null)
+        {
+            
+        }
+    }
 
     @Override
     public FedResultSet executeQuery(String sql) throws FedException
