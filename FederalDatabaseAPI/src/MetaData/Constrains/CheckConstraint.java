@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package MetaData;
+package MetaData.Constrains;
 
-import Data.FedHelper;
 import FederalDB.FedConnection;
+import MetaData.ColumnValue;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,11 +14,10 @@ import java.util.List;
  *
  * @author Franz Weidmann
  */
-public class PrimaryKey extends Constraint {
-    
+public class CheckConstraint extends Constraint {
     
     @Override
-    public boolean check(FedConnection fedConnection, List<ColumnValue> values){
+    public boolean check(FedConnection fedConnection, List<ColumnValue> columnValues){
         return true;
     }
 

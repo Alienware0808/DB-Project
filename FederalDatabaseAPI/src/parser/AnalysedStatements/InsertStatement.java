@@ -25,7 +25,7 @@ public class InsertStatement extends Statement{
         super(tree);
         values = new ArrayList<>();
         this.fedConnection = fedConnection;
-        tableDescription = fedConnection.metaDataManger.getMetaData(tree.getChild(2).getText());
+        tableDescription = fedConnection.metaDataManger.getTableMetaData(tree.getChild(2).getText());
         for(int i = 4; i < tree.getChildCount(); i++)
         {
             if(tree.getChild(i).getChild(0) instanceof SQLiteParser.Literal_valueContext)

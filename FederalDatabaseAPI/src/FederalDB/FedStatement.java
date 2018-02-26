@@ -51,16 +51,20 @@ public class FedStatement implements FedStatementInterface
             switch (lstmt.statementType)
             {
                 case DROP:
+                    boolean succ = false;
                     for (int i = 0; i < 3; i++)
                     {
                         try
                         {
                             PreparedStatement statement = con[i].prepareStatement(sql);
                             statement.executeUpdate();
+                            succ = true;
                         } catch (Exception ex)
                         {
                             //Logger.getLogger(FedStatement.class.getName()).log(Level.SEVERE, null, ex);
                         }
+                        if(!succ)
+                            throw new FedException(new Exception("Drop failed"));
                     }
                     break;
                 default:
@@ -89,11 +93,6 @@ public class FedStatement implements FedStatementInterface
             
         }
 
-        if (sql.startsWith("drop"))
-        {
-
-        }
-
         return 1;
     }
 
@@ -102,7 +101,7 @@ public class FedStatement implements FedStatementInterface
         if (createstmt.fedStatement instanceof CreateStatement.FedHorizontal)
         {
             CreateStatement.FedHorizontal hori = (CreateStatement.FedHorizontal) createstmt.fedStatement;
-            if (metaDataManger.getMetaData(createstmt.tableName) == null)
+            if (metaDataManger.getTableMetaData(createstmt.tableName) == null)
             {
                 List<Object> intervalls = hori.getIntervall();
                 String createsql = "create table " + createstmt.tableName + " (";

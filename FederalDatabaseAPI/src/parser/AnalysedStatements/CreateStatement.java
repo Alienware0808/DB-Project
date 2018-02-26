@@ -123,7 +123,7 @@ public class CreateStatement extends Statement {
                     j++;
                     j++; // skip ")"
                     j++; // skip "references"
-                    foreignkey.referenceToTable = fedConnection.metaDataManger.getMetaData(contree.getChild(j).getText());
+                    foreignkey.referenceToTable = fedConnection.metaDataManger.getTableMetaData(contree.getChild(j).getText());
                     j++; // skip tablename
                     j++; // skip "("
                     foreignkey.referenceToColumn = contree.getChild(j).getText();
@@ -492,7 +492,7 @@ public class CreateStatement extends Statement {
 
         @Override
         public boolean getCanBeLocal() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            return false;
         }
 
         @Override

@@ -33,7 +33,7 @@ public class UpdateStatement extends Statement {
     public UpdateStatement(ParseTree tree, FedConnection fedConnection) throws ContextException {
         super(tree);
         this.fedConnection = fedConnection;
-        table = fedConnection.metaDataManger.getMetaData(tree.getChild(1).getText()); // TODO read table from metadata via name
+        table = fedConnection.metaDataManger.getTableMetaData(tree.getChild(1).getText()); // TODO read table from metadata via name
         column = tree.getChild(3).getText(); // TODO read column from metadata via colname and tablename
         valueString = tree.getChild(5).getText();
         if(IsTerminalNode(tree.getChild(6), SQLiteParser.K_WHERE))

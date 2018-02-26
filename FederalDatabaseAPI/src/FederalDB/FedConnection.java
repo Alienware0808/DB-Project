@@ -99,6 +99,10 @@ public class FedConnection implements FedConnectionInterface{
         */
     }
 
+    public Connection[] getConn() {
+        return conn;
+    }
+
     @Override
     public FedStatement getStatement() {
         FedStatement statement= new FedStatement(this, conn, metaDataManger);

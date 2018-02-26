@@ -5,20 +5,19 @@
  */
 package MetaData;
 
-import FederalDB.FedConnection;
 import java.util.ArrayList;
 import java.util.List;
+import parser.AnalysedStatements.CreateStatement;
 
 /**
  *
- * @author Franz Weidmann
+ * @author Admin
  */
-public class Check extends Constraint {
+public class FedVerticalType extends FedType {
+    public List<List<CreateStatement.CreateColumnDefinition>> DistributionList;
     
-    
-    @Override
-    public boolean check(FedConnection fc, List<ColumnValue> cList){
-        return true;
+    public FedVerticalType()
+    {
+        DistributionList = new ArrayList<>();
     }
-
 }

@@ -82,7 +82,7 @@ public class SelectStatement extends Statement {
         if(table == null)
         {
             // TODO search the Metadata for that table ...
-            table = fedConnection.metaDataManger.getMetaData(nameOrAlias);
+            table = fedConnection.metaDataManger.getTableMetaData(nameOrAlias);
             if(table == null)
                 throw new ContextException("Table not found");
         }
@@ -133,7 +133,7 @@ public class SelectStatement extends Statement {
                 if(table_node.getChild(j) instanceof SQLiteParser.Table_nameContext)
                 {
                     // TODO Exception Handling??? Maybe???
-                    current =  fedConnection.metaDataManger.getMetaData(table_node.getChild(j).getText());
+                    current =  fedConnection.metaDataManger.getTableMetaData(table_node.getChild(j).getText());
                     tables.add(current);
                 }
                 // Add the Alias for the table

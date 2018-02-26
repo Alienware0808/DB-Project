@@ -6,6 +6,7 @@
 package Data;
 
 import MetaData.ColumnDefinition;
+import MetaData.ColumnValue;
 import ResultSetManagment.FedResultSet;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -52,6 +53,36 @@ public final class SQLHelper {
         select_sql += SQString.columnList(columns);
         select_sql += " from " + table.toLowerCase().trim();
         PreparedStatement prepStat = getPrepStatement(connection, select_sql);
+        return prepStat.executeQuery();
+    }
+    
+    /**
+     * Selects from the Connection the given fields from the given Tables
+     * @param connection The Database Connection to use
+     * @param columns The Columns which have to be selected
+     * @param table Select from this table
+     * @return The Results as a FedResultSet
+     * @throws java.sql.SQLException 
+     */
+    public static ResultSet select(
+            Connection connection, List<ColumnDefinition> columns, 
+            String table, List<ColumnValue> where_equals) throws SQLException
+    {
+        if(table == null || table.isEmpty())
+            throw new NullPointerException("Table name cannot be null or an empty String");
+        if(columns == null || columns.isEmpty())
+            throw new NullPointerException("columns cannot be null or empty");
+        if(connection == null || connection.isClosed())
+            throw new NullPointerException("connection cannot be null or closed");
+        String select_sql = "select ";
+        select_sql += SQString.columnList(columns);
+        select_sql += " from " + table.toLowerCase().trim();
+        select_sql += " where";
+        for(int i = 0; i < where_equals.size(); i++)
+            select_sql += " " + where_equals.get(i).name.toLowerCase().trim() + " = ?";
+        PreparedStatement prepStat = getPrepStatement(connection, select_sql);
+        for(int i = 0; i < where_equals.size(); i++)
+            prepStat.setObject(i, where_equals.get(i).value);
         return prepStat.executeQuery();
     }
     

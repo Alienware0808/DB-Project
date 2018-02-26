@@ -48,4 +48,16 @@ public class ColumnDefinition implements IValue{
         }
         return null;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == null)
+            return false;
+        if(!(obj instanceof ColumnDefinition))
+            return false;
+        if(((ColumnDefinition)(obj)).name.equals(this.name) && 
+           ((ColumnDefinition)(obj)).tableName.equals(this.tableName))
+            return true;
+        return false;
+    }
 }

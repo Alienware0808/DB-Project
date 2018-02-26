@@ -3,9 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package MetaData;
+package MetaData.Constrains;
 
 import FederalDB.FedConnection;
+import MetaData.ColumnDefinition;
+import MetaData.ColumnValue;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,5 +23,6 @@ public abstract class Constraint {
         columns = new ArrayList<>();
     }
     
-    public abstract boolean check(FedConnection fedConnection, List<ColumnValue> values);
+    public abstract boolean check(FedConnection fedConnection, List<ColumnValue> values)
+            throws Exception;
 }

@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  *
  * @author Admin
  */
-class SqlResultWrapper implements FedResultSetExtendedInterface {
+public class SqlResultWrapper implements FedResultSetExtendedInterface {
     ResultSet resultSet;
     
     public SqlResultWrapper(ResultSet resultSet)

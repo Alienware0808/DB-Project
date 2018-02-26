@@ -22,7 +22,7 @@ public final class FedHelper {
             String table)
     {
         MetaData.MetaDataManager metaData = null;
-        MetaDataEntry entry = metaData.getMetaData(table);
+        MetaDataEntry entry = metaData.getTableMetaData(table);
         // TODO Do the meta thingi ...
         if(/*horizontal*/true)
         {

@@ -10,6 +10,7 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -22,54 +23,50 @@ public class MetaDataManager {
     private final Connection conn;
     
     
-    public MetaDataManager(Connection conn)
+    public MetaDataManager(Connection conn) throws SQLException
     {
         this.conn=conn;
-        String sql = "CREATE table meta (entry long)"; 
-        String sqlI = "Insert into meta values ('')";
+        String createSql = "CREATE table meta (entry long)"; 
+        String insertSql = "Insert into meta values ('')";
+        String selectSql = "select * from meta";
         
         try{
             Statement stmt = conn.createStatement();
-            stmt.executeUpdate(sql);
-            stmt.executeUpdate(sqlI);
-            saveMetaData();
+            stmt.executeUpdate(createSql);
+            stmt.executeUpdate(insertSql);
+            save();
         }
         catch(Exception e){
-           
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(selectSql);
+            rs.next();
+            String json = rs.getString(0);
+            metaDataSet = (MetaDataSet)new GsonBuilder().create().fromJson(json, MetaDataSet.class);
+            rs.close();
         }
     }
     
     // Adds a new metadataentry to the gson hashmap
-    public void newMetaData(String tableName, MetaDataEntry mdE){
+    public void newTableMetaData(String tableName, MetaDataEntry mdE) throws Exception{
         metaDataSet.addEntry(tableName, mdE);
     }
     
-    public void deleteMetaData(String tableName){
+    public void deleteTableMetaData(String tableName) throws Exception{
         metaDataSet.deleteEntry(tableName);
     }
     
     // returns the metaDataEntry which describes the database
     // or null if there is no entry for this tablename
     // distribution according to its tablename
-    public MetaDataEntry getMetaData(String tableName){
+    public MetaDataEntry getTableMetaData(String tableName){
         return metaDataSet.getEntry(tableName);
     }
     
-    
     // to save the JavaObject of the metaData onto the json file
-    public void saveMetaData() throws Exception {
+    public void save() throws Exception {
         String metaDataString = new GsonBuilder().create().toJson(metaDataSet);
-        String sql = "update META set ENTRY= "+ metaDataString;
+        String sql = "update META set ENTRY = '"+ metaDataString + "'";
         Statement stmt = conn.createStatement();
         stmt.executeUpdate(sql);
-    }
-    
-    private String getMetaDataStringFromFile(String path) throws Exception{
-        File file = new File(path);
-        FileInputStream fis = new FileInputStream(file);
-        byte[] data = new byte[(int) file.length()];
-        fis.read(data);
-        fis.close();
-        return new String(data, "UTF-8");
     }
 }
