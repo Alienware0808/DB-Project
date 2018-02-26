@@ -100,7 +100,7 @@ public class FedConnection implements FedConnectionInterface{
     }
 
     @Override
-    public FedStatement getStatement(){
+    public FedStatement getStatement() {
         FedStatement statement= new FedStatement(this, conn, metaDataManger);
         return statement;
     }
