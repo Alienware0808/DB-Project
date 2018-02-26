@@ -16,7 +16,7 @@ public class FedConnection implements FedConnectionInterface{
     private Connection conn[] = new Connection[3];
     public final MetaDataManager metaDataManger;
 
-    public FedConnection(Connection[] conns) throws SQLException, FedException{
+    public FedConnection(Connection[] conns) {
         this.conn = conns;
         metaDataManger = new MetaDataManager(conn[0]);
         /*
