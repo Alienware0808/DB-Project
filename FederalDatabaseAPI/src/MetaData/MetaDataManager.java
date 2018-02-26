@@ -22,7 +22,8 @@ public class MetaDataManager {
     private final Connection conn;
     
     
-    public MetaDataManager(Connection conn){
+    public MetaDataManager(Connection conn)
+    {
         this.conn=conn;
         String sql = "CREATE table meta (entry long)"; 
         String sqlI = "Insert into meta values ('')";
@@ -31,9 +32,10 @@ public class MetaDataManager {
             Statement stmt = conn.createStatement();
             stmt.executeUpdate(sql);
             stmt.executeUpdate(sqlI);
+            saveMetaData();
         }
-        catch(SQLException e){
-            e.printStackTrace();
+        catch(Exception e){
+           
         }
     }
     
