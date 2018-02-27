@@ -154,12 +154,32 @@ public class Select_Test
             System.out.println("Create Holunder");
         } catch(Exception e) {}
         //Insert für Test
-        for (int i = 0; 0 < 15; i++) {
-            String a = "Insert Into Holunder Values ("+i+", 'bla', 'blub');";
-            try{
-                statement.executeUpdate(a);
-            } catch (Exception e) {}
-        }
+        String a = "INSERT INTO FLLINIE VALUES ('AB', 'D  ', null, 'Air Berlin', null);";                                   
+        String b = "INSERT INTO FLLINIE VALUES ('AC', 'CDN', null, 'Air Canada', 'Star');     ";                          
+        String c = "INSERT INTO FLLINIE VALUES ('AF', 'F  ', null, 'Air France', 'SkyTeam');  ";                          
+        String d = "INSERT INTO FLLINIE VALUES ('BA', 'GB ', null, 'British Airways', 'OneWorld'); ";                     
+        String e = "INSERT INTO FLLINIE VALUES ('DB', 'D  ', null, 'Database Airlines', null); ";                           
+        String f = "INSERT INTO FLLINIE VALUES ('DI', 'D  ', null, 'Deutsche BA', null);       ";                           
+        String g = "INSERT INTO FLLINIE VALUES ('DL', 'USA', null, 'Delta Airlines', 'SkyTeam'); ";                       
+        String h = "INSERT INTO FLLINIE VALUES ('JL', 'J  ', null, 'Japan Airlines', 'OneWorld'); ";                      
+        String i = "INSERT INTO FLLINIE VALUES ('LH', 'D  ', null, 'Lufthansa', 'Star');        ";                        
+        String j = "INSERT INTO FLLINIE VALUES ('NH', 'J  ', null, 'All Nippon Airways', 'Star'); ";                      
+        String k = "INSERT INTO FLLINIE VALUES ('UA', 'USA', null, 'United Airlines', 'Star');";
+
+        try{
+            statement.executeUpdate(a);
+            statement.executeUpdate(b);
+            statement.executeUpdate(c);
+            statement.executeUpdate(d);
+            statement.executeUpdate(e);
+            statement.executeUpdate(f);
+            statement.executeUpdate(g);
+            statement.executeUpdate(h);
+            statement.executeUpdate(i);
+            statement.executeUpdate(j);
+            statement.executeUpdate(k);
+        } catch (Exception ex) {
+        System.out.println("Insert Fail");}
     }
     
     @BeforeClass
@@ -186,10 +206,18 @@ public class Select_Test
     @Test
     public void select_Test() {
         try {
-            FedResultSet rst = statement.executeQuery("Select * FROM Holunder");
+            FedResultSet rst = statement.executeQuery("Select * FROM FLLINIE");
             assertEquals(15, rst.getColumnCount());
-       } catch (Exception e) {}
-        
+       } catch (Exception e) {}   
+    }
+    
+    //Anzahl Zeilen
+    @Test
+    public void select_Test01() {
+        try{
+            FedResultSet rst = statement.executeQuery("Select COUNT(*) FROM FLLINIE");
+            assertEquals(11,rst.getColumnCount());
+        }catch (Exception e) {}
     }
 
     // TODO add test methods here.

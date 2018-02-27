@@ -179,6 +179,7 @@ public class Insert_Test
             assertEquals(1,statement.executeUpdate(sql));
         } catch(Exception e) {}
     }
+    
     //Ohne PrimaryKey
     @Test
     public void test_insert_03() {
@@ -188,6 +189,7 @@ public class Insert_Test
         } catch(Exception e) {}
     }
     
+    
     //Fremdschlüssel existiert nicht
     @Test
     public void test_insert_04() {
@@ -196,6 +198,7 @@ public class Insert_Test
             assertEquals(1,statement.executeUpdate(sql));
         } catch(Exception e) {}
     }
+    
     //Doppelter Primärschlüssel
     @Test
     public void test_insert_05() {
@@ -204,6 +207,7 @@ public class Insert_Test
             assertEquals(1,statement.executeUpdate(sql));
         } catch(Exception e) {}
     }
+    
     //Falsche Menge an Values zu wenig
     @Test
     public void test_insert_06() {
@@ -212,6 +216,7 @@ public class Insert_Test
             assertEquals(1,statement.executeUpdate(sql));
         } catch(Exception e) {}
     }
+    
     //Falsche Menge an Values zu viel
     @Test
     public void test_insert_07() {
@@ -220,6 +225,7 @@ public class Insert_Test
             assertEquals(1,statement.executeUpdate(sql));
         } catch(Exception e) {}
     }
+    
     //Grenzen bei Horizontal davor
     @Test
     public void test_insert_08() {
@@ -228,6 +234,7 @@ public class Insert_Test
             assertEquals(1,statement.executeUpdate(sql));
         } catch(Exception e) {}
     }
+    
     //Grenzen bei Horizontal genau
     @Test
     public void test_insert_09() {
@@ -236,6 +243,7 @@ public class Insert_Test
             assertEquals(1,statement.executeUpdate(sql));
         } catch(Exception e) {}
     }
+    
     //Grenzen bei Horizontal, danach
     @Test
     public void test_insert_10() {
@@ -244,6 +252,7 @@ public class Insert_Test
             assertEquals(1,statement.executeUpdate(sql));
         } catch(Exception e) {}
     }
+    
     //Falsche Formate INT statt varchar
     @Test
     public void test_insert_11() {
@@ -252,6 +261,7 @@ public class Insert_Test
             assertEquals(1,statement.executeUpdate(sql));
         } catch(Exception e) {}
     }
+    
     //Falsche Formate varchar statt int
     @Test
     public void test_insert_12() {
@@ -260,30 +270,34 @@ public class Insert_Test
             assertEquals(1,statement.executeUpdate(sql));
         } catch(Exception e) {}
     }
+    
     //Test von Meilen > 0
     @Test
     public void test_insert_13() {
         String sql = "INSERT INTO FLBUCHUNG VALUES (200, 80, 'LH', 54, 'FRA', 'CDG', '19-SEP-2012', -200, 243);";
         try{
-            assertEquals(1,statement.executeUpdate(sql));
+            assertEquals(0,statement.executeUpdate(sql));
         } catch(Exception e) {}
     }
+    
     //Testen von NOT NULL
     @Test
     public void test_insert_14() {
         String sql = "INSERT INTO FLBUCHUNG VALUES (201, 80, 'LH', 54, 'FRA', 'CDG', '19-SEP-2012', 300, NULL);";
         try{
-            assertEquals(1,statement.executeUpdate(sql));
+            assertEquals(0,statement.executeUpdate(sql));
         } catch(Exception e) {}
     }
+    
     //Check Primary Key NOT Distributed
     @Test
     public void test_insert_15() {
         String sql = "INSERT INTO FLBUCHUNG VALUES (184, 81, 'DB', 90, 'TRU', 'FRA', '16-FEB-2010', 5000, 800);";
         try{
-            assertEquals(1,statement.executeUpdate(sql));
+            assertEquals(0,statement.executeUpdate(sql));
         } catch(Exception e) {}
     }
+    
     //Test Primary Key Distributed NOT IN same Partition
     @Test
     public void test_insert_16() {
@@ -292,6 +306,7 @@ public class Insert_Test
             assertEquals(1,statement.executeUpdate(sql));
         } catch(Exception e) {}
     }
+    
     //Test RANGE
     @Test
     public void test_insert_17() {
