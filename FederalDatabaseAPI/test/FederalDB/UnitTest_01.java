@@ -25,7 +25,27 @@ public class UnitTest_01
     final String usernameValidation = "VDBSA09";
     final String passwordValidation = "VDBSA09";
     
-    private FedConnection fedConnection = (new FedPseudoDriver()).getConnection(usernameValidation, passwordValidation);
+    private FedConnection fedConnection = (new FedPseudoDriver()).getConnection(usernameValidation, passwordValidation);;
+    private FedConnection connect;
+    
+    
+    //Falsche Benutzername
+    @Test
+    public void ConnectionTest_02() {
+        connect = (new FedPseudoDriver()).getConnection("VDBSA08", passwordValidation);
+        assertNull(connect);
+    }
+    //Richtige Connection aufbauen
+    @Test
+    public void ConnectionTest() {
+        connect = (new FedPseudoDriver()).getConnection(usernameValidation, passwordValidation);
+        assertNotNull(connect);
+    }
+    //Test für getStatement
+    @Test
+    public void ConnectionTest_03() {
+        assertNotNull(fedConnection.getStatement());
+    }
     
     public UnitTest_01()
     {
@@ -94,7 +114,24 @@ public class UnitTest_01
         System.out.println("FederalDB.UnitTest_01.drop_03()   " + thrown);
          assertTrue(thrown);
     }
-
+    //Eine einfache Tabelle
+    @Test
+    public void test_create() {
+        boolean thrown = true;
+        String sql = "Create Table TEST ("+
+            "id integer,\n" +
+            "name varchar(40),\n" +
+            "constraint Test_PK\n" +
+            "	primary key (id)))";
+        try {
+            final FedStatement statement = fedConnection.getStatement();
+            statement.executeUpdate(sql);
+            thrown = false;
+        } catch(Exception e) {}
+        assertTrue(thrown);
+    }
+    
+    //Tabelle Vertical
     @Test
     public void test_create_01(){
         boolean thrown = true;
@@ -311,5 +348,30 @@ public class UnitTest_01
         } catch(Exception e) {}
         System.out.println("FederalDB.UnitTest_01.test_10()   " + thrown);
          assertTrue(thrown);
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    //Falls gelungen wieder löschen
+    @Test
+    public void RBack() {
+        try{
+            final FedStatement statement = fedConnection.getStatement();
+            statement.executeUpdate("Drop Table TEST");
+            statement.executeUpdate("Drop Table myVert01");
+            statement.executeUpdate("Drop Table myVert02");
+            statement.executeUpdate("Drop Table myVert03");
+            statement.executeUpdate("Drop Table myVert04");
+            statement.executeUpdate("Drop Table myVert05");
+            statement.executeUpdate("Drop Table myVert06");
+            statement.executeUpdate("Drop Table myVert07");
+            statement.executeUpdate("Drop Table myVert08");
+            statement.executeUpdate("Drop Table TabEins");
+        } catch (Exception e) {}
     }
 }

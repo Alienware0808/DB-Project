@@ -5,6 +5,7 @@
  */
 package FederalDB;
 
+import ResultSetManagment.FedResultSet;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -16,7 +17,7 @@ import static org.junit.Assert.*;
  *
  * @author svwer
  */
-public class Insert_Test
+public class Select_Test
 {
     final String usernameTest = "VDBSA09";
     final String passwordTest = "VDBSA09";
@@ -26,7 +27,8 @@ public class Insert_Test
     
     private FedConnection fedConnection = (new FedPseudoDriver()).getConnection(usernameValidation, passwordValidation);
     final FedStatement statement;
-    public Insert_Test()
+    
+    public Select_Test()
     {
         statement = fedConnection.getStatement();
         String FlHafen = "create table FLHAFEN (\n" +
@@ -129,6 +131,14 @@ public class Insert_Test
                 "        check (PREIS > 0)\n" +
                 ")\n" +
                 "HORIZONTAL (PNR(35,70));";
+        String EigeneTest = "create table Holunder (\n" +
+                "ID     integer,\n" +
+                "FLC	varchar(2),\n" +
+                "LAND	varchar(3),\n" +
+                "constraint Holunder_PS\n" +
+                "	primary key (ID),\n" +
+                ")\n" +
+                "HORIZONTAL (ID(4,8));";
         try {
             statement.executeUpdate(FlHafen);
             System.out.println("Create FlugHafen");
@@ -140,7 +150,16 @@ public class Insert_Test
             System.out.println("Create Passagier");
             statement.executeUpdate(FlBuchung);
             System.out.println("Create Buchung");
+            statement.executeUpdate(EigeneTest);
+            System.out.println("Create Holunder");
         } catch(Exception e) {}
+        //Insert für Test
+        for (int i = 0; 0 < 15; i++) {
+            String a = "Insert Into Holunder Values ("+i+", 'bla', 'blub');";
+            try{
+                statement.executeUpdate(a);
+            } catch (Exception e) {}
+        }
     }
     
     @BeforeClass
@@ -162,146 +181,22 @@ public class Insert_Test
     public void tearDown()
     {
     }
-//Korrekter Wert in Tabelle eintragen
-    @Test
-    public void test_insert_01() {
-        String sql = "INSERT INTO FLHAFEN VALUES ('AKL', 'NZ ', 'Auckland', 'Auckland International')";
-        try{
-            assertEquals(1,statement.executeUpdate(sql));
-        } catch(Exception e) {}
-    }
     
-    //Nicht Exitente Tabelle
+    //Select all
     @Test
-    public void test_insert_02() {
-        String sql = "INSERT INTO Test VALUES ('AKL', 'NZ ', 'Auckland', 'Auckland International')";
-        try{
-            assertEquals(1,statement.executeUpdate(sql));
-        } catch(Exception e) {}
+    public void select_Test() {
+        try {
+            FedResultSet rst = statement.executeQuery("Select * FROM Holunder");
+            assertEquals(15, rst.getColumnCount());
+       } catch (Exception e) {}
+        
     }
-    //Ohne PrimaryKey
-    @Test
-    public void test_insert_03() {
-        String sql = "INSERT INTO FLHAFEN (LAND, STADT, NAMEN)VALUES ('NZ ', 'Auckland', 'Auckland International')";
-        try{
-            assertEquals(1,statement.executeUpdate(sql));
-        } catch(Exception e) {}
-    }
-    
-    //Fremdschlüssel existiert nicht
-    @Test
-    public void test_insert_04() {
-        String sql = "INSERT INTO FLLINIE VALUES ('AB', 'D ', 'test', 'Air Berlin', null)";
-        try{
-            assertEquals(1,statement.executeUpdate(sql));
-        } catch(Exception e) {}
-    }
-    //Doppelter Primärschlüssel
-    @Test
-    public void test_insert_05() {
-        String sql = "INSERT INTO FLHAFEN VALUES ('AKL', 'NZ ', 'Auckland', 'Auckland International')";
-        try{
-            assertEquals(1,statement.executeUpdate(sql));
-        } catch(Exception e) {}
-    }
-    //Falsche Menge an Values zu wenig
-    @Test
-    public void test_insert_06() {
-        String sql = "INSERT INTO FLHAFEN VALUES ('AKL', 'NZ ', 'Auckland')";
-        try{
-            assertEquals(1,statement.executeUpdate(sql));
-        } catch(Exception e) {}
-    }
-    //Falsche Menge an Values zu viel
-    @Test
-    public void test_insert_07() {
-        String sql = "INSERT INTO FLHAFEN VALUES ('AKL', 'NZ ', 'Auckland', 'Auckland International', 'Baum')";
-        try{
-            assertEquals(1,statement.executeUpdate(sql));
-        } catch(Exception e) {}
-    }
-    //Grenzen bei Horizontal davor
-    @Test
-    public void test_insert_08() {
-        String sql = "INSERT INTO FLLINIE VALUES ('KJ', 'D', null, 'Auckland International', null)";
-        try{
-            assertEquals(1,statement.executeUpdate(sql));
-        } catch(Exception e) {}
-    }
-    //Grenzen bei Horizontal genau
-    @Test
-    public void test_insert_09() {
-        String sql = "INSERT INTO FLLINIE VALUES ('KK', 'D', null, 'Auckland International', null)";
-        try{
-            assertEquals(1,statement.executeUpdate(sql));
-        } catch(Exception e) {}
-    }
-    //Grenzen bei Horizontal, danach
-    @Test
-    public void test_insert_10() {
-        String sql = "INSERT INTO FLLINIE VALUES ('KL', 'D', null, 'Auckland International', null)";
-        try{
-            assertEquals(1,statement.executeUpdate(sql));
-        } catch(Exception e) {}
-    }
-    //Falsche Formate INT statt varchar
-    @Test
-    public void test_insert_11() {
-        String sql = "INSERT INTO FLLINIE VALUES ('HM', 'D', null, 12, null)";
-        try{
-            assertEquals(1,statement.executeUpdate(sql));
-        } catch(Exception e) {}
-    }
-    //Falsche Formate varchar statt int
-    @Test
-    public void test_insert_12() {
-        String sql = "INSERT INTO FLPASSAGIER VALUES ('HM', 'Dumm', 'Beutel', 'D')";
-        try{
-            assertEquals(1,statement.executeUpdate(sql));
-        } catch(Exception e) {}
-    }
-    //Test von Meilen > 0
-    @Test
-    public void test_insert_13() {
-        String sql = "INSERT INTO FLBUCHUNG VALUES (200, 80, 'LH', 54, 'FRA', 'CDG', '19-SEP-2012', -200, 243);";
-        try{
-            assertEquals(1,statement.executeUpdate(sql));
-        } catch(Exception e) {}
-    }
-    //Testen von NOT NULL
-    @Test
-    public void test_insert_14() {
-        String sql = "INSERT INTO FLBUCHUNG VALUES (201, 80, 'LH', 54, 'FRA', 'CDG', '19-SEP-2012', 300, NULL);";
-        try{
-            assertEquals(1,statement.executeUpdate(sql));
-        } catch(Exception e) {}
-    }
-    //Check Primary Key NOT Distributed
-    @Test
-    public void test_insert_15() {
-        String sql = "INSERT INTO FLBUCHUNG VALUES (184, 81, 'DB', 90, 'TRU', 'FRA', '16-FEB-2010', 5000, 800);";
-        try{
-            assertEquals(1,statement.executeUpdate(sql));
-        } catch(Exception e) {}
-    }
-    //Test Primary Key Distributed NOT IN same Partition
-    @Test
-    public void test_insert_16() {
-        String sql = "INSERT INTO FLBUCHUNG VALUES (184, 81, 'DB', 90, 'CDG', 'FRA', '16-FEB-2010', 5000, 800);";
-        try{
-            assertEquals(1,statement.executeUpdate(sql));
-        } catch(Exception e) {}
-    }
-    //Test RANGE
-    @Test
-    public void test_insert_17() {
-        String sql = "INSERT INTO FLG VALUES (305, 'LH', 53, 'CDG', 'FRA', 1500, 9000);";
-        try{
-            assertEquals(1,statement.executeUpdate(sql));
-        } catch(Exception e) {}
-    }
-    
-    
+
+    // TODO add test methods here.
+    // The methods must be annotated with annotation @Test. For example:
+    //
+    // @Test
+    // public void hello() {}
     //Am Ende die TestTabellen wieder Löschen
     @Test
     public void drop() {
