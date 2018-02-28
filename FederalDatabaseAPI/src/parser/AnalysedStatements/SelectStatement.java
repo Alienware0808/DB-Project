@@ -5,7 +5,6 @@
  */
 package parser.AnalysedStatements;
 
-import Conditions.ColumnValueDescriptor;
 import Conditions.CompareCondition;
 import Conditions.CompareType;
 import Conditions.Condition;
@@ -13,6 +12,7 @@ import Conditions.JunctionCondition;
 import Conditions.SingleValueDescriptor;
 import Conditions.IValue;
 import FederalDB.FedConnection;
+import MetaData.ColumnDefinition;
 import MetaData.MetaDataEntry;
 import java.util.AbstractList;
 import java.util.ArrayList;
@@ -332,13 +332,13 @@ public class SelectStatement extends Statement {
                     Column col = new Column(tables.get(0).TableName, expr.getText());
                     if(getResultColumnByNameOrAlias(col.getName(), col.getTableName()) == null)
                         extraColumnsForWhere.add(col);
-                    return new ColumnValueDescriptor(col.getName(), col.getTableName());
+                    return new ColumnDefinition(col.getName(), col.getTableName());
                 }
             case 3:
                 Column col = new Column(getTableByNameOrAlias(expr.getChild(0).getText()).TableName, expr.getChild(2).getText());
                 if(getResultColumnByNameOrAlias(col.getName(), col.getTableName()) == null)
                     extraColumnsForWhere.add(col);
-                return new ColumnValueDescriptor(col.getName(), col.getTableName());
+                return new ColumnDefinition(col.getName(), col.getTableName());
             default:
                 throw new ContextException("Unexpected expression in where clause");
         }

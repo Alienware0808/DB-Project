@@ -1,6 +1,5 @@
 package FederalDB;
 
-import ResultSetManagment.FedResultSet;
 
 
 public interface FedStatementInterface {

@@ -1,7 +1,6 @@
 package FederalDB;
 
 import FederalDB.FedException;
-import ResultSetManagment.FedResultSet;
 import java.util.Scanner;
 
 public class FedTestEnvironment {

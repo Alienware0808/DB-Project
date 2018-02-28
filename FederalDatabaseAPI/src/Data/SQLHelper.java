@@ -7,7 +7,6 @@ package Data;
 
 import MetaData.ColumnDefinition;
 import MetaData.ColumnValue;
-import ResultSetManagment.FedResultSet;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -243,6 +242,26 @@ public final class SQLHelper {
         if(connection == null || connection.isClosed())
             throw new NullPointerException("connection cannot be null or closed");
         String select_sql = "select * from " + table.toLowerCase().trim();
+        PreparedStatement prepStat = getPrepStatement(connection, select_sql);
+        return prepStat.executeQuery();
+    }
+    
+    /**
+     * Selects all Columns from the given Table from the given Connection
+     * @param connection The Database Connection to use
+     * @param table Select from this table
+     * @return
+     * @throws SQLException 
+     */
+    public static ResultSet selectAll(Connection connection, String table, 
+            String where) throws SQLException
+    {
+        if(table == null || table.isEmpty())
+            throw new NullPointerException("Table name cannot be null or an empty String");
+        if(connection == null || connection.isClosed())
+            throw new NullPointerException("connection cannot be null or closed");
+        String select_sql = "select * from " + table.toLowerCase().trim();
+        select_sql += " where " + where.trim();
         PreparedStatement prepStat = getPrepStatement(connection, select_sql);
         return prepStat.executeQuery();
     }

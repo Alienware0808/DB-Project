@@ -30,4 +30,8 @@ public interface FedResultSetExtendedInterface extends FedResultSetInterface {
     boolean first() throws FedException;
     
     int getCursorPosition() throws FedException;
+    
+    boolean setCursorPosition(int position) throws FedException;
+    
+    int getRowCount() throws FedException;
 }

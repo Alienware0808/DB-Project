@@ -12,27 +12,27 @@ import java.sql.ResultSet;
  *
  * @author Admin
  */
-public class FedCrossproduct implements FedResultSetExtendedInterface {
+public class FedCrossproductResultSet implements FedResultSetExtendedInterface {
 
     private FedResultSetExtendedInterface left;
     private FedResultSetExtendedInterface right;
-    private int currentIndex;
+    private int currentRow;
     
-    public FedCrossproduct(FedResultSetExtendedInterface left, FedResultSetExtendedInterface right) throws FedException
+    public FedCrossproductResultSet(FedResultSetExtendedInterface left, FedResultSetExtendedInterface right) throws FedException
     {
         this.left = left;
         this.right = right;
         first();
     }
     
-    public FedCrossproduct(ResultSet left, ResultSet right) throws FedException
+    public FedCrossproductResultSet(ResultSet left, ResultSet right) throws FedException
     {
-        this(new SqlResultWrapper(left), new SqlResultWrapper(right));
+        this(new SqlWrapperResultSet(left), new SqlWrapperResultSet(right));
     }
     
     @Override
     public boolean first() throws FedException {
-        currentIndex = 0;
+        currentRow = 1;
         boolean l = left.first();
         boolean r = right.first();
         return r & l;
@@ -40,12 +40,12 @@ public class FedCrossproduct implements FedResultSetExtendedInterface {
 
     @Override
     public boolean next() throws FedException {
-        currentIndex++;
+        currentRow++;
         if(right.next()) // Next in the right
             return true;
         if(left.next()) // Next in the left
             return right.first(); // Reset the left
-        currentIndex--;
+        currentRow--;
         return false;
     }
 
@@ -92,7 +92,33 @@ public class FedCrossproduct implements FedResultSetExtendedInterface {
 
     @Override
     public int getCursorPosition() throws FedException {
-        return currentIndex;
+        return currentRow;
+    }
+
+    @Override
+    public boolean setCursorPosition(int position) throws FedException {
+        boolean res1 = true;
+        boolean res2 = true;
+        res1 = left.setCursorPosition((position - 1) / right.getRowCount() + 1);
+        res2 = right.setCursorPosition((position - 1) % right.getRowCount() + 1);
+        if(res1 & res2)
+        {
+            currentRow = position;
+            return true;
+        }
+        else
+        {
+            // Reset to previous valid position
+            position = currentRow;
+            left.setCursorPosition((position - 1) / right.getRowCount() + 1);
+            right.setCursorPosition((position - 1) % right.getRowCount() + 1);
+            return false;
+        }
+    }
+
+    @Override
+    public int getRowCount() throws FedException {
+        return right.getRowCount() * left.getRowCount();
     }
     
 }

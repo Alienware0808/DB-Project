@@ -6,9 +6,10 @@
 package Conditions;
 
 import FederalDB.FedException;
-import ResultSetManagment.FedResultSet;
+import MetaData.ColumnDefinition;
 import ResultSetManagment.FedResultSetExtendedInterface;
 import java.util.ArrayList;
+import java.util.List;
 import javafx.collections.transformation.SortedList;
 
 /**
@@ -130,5 +131,37 @@ public class CompareCondition extends Condition {
             break;
         }
         return matches;
+    }
+
+    @Override
+    public List<ColumnDefinition> getRequiredColumns() {
+        List<ColumnDefinition> result = new ArrayList<>();
+        if(leftValues instanceof ColumnDefinition)
+            result.add((ColumnDefinition)leftValues);
+        if(rightValues instanceof ColumnDefinition)
+            result.add((ColumnDefinition)rightValues);
+        return result;
+    }
+
+    @Override
+    public String toWhereString() {
+        String str = leftValues.toWhereString() + " ";
+        switch(type)
+        {
+            case EQUAL: str += "=";
+                    break;
+            case NOT_EQUAL: str += "<>";
+                    break;
+            case GREATER: str += ">";
+                    break;
+            case LESSER: str += "<";
+                    break;
+            case GREATER_OR_EQUAL: str += ">=";
+                    break;
+            case LESSER_OR_EQUAL: str += "<=";
+                    break;
+        }
+        str += " " + rightValues.toWhereString();
+        return str;
     }
 }

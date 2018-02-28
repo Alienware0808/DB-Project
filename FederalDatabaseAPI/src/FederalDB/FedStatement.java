@@ -7,7 +7,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import ResultSetManagment.FedResultSet;
 import java.util.List;
 import parser.*;
 import parser.AnalysedStatements.*;

@@ -6,6 +6,7 @@
 package Conditions;
 
 import FederalDB.FedException;
+import MetaData.ColumnDefinition;
 import ResultSetManagment.FedResultSetExtendedInterface;
 import java.util.ArrayList;
 import java.util.List;
@@ -102,6 +103,21 @@ public class JunctionCondition extends Condition {
             }break;
         }
         return matches;
+    }
+
+    @Override
+    public List<ColumnDefinition> getRequiredColumns() {
+        List<ColumnDefinition> result = new ArrayList<>();
+        result.addAll(leftCondition.getRequiredColumns());
+        result.addAll(rightCondition.getRequiredColumns());
+        return result;
+    }
+
+    @Override
+    public String toWhereString() {
+        return "(" + leftCondition.toWhereString() + ") " + 
+                (type == JunctionType.AND? "AND": "OR") +
+                "(" + rightCondition.toWhereString() + ") ";
     }
     
     public enum JunctionType

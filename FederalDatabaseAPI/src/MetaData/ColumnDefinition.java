@@ -7,7 +7,8 @@ package MetaData;
 
 import Conditions.IValue;
 import FederalDB.FedException;
-import ResultSetManagment.FedResultSet;
+import FederalDB.FedResultSetInterface;
+import ResultSetManagment.FedResultSetExtendedInterface;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,11 +27,22 @@ public class ColumnDefinition implements IValue{
         this.name = columnName;
         this.tableName = tableName;
     }
+    
+    private int getIndexByName(FedResultSetInterface resultSet) throws FedException
+    {
+        for(int i = 0; i < resultSet.getColumnCount(); i++)
+            if(resultSet.getColumnName(i).trim().toLowerCase().equals(name.toLowerCase().trim()))
+                return i;
+        return -1;
+    }
 
     @Override
-    public Object getValue(FedResultSet resultSet)
+    public Object getValue(FedResultSetInterface resultSet)
+            throws FedException
     {
-        int index = resultSet.getIndexOfColumn(name);
+        int index = getIndexByName(resultSet);
+        if(index == -1)
+            throw new FedException(new Exception("Field not Found"));
         try
         {
             int type = resultSet.getColumnType(index);
@@ -59,5 +71,10 @@ public class ColumnDefinition implements IValue{
            ((ColumnDefinition)(obj)).tableName.equals(this.tableName))
             return true;
         return false;
+    }
+
+    @Override
+    public String toWhereString() {
+        return tableName + "." + name;
     }
 }

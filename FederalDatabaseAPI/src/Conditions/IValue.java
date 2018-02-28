@@ -5,13 +5,15 @@
  */
 package Conditions;
 
+import FederalDB.FedException;
 import FederalDB.FedResultSetInterface;
-import ResultSetManagment.FedResultSet;
 
 /**
  *
  * @author Tobias Habermann
  */
 public interface IValue {
-    Object getValue(FedResultSetInterface resultSet);
+    Object getValue(FedResultSetInterface resultSet)
+            throws FedException;
+    String toWhereString();
 }

@@ -16,10 +16,11 @@ import java.util.logging.Logger;
  *
  * @author Admin
  */
-public class SqlResultWrapper implements FedResultSetExtendedInterface {
+public class SqlWrapperResultSet implements FedResultSetExtendedInterface {
     ResultSet resultSet;
+    private Integer cachedRowCount = null;
     
-    public SqlResultWrapper(ResultSet resultSet)
+    public SqlWrapperResultSet(ResultSet resultSet)
     {
         this.resultSet = resultSet;
     }
@@ -104,5 +105,33 @@ public class SqlResultWrapper implements FedResultSetExtendedInterface {
         } catch (SQLException ex) {
             throw new FedException(ex);
         }
+    }
+
+    @Override
+    public boolean setCursorPosition(int position) throws FedException {
+        try {
+            return resultSet.absolute(position);
+        } catch (SQLException ex) {
+            throw new FedException(ex);
+        }
+    }
+
+    @Override
+    public int getRowCount() throws FedException {
+        if(cachedRowCount == null)
+        {
+            int position = getCursorPosition();
+            try {
+                resultSet.last();
+                cachedRowCount = resultSet.getRow();
+            } catch (SQLException ex) {
+                throw new FedException(ex);
+            }
+            finally
+            {
+                setCursorPosition(position);
+            }
+        }
+        return cachedRowCount;
     }
 }

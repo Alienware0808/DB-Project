@@ -5,6 +5,7 @@
  */
 package MetaData.Constrains;
 
+import Conditions.Condition;
 import FederalDB.FedConnection;
 import MetaData.ColumnDefinition;
 import MetaData.ColumnValue;
@@ -23,6 +24,12 @@ public abstract class Constraint {
         columns = new ArrayList<>();
     }
     
-    public abstract boolean check(FedConnection fedConnection, List<ColumnValue> values)
+    public abstract boolean checkInsert(FedConnection fedConnection, List<ColumnValue> values)
+            throws Exception;
+    
+    public abstract boolean checkDelete(FedConnection fedConnection, List<ColumnValue> values)
+            throws Exception;
+    
+    public abstract boolean checkUpdate(FedConnection fedConnection, List<ColumnValue> values, Condition where)
             throws Exception;
 }

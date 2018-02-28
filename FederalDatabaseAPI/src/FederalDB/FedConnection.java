@@ -3,7 +3,7 @@ package FederalDB;
 
 import Data.SQLHelper;
 import MetaData.MetaDataManager;
-import ResultSetManagment.FedCrossproduct;
+import ResultSetManagment.FedCrossproductResultSet;
 import ResultSetManagment.FedHorizontalResultSet;
 import ResultSetManagment.FedVerticalResultSet;
 import java.sql.Connection;
@@ -16,7 +16,7 @@ public class FedConnection implements FedConnectionInterface{
     private Connection conn[] = new Connection[3];
     public final MetaDataManager metaDataManger;
 
-    public FedConnection(Connection[] conns) {
+    public FedConnection(Connection[] conns) throws SQLException {
         this.conn = conns;
         metaDataManger = new MetaDataManager(conn[0]);
         /*
@@ -66,7 +66,7 @@ public class FedConnection implements FedConnectionInterface{
             } while(horiResult.next());
             
             
-            FedCrossproduct crossProd = new FedCrossproduct(vertiResult, horiResult);
+            FedCrossproductResultSet crossProd = new FedCrossproductResultSet(vertiResult, horiResult);
             System.out.println();
             System.out.println(crossProd.getColumnName(1) 
                 + " | " + crossProd.getColumnName(2)

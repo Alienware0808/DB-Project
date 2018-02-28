@@ -6,7 +6,7 @@
 package Data;
 
 import MetaData.ColumnDefinition;
-import ResultSetManagment.FedResultSet;
+import ResultSetManagment.FedResultSetExtendedInterface;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public final class SelectHelper {
      * @param table
      * @return 
      */
-    public static FedResultSet select(Connection connection, List<ColumnDefinition> columns, String table)
+   /* public static FedResultSetExtendedInterface select(Connection connection, List<ColumnDefinition> columns, String table)
     {
         String select_sql = "select ";
         for(int i = 0; i < columns.size(); i++)
@@ -38,7 +38,7 @@ public final class SelectHelper {
         }
         select_sql += " from " + table.toLowerCase();
         return null;
-    }
+    }*/
     
 //    private static PreparedStatement getPrepStatement(Connection connection)
 //    {

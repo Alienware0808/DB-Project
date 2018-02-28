@@ -22,14 +22,12 @@ public class MetaDataManager {
     private MetaDataSet metaDataSet;
     private final Connection conn;
     
-    
     public MetaDataManager(Connection conn) throws SQLException
     {
         this.conn=conn;
-        String createSql = "CREATE table meta (entry long)"; 
+        String createSql = "create table meta (entry long)"; 
         String insertSql = "Insert into meta values ('')";
         String selectSql = "select * from meta";
-        
         try{
             Statement stmt = conn.createStatement();
             stmt.executeUpdate(createSql);
@@ -46,24 +44,21 @@ public class MetaDataManager {
         }
     }
     
-    // Adds a new metadataentry to the gson hashmap
-    public void newTableMetaData(String tableName, MetaDataEntry mdE) throws Exception{
-        metaDataSet.addEntry(tableName, mdE);
+    public void addTableMetaData(MetaDataEntry metaDataEntry) throws Exception{
+        metaDataSet.addEntry(metaDataEntry.TableName, metaDataEntry);
+        save();
     }
     
     public void deleteTableMetaData(String tableName) throws Exception{
         metaDataSet.deleteEntry(tableName);
+        save();
     }
     
-    // returns the metaDataEntry which describes the database
-    // or null if there is no entry for this tablename
-    // distribution according to its tablename
     public MetaDataEntry getTableMetaData(String tableName){
         return metaDataSet.getEntry(tableName);
     }
     
-    // to save the JavaObject of the metaData onto the json file
-    public void save() throws Exception {
+    private void save() throws Exception {
         String metaDataString = new GsonBuilder().create().toJson(metaDataSet);
         String sql = "update META set ENTRY = '"+ metaDataString + "'";
         Statement stmt = conn.createStatement();

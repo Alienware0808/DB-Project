@@ -6,7 +6,6 @@
 package parser.AnalysedStatements;
 
 
-import Conditions.ColumnValueDescriptor;
 import Conditions.CompareCondition;
 import Conditions.CompareType;
 import Conditions.Condition;
@@ -14,6 +13,7 @@ import Conditions.JunctionCondition;
 import Conditions.SingleValueDescriptor;
 import Conditions.IValue;
 import FederalDB.FedConnection;
+import MetaData.ColumnDefinition;
 import MetaData.MetaDataEntry;
 import org.antlr.v4.runtime.tree.ParseTree;
 import parser.ContextException;
@@ -109,7 +109,7 @@ public class UpdateStatement extends Statement {
 //                    Conditions.ColumnValueDescriptor coldef = null; // TODO get column //getColumnDefinitionByName(expr.getText());
 //                    if(coldef == null)
 //                        throw new ContextException("Column Definition not found");
-                    return new ColumnValueDescriptor(this.table.TableName, expr.getText()); 
+                    return new ColumnDefinition(this.table.TableName, expr.getText()); 
                 }
             default:
                 throw new ContextException("Unexpected expression in where clause");

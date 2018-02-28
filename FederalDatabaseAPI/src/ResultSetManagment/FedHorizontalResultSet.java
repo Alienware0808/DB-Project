@@ -16,13 +16,13 @@ import java.sql.ResultSet;
 public class FedHorizontalResultSet implements FedResultSetExtendedInterface {
     
     private FedResultSetExtendedInterface first;
-    private FedResultSetExtendedInterface secound;
+    private FedResultSetExtendedInterface second;
     private boolean isAtFirst;
     
-    public FedHorizontalResultSet(FedResultSetExtendedInterface first, FedResultSetExtendedInterface secound) throws FedException
+    public FedHorizontalResultSet(FedResultSetExtendedInterface first, FedResultSetExtendedInterface second) throws FedException
     {
         this.first = first;
-        this.secound = secound;
+        this.second = second;
         first.first();
         first.first();
         isAtFirst = true;
@@ -30,17 +30,17 @@ public class FedHorizontalResultSet implements FedResultSetExtendedInterface {
 
     public FedHorizontalResultSet(ResultSet left, ResultSet right) throws FedException
     {
-        this(new SqlResultWrapper(left), new SqlResultWrapper(right));
+        this(new SqlWrapperResultSet(left), new SqlWrapperResultSet(right));
     }
     
     public FedHorizontalResultSet(FedResultSetExtendedInterface first, ResultSet right) throws FedException
     {
-        this(first, new SqlResultWrapper(right));
+        this(first, new SqlWrapperResultSet(right));
     }
     
     public FedHorizontalResultSet(ResultSet left, FedResultSetExtendedInterface right) throws FedException
     {
-        this(new SqlResultWrapper(left), right);
+        this(new SqlWrapperResultSet(left), right);
     }
     
     @Override
@@ -50,9 +50,9 @@ public class FedHorizontalResultSet implements FedResultSetExtendedInterface {
             if(first.next())
                 return true;
             isAtFirst = false;
-            return secound.first();
+            return second.first();
         }
-        if(secound.next())
+        if(second.next())
             return true;
         return false;
     }
@@ -61,14 +61,14 @@ public class FedHorizontalResultSet implements FedResultSetExtendedInterface {
     public String getString(int columnIndex) throws FedException {
         if(isAtFirst)
             return first.getString(columnIndex);
-        return secound.getString(columnIndex);
+        return second.getString(columnIndex);
     }
 
     @Override
     public int getInt(int columnIndex) throws FedException {
         if(isAtFirst)
             return first.getInt(columnIndex);
-        return secound.getInt(columnIndex);
+        return second.getInt(columnIndex);
     }
 
     @Override
@@ -89,14 +89,14 @@ public class FedHorizontalResultSet implements FedResultSetExtendedInterface {
     @Override
     public void close() throws FedException {
         first.close();
-        secound.close();
+        second.close();
     }
 
     @Override
     public boolean first() throws FedException {
         boolean res = first.first();
         isAtFirst = true;
-        if(secound.first())
+        if(second.first())
             return true;
         return res;
     }
@@ -105,6 +105,18 @@ public class FedHorizontalResultSet implements FedResultSetExtendedInterface {
     public int getCursorPosition() throws FedException {
         if(isAtFirst)
             return first.getCursorPosition();
-        else return first.getCursorPosition() + secound.getCursorPosition();
+        else return first.getCursorPosition() + second.getCursorPosition();
+    }
+
+    @Override
+    public boolean setCursorPosition(int position) throws FedException {
+        if(position > first.getRowCount())
+            return second.setCursorPosition(position - first.getRowCount());
+        return first.setCursorPosition(position);
+    }
+
+    @Override
+    public int getRowCount() throws FedException {
+        return first.getRowCount() + second.getRowCount();
     }
 }

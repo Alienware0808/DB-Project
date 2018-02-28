@@ -6,24 +6,32 @@
 package Conditions;
 
 import FederalDB.FedResultSetInterface;
-import ResultSetManagment.FedResultSet;
 
 /**
  *
- * @author Tobias Habermann
+ * @author Admin
  */
 public class SingleValueDescriptor implements IValue {
-    public Object value;
-    
+    public Object Value;
+
     public SingleValueDescriptor() {
     }
 
-    public SingleValueDescriptor(Object value) {
-        this.value = value;
+    public SingleValueDescriptor(Object Value) {
+        this.Value = Value;
     }
 
     @Override
     public Object getValue(FedResultSetInterface resultSet) {
-        return value;
+        return Value;
     }
+
+    @Override
+    public String toWhereString() {
+        if(Value instanceof String)
+            return "'"+Value.toString()+"'";
+        return Value.toString();
+    }
+    
+    
 }

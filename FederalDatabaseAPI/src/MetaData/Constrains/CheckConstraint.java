@@ -5,8 +5,14 @@
  */
 package MetaData.Constrains;
 
+import Conditions.Condition;
+import Data.FedHelper;
 import FederalDB.FedConnection;
+import FederalDB.FedResultSetInterface;
 import MetaData.ColumnValue;
+import ResultSetManagment.FedOverwriteResultSet;
+import ResultSetManagment.FedResultSetExtendedInterface;
+import ResultSetManagment.ValueWrapperResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,9 +22,31 @@ import java.util.List;
  */
 public class CheckConstraint extends Constraint {
     
+    private Condition condition;
+
+    public Condition getCondition() {
+        return condition;
+    }
+
     @Override
-    public boolean check(FedConnection fedConnection, List<ColumnValue> columnValues){
+    public boolean checkInsert(FedConnection fedConnection, List<ColumnValue> values) throws Exception {
+        ValueWrapperResultSet resultSet = new ValueWrapperResultSet(values);
+        return condition.execute(resultSet).size() == 1;
+    }
+
+    @Override
+    public boolean checkDelete(FedConnection fedConnection, List<ColumnValue> values) throws Exception {
         return true;
     }
 
+    @Override
+    public boolean checkUpdate(FedConnection fedConnection, List<ColumnValue> values, Condition where) throws Exception {
+        MetaData.MetaDataEntry meta = fedConnection.metaDataManger.getTableMetaData(values.get(0).tableName);
+        FedResultSetExtendedInterface resultSet = FedHelper.selectAllFromSingleTable(fedConnection, meta.TableName, where);
+        FedOverwriteResultSet ov = new FedOverwriteResultSet(resultSet, values);
+        int filteredCount = condition.execute(ov).size();
+        if(filteredCount != resultSet.getRowCount())
+            return false;
+        return true;
+    }
 }

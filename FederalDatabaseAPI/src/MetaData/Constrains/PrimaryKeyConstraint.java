@@ -5,6 +5,7 @@
  */
 package MetaData.Constrains;
 
+import Conditions.Condition;
 import MetaData.Constrains.Constraint;
 import Data.FedHelper;
 import Data.SQLHelper;
@@ -16,7 +17,7 @@ import MetaData.ColumnDefinition;
 import MetaData.ColumnValue;
 import MetaData.FedHorizontalType;
 import MetaData.MetaDataEntry;
-import ResultSetManagment.SqlResultWrapper;
+import ResultSetManagment.SqlWrapperResultSet;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -39,11 +40,13 @@ public class PrimaryKeyConstraint extends Constraint {
     {
         this.PrimaryKeys = primaryKeys;
     }
-    
+
+    public List<ColumnDefinition> getPrimaryKeys() {
+        return PrimaryKeys;
+    }
+
     @Override
-    public boolean check(FedConnection fedConnection, List<ColumnValue> values)
-            throws Exception
-    {
+    public boolean checkInsert(FedConnection fedConnection, List<ColumnValue> values) throws Exception {
         MetaDataEntry entry = fedConnection.metaDataManger.getTableMetaData(PrimaryKeys.get(0).tableName);
         List<ColumnValue> primVals = new ArrayList<ColumnValue>();
         for(ColumnValue colval: values)
@@ -55,24 +58,26 @@ public class PrimaryKeyConstraint extends Constraint {
                     break;
                 }
         }
+        if(primVals.isEmpty())
+            return false;
         if(entry.FedType instanceof FedHorizontalType)
         {
             ResultSet resultSet = SQLHelper.select(fedConnection.getConn()[0], 
                     PrimaryKeys, entry.TableName, primVals);
-            if(!resultSet.next())
-                return true;
+            if(resultSet.next())
+                return false;
             resultSet = SQLHelper.select(fedConnection.getConn()[1], 
                     PrimaryKeys, entry.TableName, primVals);
-            if(!resultSet.next())
-                return true;
+            if(resultSet.next())
+                return false;
             if(entry.FedType.DatabaseCount == 3)
             {
                 resultSet = SQLHelper.select(fedConnection.getConn()[2], 
                     PrimaryKeys, entry.TableName, primVals);
-                if(!resultSet.next())
-                    return true;
+                if(resultSet.next())
+                    return false;
             }
-            return false;
+            return true;
         }
         else 
         {
@@ -82,7 +87,33 @@ public class PrimaryKeyConstraint extends Constraint {
         }
     }
 
-    public List<ColumnDefinition> getPrimaryKeys() {
-        return PrimaryKeys;
+    @Override
+    public boolean checkDelete(FedConnection fedConnection, List<ColumnValue> values) throws Exception {
+        return true;
+    }
+
+    /**
+     * Updating the Primary-Key is not allowed
+     * @param fedConnection
+     * @param values
+     * @return
+     * @throws Exception 
+     */
+    @Override
+    public boolean checkUpdate(FedConnection fedConnection, List<ColumnValue> values, Condition where) throws Exception {
+        MetaDataEntry entry = fedConnection.metaDataManger.getTableMetaData(PrimaryKeys.get(0).tableName);
+        List<ColumnValue> primVals = new ArrayList<ColumnValue>();
+        for(ColumnValue colval: values)
+        {
+            for(ColumnDefinition primkey: PrimaryKeys)
+                if(colval.equals(primkey))
+                {
+                    primVals.add(colval);
+                    break;
+                }
+        }
+        if(primVals.isEmpty())
+            return true;
+        return false;
     }
 }

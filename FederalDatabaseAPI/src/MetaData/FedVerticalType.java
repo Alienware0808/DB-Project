@@ -20,4 +20,15 @@ public class FedVerticalType extends FedType {
     {
         DistributionList = new ArrayList<>();
     }
+    
+    public int getDatabaseForColumn(ColumnDefinition coldef)
+    {
+        for(int i = 0; i < DistributionList.size(); i++)
+        {
+            for(CreateStatement.CreateColumnDefinition crcol: DistributionList.get(i))
+                if(crcol.equals(coldef))
+                    return i;
+        }
+        return -1;
+    }
 }

@@ -5,7 +5,6 @@
  */
 package parser.AnalysedStatements;
 
-import Conditions.ColumnValueDescriptor;
 import Conditions.CompareCondition;
 import Conditions.CompareType;
 import Conditions.Condition;

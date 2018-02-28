@@ -40,17 +40,17 @@ public class FedVerticalResultSet implements FedResultSetExtendedInterface {
     
     public FedVerticalResultSet(ResultSet left, ResultSet right) throws FedException
     {
-        this(new SqlResultWrapper(left), new SqlResultWrapper(right));
+        this(new SqlWrapperResultSet(left), new SqlWrapperResultSet(right));
     }
     
     public FedVerticalResultSet(FedResultSetExtendedInterface left, ResultSet right) throws FedException
     {
-        this(left, new SqlResultWrapper(right));
+        this(left, new SqlWrapperResultSet(right));
     }
     
     public FedVerticalResultSet(ResultSet left, FedResultSetExtendedInterface right) throws FedException
     {
-        this(new SqlResultWrapper(left), right);
+        this(new SqlWrapperResultSet(left), right);
     }
     
     private ArrayList<Integer> getPrimIndexes() throws FedException
@@ -133,6 +133,17 @@ public class FedVerticalResultSet implements FedResultSetExtendedInterface {
     @Override
     public int getCursorPosition() throws FedException {
         return this.left.getCursorPosition();
+    }
+
+    @Override
+    public boolean setCursorPosition(int position) throws FedException {
+        left.setCursorPosition(position);
+        return right.setCursorPosition(position);
+    }
+
+    @Override
+    public int getRowCount() throws FedException {
+        return left.getRowCount();
     }
     
 }

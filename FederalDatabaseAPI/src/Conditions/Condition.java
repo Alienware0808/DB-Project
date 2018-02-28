@@ -6,6 +6,7 @@
 package Conditions;
 
 import FederalDB.FedException;
+import MetaData.ColumnDefinition;
 import ResultSetManagment.FedResultSetExtendedInterface;
 import java.util.List;
 
@@ -15,6 +16,10 @@ import java.util.List;
  */
 public abstract class Condition {
     
+    public abstract List<ColumnDefinition> getRequiredColumns();
+    
     public abstract List<Integer> execute(FedResultSetExtendedInterface resultSet)
             throws FedException;
+
+    public abstract String toWhereString();
 }
