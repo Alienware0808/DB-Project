@@ -1,5 +1,6 @@
 package FederalDB;
 
+import ResultSetManagment.FedResultSet;
 import FederalDB.FedException;
 import java.util.Scanner;
 

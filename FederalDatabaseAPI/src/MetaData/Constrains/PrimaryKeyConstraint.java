@@ -29,51 +29,53 @@ import java.util.List;
  */
 public class PrimaryKeyConstraint extends Constraint {
     
-    public List<ColumnDefinition> PrimaryKeys;
+    public ColumnDefinition PrimaryKey;
     
     public PrimaryKeyConstraint()
     {
-        this.PrimaryKeys = new ArrayList<>();
     }
     
-    public PrimaryKeyConstraint(List<ColumnDefinition> primaryKeys)
+    public PrimaryKeyConstraint(ColumnDefinition PrimaryKey)
     {
-        this.PrimaryKeys = primaryKeys;
+        this.PrimaryKey = PrimaryKey;
     }
 
-    public List<ColumnDefinition> getPrimaryKeys() {
-        return PrimaryKeys;
+    public ColumnDefinition getPrimaryKey() {
+        return PrimaryKey;
     }
 
     @Override
     public boolean checkInsert(FedConnection fedConnection, List<ColumnValue> values) throws Exception {
-        MetaDataEntry entry = fedConnection.metaDataManger.getTableMetaData(PrimaryKeys.get(0).tableName);
-        List<ColumnValue> primVals = new ArrayList<ColumnValue>();
+        MetaDataEntry entry = fedConnection.metaDataManger.getTableMetaData(PrimaryKey.tableName);
+        ColumnValue primVal = null;
         for(ColumnValue colval: values)
         {
-            for(ColumnDefinition primkey: PrimaryKeys)
-                if(colval.equals(primkey))
-                {
-                    primVals.add(colval);
-                    break;
-                }
+            if(colval.equals(PrimaryKey))
+            {
+                primVal = colval;
+                break;
+            }
         }
-        if(primVals.isEmpty())
+        if(primVal == null)
             return false;
+        List<ColumnDefinition> primaryKeyAsList = new ArrayList<>();
+        primaryKeyAsList.add(PrimaryKey);
+        List<ColumnValue> primaryValueAsList = new ArrayList<>();
+        primaryValueAsList.add(primVal);
         if(entry.FedType instanceof FedHorizontalType)
         {
             ResultSet resultSet = SQLHelper.select(fedConnection.getConn()[0], 
-                    PrimaryKeys, entry.TableName, primVals);
+                    primaryKeyAsList, entry.TableName, primaryValueAsList);
             if(resultSet.next())
                 return false;
             resultSet = SQLHelper.select(fedConnection.getConn()[1], 
-                    PrimaryKeys, entry.TableName, primVals);
+                    primaryKeyAsList, entry.TableName, primaryValueAsList);
             if(resultSet.next())
                 return false;
             if(entry.FedType.DatabaseCount == 3)
             {
                 resultSet = SQLHelper.select(fedConnection.getConn()[2], 
-                    PrimaryKeys, entry.TableName, primVals);
+                    primaryKeyAsList, entry.TableName, primaryValueAsList);
                 if(resultSet.next())
                     return false;
             }
@@ -82,7 +84,7 @@ public class PrimaryKeyConstraint extends Constraint {
         else 
         {
             ResultSet resultSet = SQLHelper.select(fedConnection.getConn()[0], 
-                    PrimaryKeys, entry.TableName, primVals);
+                    primaryKeyAsList, entry.TableName, primaryValueAsList);
             return !resultSet.next();
         }
     }
@@ -101,18 +103,17 @@ public class PrimaryKeyConstraint extends Constraint {
      */
     @Override
     public boolean checkUpdate(FedConnection fedConnection, List<ColumnValue> values, Condition where) throws Exception {
-        MetaDataEntry entry = fedConnection.metaDataManger.getTableMetaData(PrimaryKeys.get(0).tableName);
-        List<ColumnValue> primVals = new ArrayList<ColumnValue>();
+        MetaDataEntry entry = fedConnection.metaDataManger.getTableMetaData(PrimaryKey.tableName);
+        ColumnValue primVal = null;
         for(ColumnValue colval: values)
         {
-            for(ColumnDefinition primkey: PrimaryKeys)
-                if(colval.equals(primkey))
-                {
-                    primVals.add(colval);
-                    break;
-                }
+            if(colval.equals(PrimaryKey))
+            {
+                primVal = colval;
+                break;
+            }
         }
-        if(primVals.isEmpty())
+        if(primVal == null)
             return true;
         return false;
     }

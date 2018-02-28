@@ -42,6 +42,52 @@ public final class FedHelper {
         return null;
     }
     
+    public static FedResultSetExtendedInterface selectFromSingleTable(
+            FedConnection connection, ColumnDefinition column1) 
+            throws SQLException, FedException
+    {
+        MetaDataEntry meta = connection.metaDataManger.getTableMetaData(column1.tableName);
+        if(meta.FedType instanceof FedHorizontalType)
+        {
+            FedResultSetExtendedInterface rs1 = new SqlWrapperResultSet(SQLHelper.select
+                (connection.getConn()[0], column1.toWhereString(), column1.tableName));
+            FedResultSetExtendedInterface rs2 = new SqlWrapperResultSet(SQLHelper.select
+                (connection.getConn()[1], column1.toWhereString(), column1.tableName));
+            if(meta.FedType.DatabaseCount == 3)
+            {
+                FedResultSetExtendedInterface rs3 = new SqlWrapperResultSet(SQLHelper.select
+                (connection.getConn()[2], column1.toWhereString(), column1.tableName));
+                FedHorizontalResultSet hs1 = new FedHorizontalResultSet(rs1, rs2);
+                return new FedHorizontalResultSet(hs1, rs3);
+            }
+            return new FedHorizontalResultSet(rs1, rs2);
+        }
+        else if(meta.FedType instanceof FedVerticalType)
+        {
+            FedVerticalResultSet vr;
+            
+            FedVerticalType vert = (FedVerticalType)meta.FedType;
+            FedResultSetExtendedInterface rs1 = new SqlWrapperResultSet(SQLHelper.select
+                (connection.getConn()[0], column1.toWhereString(), column1.tableName));
+            FedResultSetExtendedInterface rs2 = new SqlWrapperResultSet(SQLHelper.select
+                (connection.getConn()[1], column1.toWhereString(), column1.tableName));
+            if(meta.FedType.DatabaseCount == 3)
+            {
+                FedResultSetExtendedInterface rs3 = new SqlWrapperResultSet(SQLHelper.select
+                    (connection.getConn()[2], column1.toWhereString(), column1.tableName));
+                FedVerticalResultSet vzwisch = new FedVerticalResultSet(rs1, rs2);
+                vr = new FedVerticalResultSet(vzwisch, rs3);
+            }
+            else vr = new FedVerticalResultSet(rs1, rs2);
+            return vr;
+        }
+        else
+        {
+            return new SqlWrapperResultSet(SQLHelper.select
+                (connection.getConn()[0], column1.toWhereString(), column1.tableName));
+        }
+    }
+    
     public static FedResultSetExtendedInterface selectAllFromSingleTable(
             FedConnection connection, String table, Condition where) 
             throws SQLException, FedException

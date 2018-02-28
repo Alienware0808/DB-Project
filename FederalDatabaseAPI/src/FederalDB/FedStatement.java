@@ -1,5 +1,6 @@
 package FederalDB;
 
+import ResultSetManagment.FedResultSet;
 import MetaData.ColumnDefinition;
 import MetaData.MetaDataManager;
 import java.sql.Connection;

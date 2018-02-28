@@ -4,6 +4,8 @@
     auf die Datenbanken zu ermöglichen.
  */
 package MetaData;
+import MetaData.Constrains.Constraint;
+import MetaData.Constrains.ForeignKeyConstraint;
 import com.google.gson.GsonBuilder;
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,6 +15,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -56,6 +60,23 @@ public class MetaDataManager {
     
     public MetaDataEntry getTableMetaData(String tableName){
         return metaDataSet.getEntry(tableName);
+    }
+    
+    public List<ForeignKeyConstraint> getReferencesToTable(String tableName)
+    {
+        ArrayList<ForeignKeyConstraint> res = new ArrayList<>();
+        tableName = tableName.toLowerCase().trim();
+        for(MetaDataEntry meta : this.metaDataSet.hashMap.values())
+        {
+            for(Constraint cnt : meta.constraints)
+                if(cnt instanceof ForeignKeyConstraint)
+                {
+                    ForeignKeyConstraint fc = (ForeignKeyConstraint)cnt;
+                    if(fc.getForeignColumn().tableName.equals(tableName))
+                        res.add(fc);
+                }
+        }
+        return res;
     }
     
     private void save() throws Exception {

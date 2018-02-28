@@ -24,8 +24,8 @@ public class ColumnDefinition implements IValue{
     }
     
     public ColumnDefinition(String columnName, String tableName){
-        this.name = columnName;
-        this.tableName = tableName;
+        this.name = columnName.trim().toLowerCase();
+        this.tableName = tableName.trim().toLowerCase();
     }
     
     private int getIndexByName(FedResultSetInterface resultSet) throws FedException

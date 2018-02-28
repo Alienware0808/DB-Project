@@ -6,16 +6,21 @@
 package MetaData.Constrains;
 
 import Conditions.Condition;
+import Data.FedHelper;
 import Data.SQLHelper;
 import MetaData.Constrains.Constraint;
 import FederalDB.FedConnection;
+import FederalDB.FedException;
 import FederalDB.FedStatement;
 import MetaData.ColumnDefinition;
 import MetaData.ColumnValue;
 import MetaData.FedHorizontalType;
 import MetaData.FedVerticalType;
 import MetaData.MetaDataEntry;
+import ResultSetManagment.FedResultSetExtendedInterface;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import parser.AnalysedStatements.CreateStatement;
@@ -134,5 +139,54 @@ public class ForeignKeyConstraint extends Constraint {
                     foreignColumnAsList, foreignColumn.tableName, foreignValueAsList);
             return resultSet.next();
         }
+    }
+    
+    /**
+     * 
+     * @param fedConnection
+     * @param foreignKeysToDelete Single Row ResultSet with all PrimaryKeys to delete
+     * @return 
+     */
+    public boolean checkReferences(FedConnection fedConnection, 
+            FedResultSetExtendedInterface foreignKeysToDelete) 
+            throws SQLException, FedException
+    {
+        FedResultSetExtendedInterface allForeignKeys = 
+                FedHelper.selectFromSingleTable(fedConnection, forColumn);
+        return !isMatched(allForeignKeys, foreignKeysToDelete);
+    }
+    
+    private boolean isMatched(FedResultSetExtendedInterface left, FedResultSetExtendedInterface right) 
+            throws FedException
+    {
+        if(left.getColumnType(0) == Types.VARCHAR)
+        {
+            do
+            {
+                do
+                {
+                    if(left.getString(1).equals(right.getString(1)))
+                        return true;
+                } while(right.next());
+                right.first();
+            }while(left.next());
+        }
+        else 
+        {
+            do
+            {
+                do
+                {
+                    if(left.getInt(1) == (right.getInt(1)))
+                        return true;
+                } while(right.next());
+                right.first();
+            }while(left.next());
+        }
+        return false;
+    }
+
+    public ColumnDefinition getForeignColumn() {
+        return foreignColumn;
     }
 }
