@@ -303,7 +303,7 @@ public class Insert_Test
     public void test_insert_16() {
         String sql = "INSERT INTO FLBUCHUNG VALUES (184, 81, 'DB', 90, 'CDG', 'FRA', '16-FEB-2010', 5000, 800);";
         try{
-            assertEquals(1,statement.executeUpdate(sql));
+            assertEquals(0,statement.executeUpdate(sql));
         } catch(Exception e) {}
     }
     
@@ -312,7 +312,7 @@ public class Insert_Test
     public void test_insert_17() {
         String sql = "INSERT INTO FLG VALUES (305, 'LH', 53, 'CDG', 'FRA', 1500, 9000);";
         try{
-            assertEquals(1,statement.executeUpdate(sql));
+            assertEquals(0,statement.executeUpdate(sql));
         } catch(Exception e) {}
     }
     
