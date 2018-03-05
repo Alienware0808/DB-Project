@@ -142,6 +142,33 @@ public class Update_Test
             statement.executeUpdate(FlBuchung);
             System.out.println("Create Buchung");
         } catch(Exception e) {}
+        //Insert für Test
+        String a = "INSERT INTO FLLINIE VALUES ('AB', 'D  ', null, 'Air Berlin', null);";                                   
+        String b = "INSERT INTO FLLINIE VALUES ('AC', 'CDN', null, 'Air Canada', 'Star');     ";                          
+        String c = "INSERT INTO FLLINIE VALUES ('AF', 'F  ', null, 'Air France', 'SkyTeam');  ";                          
+        String d = "INSERT INTO FLLINIE VALUES ('BA', 'GB ', null, 'British Airways', 'OneWorld'); ";                     
+        String e = "INSERT INTO FLLINIE VALUES ('DB', 'D  ', null, 'Database Airlines', null); ";                           
+        String f = "INSERT INTO FLLINIE VALUES ('DI', 'D  ', null, 'Deutsche BA', null);       ";                           
+        String g = "INSERT INTO FLLINIE VALUES ('DL', 'USA', null, 'Delta Airlines', 'SkyTeam'); ";                       
+        String h = "INSERT INTO FLLINIE VALUES ('JL', 'J  ', null, 'Japan Airlines', 'OneWorld'); ";                      
+        String i = "INSERT INTO FLLINIE VALUES ('LH', 'D  ', null, 'Lufthansa', 'Star');        ";                        
+        String j = "INSERT INTO FLLINIE VALUES ('NH', 'J  ', null, 'All Nippon Airways', 'Star'); ";                      
+        String k = "INSERT INTO FLLINIE VALUES ('UA', 'USA', null, 'United Airlines', 'Star');";
+
+        try{
+            statement.executeUpdate(a);
+            statement.executeUpdate(b);
+            statement.executeUpdate(c);
+            statement.executeUpdate(d);
+            statement.executeUpdate(e);
+            statement.executeUpdate(f);
+            statement.executeUpdate(g);
+            statement.executeUpdate(h);
+            statement.executeUpdate(i);
+            statement.executeUpdate(j);
+            statement.executeUpdate(k);
+        } catch (Exception ex) {
+        System.out.println("Insert Fail");}
     }
     
     @BeforeClass
@@ -164,9 +191,23 @@ public class Update_Test
     {
     }
 
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
+    @Test
+    public void update_test() {
+        try {
+            assertEquals(11, statement.executeUpdate("update FLLINIE set HUB = NULL;"));
+        }catch (Exception e) {}
+        
+    }
+    
+    @Test
+    public void update_test_01() {
+        try {
+            assertEquals(1, statement.executeUpdate("update FLLINIE set HUB = 'FRA' where FLC = 'LH';"));
+        }catch (Exception e) {}
+        
+    }
+    
+    
     // @Test
     // public void hello() {}
     //Am Ende die TestTabellen wieder Löschen

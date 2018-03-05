@@ -176,7 +176,7 @@ public class Insert_Test
     public void test_insert_02() {
         String sql = "INSERT INTO Test VALUES ('AKL', 'NZ ', 'Auckland', 'Auckland International')";
         try{
-            assertEquals(1,statement.executeUpdate(sql));
+            assertEquals(0,statement.executeUpdate(sql));
         } catch(Exception e) {}
     }
     
@@ -185,7 +185,7 @@ public class Insert_Test
     public void test_insert_03() {
         String sql = "INSERT INTO FLHAFEN (LAND, STADT, NAMEN)VALUES ('NZ ', 'Auckland', 'Auckland International')";
         try{
-            assertEquals(1,statement.executeUpdate(sql));
+            assertEquals(0,statement.executeUpdate(sql));
         } catch(Exception e) {}
     }
     
@@ -195,7 +195,7 @@ public class Insert_Test
     public void test_insert_04() {
         String sql = "INSERT INTO FLLINIE VALUES ('AB', 'D ', 'test', 'Air Berlin', null)";
         try{
-            assertEquals(1,statement.executeUpdate(sql));
+            assertEquals(0,statement.executeUpdate(sql));
         } catch(Exception e) {}
     }
     
@@ -204,7 +204,7 @@ public class Insert_Test
     public void test_insert_05() {
         String sql = "INSERT INTO FLHAFEN VALUES ('AKL', 'NZ ', 'Auckland', 'Auckland International')";
         try{
-            assertEquals(1,statement.executeUpdate(sql));
+            assertEquals(0,statement.executeUpdate(sql));
         } catch(Exception e) {}
     }
     
@@ -213,7 +213,7 @@ public class Insert_Test
     public void test_insert_06() {
         String sql = "INSERT INTO FLHAFEN VALUES ('AKL', 'NZ ', 'Auckland')";
         try{
-            assertEquals(1,statement.executeUpdate(sql));
+            assertEquals(0,statement.executeUpdate(sql));
         } catch(Exception e) {}
     }
     
@@ -222,7 +222,7 @@ public class Insert_Test
     public void test_insert_07() {
         String sql = "INSERT INTO FLHAFEN VALUES ('AKL', 'NZ ', 'Auckland', 'Auckland International', 'Baum')";
         try{
-            assertEquals(1,statement.executeUpdate(sql));
+            assertEquals(0,statement.executeUpdate(sql));
         } catch(Exception e) {}
     }
     
@@ -258,7 +258,7 @@ public class Insert_Test
     public void test_insert_11() {
         String sql = "INSERT INTO FLLINIE VALUES ('HM', 'D', null, 12, null)";
         try{
-            assertEquals(1,statement.executeUpdate(sql));
+            assertEquals(0,statement.executeUpdate(sql));
         } catch(Exception e) {}
     }
     
@@ -267,7 +267,7 @@ public class Insert_Test
     public void test_insert_12() {
         String sql = "INSERT INTO FLPASSAGIER VALUES ('HM', 'Dumm', 'Beutel', 'D')";
         try{
-            assertEquals(1,statement.executeUpdate(sql));
+            assertEquals(0,statement.executeUpdate(sql));
         } catch(Exception e) {}
     }
     
