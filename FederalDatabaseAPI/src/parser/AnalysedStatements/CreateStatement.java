@@ -5,21 +5,24 @@
  */
 package parser.AnalysedStatements;
 
-import Conditions.ColumnDefinitionDescriptor;
-import Conditions.ColumnValueDescriptor;
 import Conditions.CompareCondition;
 import Conditions.CompareType;
 import Conditions.Condition;
 import Conditions.JunctionCondition;
 import Conditions.SingleValueDescriptor;
-import Conditions.ValueDescriptor;
+import Conditions.IValue;
+import FederalDB.FedConnection;
+import MetaData.ColumnDefinition;
 import MetaData.MetaDataEntry;
 import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.antlr.v4.runtime.tree.ParseTree;
 import parser.ContextException;
 import parser.SQLiteParser;
+import parser.Walker;
 
 /**
  *
@@ -29,13 +32,14 @@ public class CreateStatement extends Statement {
     public String tableName;
     public boolean isIfNotExistContained;
     public final List<TableConstraint> tableConstrains;
-    public final List<ColumnDefinition> columnDefinitions;
+    public final List<CreateColumnDefinition> columnDefinitions;
     public Object fedStatement;
+    private FedConnection fedConnection;
     
-    public CreateStatement(ParseTree tree) throws ContextException {
+    public CreateStatement(ParseTree tree, FedConnection fedConnection) throws ContextException {
         super(tree);
         int i = 0;
-        
+        this.fedConnection = fedConnection;
         isIfNotExistContained = false;
         columnDefinitions = new ArrayList<>();
         tableConstrains = new ArrayList<>();
@@ -55,7 +59,7 @@ public class CreateStatement extends Statement {
                 break;
             if(tree.getChild(i) instanceof SQLiteParser.Column_defContext)
             {
-                ColumnDefinition coldef = new ColumnDefinition(tree.getChild(i), tableName);
+                CreateColumnDefinition coldef = new CreateColumnDefinition(tree.getChild(i), tableName);
                 coldef.name = tree.getChild(i).getChild(0).getText();
                 ParseTree typethingi = tree.getChild(i).getChild(1);
                 String typestr = typethingi.getChild(0).getText().toLowerCase();
@@ -100,7 +104,7 @@ public class CreateStatement extends Statement {
                             break;
                         if(contree.getChild(j) instanceof SQLiteParser.Indexed_columnContext)
                         {
-                            ColumnDefinition coldef = getColumnDefinitionByName(contree.getChild(j).getText());
+                            CreateColumnDefinition coldef = getColumnDefinitionByName(contree.getChild(j).getText());
                             if(coldef == null)
                                 throw new ContextException("Column not found");
                             primkey.primaryKeys.add(coldef);
@@ -118,7 +122,7 @@ public class CreateStatement extends Statement {
                     j++;
                     j++; // skip ")"
                     j++; // skip "references"
-                    foreignkey.referenceToTable = MetaData.MetaDataManager.MetaManager.getMetaData(contree.getChild(j).getText());
+                    foreignkey.referenceToTable = fedConnection.metaDataManger.getTableMetaData(contree.getChild(j).getText());
                     j++; // skip tablename
                     j++; // skip "("
                     foreignkey.referenceToColumn = contree.getChild(j).getText();
@@ -128,16 +132,15 @@ public class CreateStatement extends Statement {
                 {
                     j++; // skip "CHECK" 
                     j++; // skip "("
-                    if(IsTerminalNode(contree.getChild(j+1), SQLiteParser.K_BETWEEN))
+                    ParseTree expr = contree.getChild(j);
+                    if(IsTerminalNode(expr.getChild(1), SQLiteParser.K_BETWEEN))
                     {
-                        ColumnDefinition coldef = getColumnDefinitionByName(contree.getChild(j).getText());
+                        ColumnDefinition coldef = getColumnDefinitionByName(expr.getChild(0).getText());
                         if(coldef == null)
                             throw new ContextException("Column Definition not found in between statement");
                         TableConstraintBetween between = new TableConstraintBetween(contree, coldef);
-                        j++;
-                        j++; // skip "BETWEEN"
-                        between.min = contree.getChild(j).getText();
-                        between.max = contree.getChild(j+2).getText();
+                        between.min = expr.getChild(2).getText();
+                        between.max = expr.getChild(4).getText();
                         try
                         {
                             between.min = Integer.parseInt(between.min.toString());
@@ -146,21 +149,20 @@ public class CreateStatement extends Statement {
                         {}
                         this.tableConstrains.add(between);
                     }
-                    if(IsTerminalNode(contree.getChild(j+1), SQLiteParser.K_IS))
+                    if(IsTerminalNode(expr.getChild(1), SQLiteParser.K_IS))
                     {
-                        ColumnDefinition coldef = getColumnDefinitionByName(contree.getChild(j).getText());
+                        ColumnDefinition coldef = getColumnDefinitionByName(expr.getChild(0).getText());
                         if(coldef == null)
                             throw new ContextException("Column Definition not found in null statement");
                         TableConstraintNullConstraint nullcon = new TableConstraintNullConstraint(contree, coldef);
-                        j++;
-                        j++; // skip "IS"
-                        nullcon.isNotNullSet = IsTerminalNode(contree.getChild(j), SQLiteParser.K_NOT);
+                        
+                        nullcon.isNotNullSet = IsTerminalNode(expr.getChild(2), SQLiteParser.K_NOT);
                         this.tableConstrains.add(nullcon);
                     }
                     else
                     {
                         TableConstraintCompare comparecon = new TableConstraintCompare(contree);
-                        comparecon.condition = parseCondition(contree.getChild(j));
+                        comparecon.condition = parseCondition(expr);
                         this.tableConstrains.add(comparecon);
                     }
                 }
@@ -270,7 +272,7 @@ public class CreateStatement extends Statement {
         }
     }
     
-    private ValueDescriptor parseValueDescriptor(ParseTree expr) throws ContextException
+    private IValue parseValueDescriptor(ParseTree expr) throws ContextException
     {
         
         switch (expr.getChildCount()) {
@@ -287,56 +289,31 @@ public class CreateStatement extends Statement {
                     ColumnDefinition coldef = getColumnDefinitionByName(expr.getText());
                     if(coldef == null)
                         throw new ContextException("Column Definition not found");
-                    return new ColumnDefinitionDescriptor(coldef);
+                    return coldef;
                 }
             default:
                 throw new ContextException("Unexpected expression in where clause");
         }
     }
     
-    public ColumnDefinition getColumnDefinitionByName(String name)
+    public CreateColumnDefinition getColumnDefinitionByName(String name)
     {
-        for (ColumnDefinition col : this.columnDefinitions) {
+        for (CreateColumnDefinition col : this.columnDefinitions) {
             if(col.name.equals(name))
                 return col;
         }
         return null;
     }
     
-    public interface IColumnDefinition
+    public class CreateColumnDefinition extends MetaData.ColumnDefinition
     {
-        public String getName();
-        public String getTableName();
-    }
-    
-    public class ForeignColumnDefinition implements IColumnDefinition
-    {
-        private String name;
-        private String tableName;
-
-        public ForeignColumnDefinition(String name, String tableName) {
-            this.name = name;
-            this.tableName = tableName;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getTableName() {
-            return tableName;
-        }
-    }
-    
-    public class ColumnDefinition extends Statement implements IColumnDefinition
-    {
-        private String name;
-        private String tableName;
         private Class type;
         private int typeLength;
+        ParseTree tree;
 
-        public ColumnDefinition(ParseTree tree, String tableName) throws ContextException {
-            super(tree);
+        public CreateColumnDefinition(ParseTree tree, String tableName) throws ContextException {
+            super();
+            this.tree = tree;
             name = tree.getChild(0).getText();
             this.tableName = tableName;
             if(tree.getChild(1) != null)
@@ -357,14 +334,6 @@ public class CreateStatement extends Statement {
             }
         }
 
-        public String getName() {
-            return name;
-        }
-
-        public String getTableName() {
-            return tableName;
-        }
-
         public Class getType() {
             return type;
         }
@@ -372,13 +341,43 @@ public class CreateStatement extends Statement {
         public int getTypeLength() {
             return typeLength;
         }
+
+        public String getText()
+        {
+            String sql = "";
+            Walker walker = new Walker(tree, new Walker.IEvents() {
+                @Override
+                public Object nodeFound(ParseTree tree, Object workValue) throws Exception {
+                    return workValue;
+                }
+
+                @Override
+                public Object finalNodeFound(ParseTree tree, Object workValue) throws Exception {
+                    workValue += tree.getText() + " ";
+                    return workValue;
+                }
+
+                @Override
+                public Object finalLiteraFound(String text, Object workValue) throws Exception {
+                    //workValue += tree.getText() + " ";
+                    return workValue;
+                }
+            });
+            walker.workValue = sql;
+            try {
+                walker.run();
+            } catch (Exception ex) {
+                Logger.getLogger(Statement.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return walker.workValue.toString();
+        }
     }
     
     public abstract class TableConstraint extends Statement
     {
         private String name;
         public abstract boolean getCanBeLocal();
-        public abstract List<IColumnDefinition> getColumns();
+        public abstract List<ColumnDefinition> getColumns();
         
         public TableConstraint(ParseTree tree) {
             super(tree);
@@ -391,14 +390,14 @@ public class CreateStatement extends Statement {
     
     public class TableConstraintPrimaryKey extends TableConstraint
     {
-        private List<IColumnDefinition> primaryKeys;
+        private List<CreateStatement.CreateColumnDefinition> primaryKeys;
         
         public TableConstraintPrimaryKey(ParseTree tree) {
             super(tree);
             this.primaryKeys = new ArrayList<>();
         }
 
-        public List<IColumnDefinition> getPrimaryKeys() {
+        public List<CreateStatement.CreateColumnDefinition> getPrimaryKeys() {
             return primaryKeys;
         }
 
@@ -408,8 +407,8 @@ public class CreateStatement extends Statement {
         }
 
         @Override
-        public List<IColumnDefinition> getColumns() {
-            return primaryKeys;
+        public List<ColumnDefinition> getColumns() {
+            return (List<ColumnDefinition>)(List<?>) primaryKeys;
         }
     }
     
@@ -437,11 +436,11 @@ public class CreateStatement extends Statement {
         }
         
         @Override
-        public List<IColumnDefinition> getColumns() {
-            List<IColumnDefinition> cols = new ArrayList<>();
+        public List<ColumnDefinition> getColumns() {
+            List<ColumnDefinition> cols = new ArrayList<>();
             cols.add(from);
-            ForeignColumnDefinition fcol = new ForeignColumnDefinition(referenceToTable.TableName, referenceToColumn);
-            cols.add(fcol);// TODO mach mal hier das in ein ColumnDefinition objekt
+            ColumnDefinition fcol = new ColumnDefinition(referenceToTable.TableName, referenceToColumn);
+            cols.add(fcol);// TODO mach mal hier das in ein CreaterColumnDefinition objekt
             return cols;
         }
     }
@@ -471,8 +470,8 @@ public class CreateStatement extends Statement {
         }
 
         @Override
-        public List<IColumnDefinition> getColumns() {
-            List<IColumnDefinition> cols = new ArrayList<>();
+        public List<ColumnDefinition> getColumns() {
+            List<ColumnDefinition> cols = new ArrayList<>();
             cols.add(forColumn);
             return cols;
         }
@@ -492,11 +491,11 @@ public class CreateStatement extends Statement {
 
         @Override
         public boolean getCanBeLocal() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            return false;
         }
 
         @Override
-        public List<IColumnDefinition> getColumns() {
+        public List<ColumnDefinition> getColumns() {
             return null;
         }
     }
@@ -531,8 +530,8 @@ public class CreateStatement extends Statement {
         }
 
         @Override
-        public List<IColumnDefinition> getColumns() {
-            List<IColumnDefinition> cols = new ArrayList<>();
+        public List<ColumnDefinition> getColumns() {
+            List<ColumnDefinition> cols = new ArrayList<>();
             cols.add(forColumn);
             return cols;
         }

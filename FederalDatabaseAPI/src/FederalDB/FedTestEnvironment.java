@@ -1,7 +1,7 @@
 package FederalDB;
 
-import FederalDB.FedException;
 import ResultSetManagment.FedResultSet;
+import FederalDB.FedException;
 import java.util.Scanner;
 
 public class FedTestEnvironment {
@@ -15,7 +15,7 @@ public class FedTestEnvironment {
             this.fedConnection.setAutoCommit(false);
         } catch (FedException fedException) {
             System.out.flush();
-
+            
             System.err.println(fedException.getMessage());
             System.err.flush();
         }

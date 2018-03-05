@@ -5,14 +5,15 @@
  */
 package parser.AnalysedStatements;
 
-import Conditions.ColumnDefinitionDescriptor;
-import Conditions.ColumnValueDescriptor;
+
 import Conditions.CompareCondition;
 import Conditions.CompareType;
 import Conditions.Condition;
 import Conditions.JunctionCondition;
 import Conditions.SingleValueDescriptor;
-import Conditions.ValueDescriptor;
+import Conditions.IValue;
+import FederalDB.FedConnection;
+import MetaData.ColumnDefinition;
 import MetaData.MetaDataEntry;
 import org.antlr.v4.runtime.tree.ParseTree;
 import parser.ContextException;
@@ -27,10 +28,12 @@ public class UpdateStatement extends Statement {
     public final String column;
     public final String valueString;
     public final Condition where;
+    private FedConnection fedConnection;
 
-    public UpdateStatement(ParseTree tree) throws ContextException {
+    public UpdateStatement(ParseTree tree, FedConnection fedConnection) throws ContextException {
         super(tree);
-        table = MetaData.MetaDataManager.MetaManager.getMetaData(tree.getChild(1).getText()); // TODO read table from metadata via name
+        this.fedConnection = fedConnection;
+        table = fedConnection.metaDataManger.getTableMetaData(tree.getChild(1).getText()); // TODO read table from metadata via name
         column = tree.getChild(3).getText(); // TODO read column from metadata via colname and tablename
         valueString = tree.getChild(5).getText();
         if(IsTerminalNode(tree.getChild(6), SQLiteParser.K_WHERE))
@@ -89,7 +92,7 @@ public class UpdateStatement extends Statement {
         }
     }
     
-    private ValueDescriptor parseValueDescriptor(ParseTree expr) throws ContextException
+    private IValue parseValueDescriptor(ParseTree expr) throws ContextException
     {
         
         switch (expr.getChildCount()) {
@@ -106,7 +109,7 @@ public class UpdateStatement extends Statement {
 //                    Conditions.ColumnValueDescriptor coldef = null; // TODO get column //getColumnDefinitionByName(expr.getText());
 //                    if(coldef == null)
 //                        throw new ContextException("Column Definition not found");
-                    return new ColumnValueDescriptor(this.table.TableName, expr.getText()); 
+                    return new ColumnDefinition(this.table.TableName, expr.getText()); 
                 }
             default:
                 throw new ContextException("Unexpected expression in where clause");

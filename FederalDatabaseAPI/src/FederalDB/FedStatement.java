@@ -1,34 +1,40 @@
 package FederalDB;
 
+import ResultSetManagment.FedResultSet;
+import MetaData.ColumnDefinition;
+import MetaData.MetaDataManager;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import ResultSetManagment.FedResultSet;
 import java.util.List;
 import parser.*;
 import parser.AnalysedStatements.*;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import java.sql.Statement; 
 
 public class FedStatement implements FedStatementInterface
 {
+    private FedConnection parent;
+    private Connection[] con;
+    public final MetaDataManager metaDataManger;
 
-    private Connection con[] = new Connection[3];
-
-    public FedStatement(Connection conn[])
+    public FedStatement(FedConnection parent, Connection[] con, MetaDataManager metaDataManager) 
     {
-        this.con = conn;
+        this.con = con;
+        this.parent = parent;
+        this.metaDataManger = metaDataManager;
     }
 
     @Override
     public int executeUpdate(String sql) throws FedException
     {
 
-        Statement[] statements;
+        parser.AnalysedStatements.Statement[] statements;
         try
         {
-            statements = SQLStatement.parseString(sql);
+            statements = SQLStatement.parseString(sql, parent);
         } catch (Exception ex)
         {
             Logger.getLogger(FedStatement.class.getName()).log(Level.SEVERE, null, ex);
@@ -45,16 +51,20 @@ public class FedStatement implements FedStatementInterface
             switch (lstmt.statementType)
             {
                 case DROP:
+                    boolean succ = false;
                     for (int i = 0; i < 3; i++)
                     {
                         try
                         {
                             PreparedStatement statement = con[i].prepareStatement(sql);
                             statement.executeUpdate();
+                            succ = true;
                         } catch (Exception ex)
                         {
                             //Logger.getLogger(FedStatement.class.getName()).log(Level.SEVERE, null, ex);
                         }
+                        if(!succ)
+                            throw new FedException(new Exception("Drop failed"));
                     }
                     break;
                 default:
@@ -73,15 +83,14 @@ public class FedStatement implements FedStatementInterface
         } else if (statements[0] instanceof InsertStatement)
         {
             InsertStatement insstmt = (InsertStatement) statements[0];
-            if (insstmt.tableDescription == null)
+            try
             {
-
+                handleInsert(insstmt);
+            } catch (SQLException ex)
+            {
+                Logger.getLogger(FedStatement.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-
-        if (sql.startsWith("drop"))
-        {
-
+            
         }
 
         return 1;
@@ -92,7 +101,7 @@ public class FedStatement implements FedStatementInterface
         if (createstmt.fedStatement instanceof CreateStatement.FedHorizontal)
         {
             CreateStatement.FedHorizontal hori = (CreateStatement.FedHorizontal) createstmt.fedStatement;
-            if (MetaData.MetaDataManager.MetaManager.getMetaData(createstmt.tableName) == null)
+            if (metaDataManger.getTableMetaData(createstmt.tableName) == null)
             {
                 List<Object> intervalls = hori.getIntervall();
                 String createsql = "create table " + createstmt.tableName + " (";
@@ -134,7 +143,7 @@ public class FedStatement implements FedStatementInterface
         if (createstmt.fedStatement instanceof CreateStatement.FedVertical)
         {
             CreateStatement.FedVertical vert = (CreateStatement.FedVertical) createstmt.fedStatement;
-            List<CreateStatement.IColumnDefinition> primkey = null;
+            List<CreateStatement.CreateColumnDefinition> primkey = null;
             for(CreateStatement.TableConstraint tabcon : createstmt.tableConstrains)
             {
                 if(tabcon instanceof CreateStatement.TableConstraintPrimaryKey)
@@ -149,7 +158,7 @@ public class FedStatement implements FedStatementInterface
                 createsql[j] = "create table " + createstmt.tableName + " (";
                 for (int i = 0; i < primkey.size(); i++)
                 {
-                    createsql[j] += ((CreateStatement.ColumnDefinition)primkey.get(i)).getText();
+                    createsql[j] += ((CreateStatement.CreateColumnDefinition)primkey.get(i)).getText();
                     if (i + 1 < primkey.size())
                     {
                         createsql[j] += ", ";
@@ -158,12 +167,16 @@ public class FedStatement implements FedStatementInterface
                 for (int i = 0; i < vert.getDistributionLists().get(j).size(); i++)
                 {
                     createsql[j] += ", ";
-                    createsql[j] += vert.getDistributionLists().get(j).get(i).getText();
+                    createsql[j] += ((CreateStatement.CreateColumnDefinition)vert.getDistributionLists().get(j).get(i)).getText();
                 }
                 for (int i = 0; i < createstmt.tableConstrains.size(); i++)
                 {
-                    if (createstmt.tableConstrains.get(i).getCanBeLocal())
+                    if (createstmt.tableConstrains.get(i).getCanBeLocal() && 
+                            vert.getDistributionLists().get(j).contains(
+                                    createstmt.tableConstrains.get(i).getColumns().get(0)))
+                    {
                         createsql[j] += ", " + createstmt.tableConstrains.get(i).getText();
+                    }
                 }
                 createsql[j] += ")";
             }

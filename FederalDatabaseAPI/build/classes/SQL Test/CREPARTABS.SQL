@@ -12,7 +12,9 @@ jemy varchar(30),
 myint integer,
 kume integer,
 constraint FLUGHAFEN_PS
-		primary key (id))
+		primary key (id),
+constraint DeineMutterStinkt
+                check (jemy is not null))
 VERTICAL ((name,eule),(jemy,myint),(kume))
 
 create table myHori (

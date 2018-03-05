@@ -4,11 +4,19 @@
     auf die Datenbanken zu ermöglichen.
  */
 package MetaData;
+import MetaData.Constrains.Constraint;
+import MetaData.Constrains.ForeignKeyConstraint;
 import com.google.gson.GsonBuilder;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -16,60 +24,65 @@ import java.io.PrintWriter;
  */
 public class MetaDataManager {
     private MetaDataSet metaDataSet;
-    private String metaDataFilePath; 
-    public static final MetaDataManager MetaManager = new MetaDataManager("myjson.json");
+    private final Connection conn;
     
-    public MetaDataManager(String metaDataFilePath){
-        this.metaDataFilePath = metaDataFilePath;
-        String metaFileString;
-        
+    public MetaDataManager(Connection conn) throws SQLException
+    {
+        this.conn=conn;
+        String createSql = "create table meta (entry long)"; 
+        String insertSql = "Insert into meta values ('')";
+        String selectSql = "select * from meta";
         try{
-            metaFileString = getMetaDataStringFromFile(metaDataFilePath);
-            metaDataSet = new GsonBuilder().create().fromJson(metaFileString, MetaDataSet.class);
-
-        }catch(Exception e){
-            System.out.println("There is no metaData File. Empty dataset will be created");
-            metaDataSet = new MetaDataSet();
+            Statement stmt = conn.createStatement();
+            stmt.executeUpdate(createSql);
+            stmt.executeUpdate(insertSql);
+            save();
         }
-
-        
-        System.out.println("MetaData read: "+metaDataSet);
+        catch(Exception e){
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(selectSql);
+            rs.next();
+            String json = rs.getString(0);
+            metaDataSet = (MetaDataSet)new GsonBuilder().create().fromJson(json, MetaDataSet.class);
+            rs.close();
+        }
     }
     
-    // Adds a new metadataentry to the gson hashmap
-    public void newMetaData(String tableName, MetaDataEntry mdE){
-        metaDataSet.addEntry(tableName, mdE);
+    public void addTableMetaData(MetaDataEntry metaDataEntry) throws Exception{
+        metaDataSet.addEntry(metaDataEntry.TableName, metaDataEntry);
+        save();
     }
     
-    public void deleteMetaData(String tableName){
+    public void deleteTableMetaData(String tableName) throws Exception{
         metaDataSet.deleteEntry(tableName);
+        save();
     }
     
-    // returns the metaDataEntry which describes the database
-    // or null if there is no entry for this tablename
-    // distribution according to its tablename
-    public MetaDataEntry getMetaData(String tableName){
+    public MetaDataEntry getTableMetaData(String tableName){
         return metaDataSet.getEntry(tableName);
     }
     
-    
-    // to save the JavaObject of the metaData onto the json file
-    public void saveMetaData() throws Exception {
-        String metaDataString = new GsonBuilder().create().toJson(metaDataSet);
-        System.out.println(metaDataString);
-        FileWriter fileWriter = new FileWriter(metaDataFilePath);
-        PrintWriter printWriter = new PrintWriter(fileWriter);
-        printWriter.write(metaDataString);
-        printWriter.close();
-        System.out.println("MetaData successfully saved to "+metaDataFilePath+"!");
+    public List<ForeignKeyConstraint> getReferencesToTable(String tableName)
+    {
+        ArrayList<ForeignKeyConstraint> res = new ArrayList<>();
+        tableName = tableName.toLowerCase().trim();
+        for(MetaDataEntry meta : this.metaDataSet.hashMap.values())
+        {
+            for(Constraint cnt : meta.constraints)
+                if(cnt instanceof ForeignKeyConstraint)
+                {
+                    ForeignKeyConstraint fc = (ForeignKeyConstraint)cnt;
+                    if(fc.getForeignColumn().tableName.equals(tableName))
+                        res.add(fc);
+                }
+        }
+        return res;
     }
     
-    private String getMetaDataStringFromFile(String path) throws Exception{
-        File file = new File(path);
-        FileInputStream fis = new FileInputStream(file);
-        byte[] data = new byte[(int) file.length()];
-        fis.read(data);
-        fis.close();
-        return new String(data, "UTF-8");
+    private void save() throws Exception {
+        String metaDataString = new GsonBuilder().create().toJson(metaDataSet);
+        String sql = "update META set ENTRY = '"+ metaDataString + "'";
+        Statement stmt = conn.createStatement();
+        stmt.executeUpdate(sql);
     }
 }

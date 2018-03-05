@@ -11,33 +11,38 @@ import java.util.HashMap;
  * @author Franz Weidmann
  */
 public class MetaDataSet {
-    private HashMap<String, MetaDataEntry> DataSet;
+    /**
+     * Do not access!
+     */
+    public HashMap<String, MetaDataEntry> hashMap;
     
-    public MetaDataSet(){
-        DataSet = new HashMap<String, MetaDataEntry>();
+    public MetaDataSet() {
+        hashMap = new HashMap<String, MetaDataEntry>();
     }
 
-    public void addEntry(String tableName, MetaDataEntry mdE){
-        DataSet.put(tableName, mdE);
+    public void addEntry(String tableName, MetaDataEntry mdE)
+            throws Exception
+    {
+        if(!hashMap.containsKey(tableName.toLowerCase()))
+            hashMap.put(tableName.toLowerCase(), mdE);
+        else throw new Exception("Metadata Entry already exists");
     }
     
-    public void deleteEntry(String tableName){
-        MetaDataEntry mdE = DataSet.remove(tableName);
-        if(mdE != null){
-            System.out.println("TABLE "+tableName+" ENTRY REMOVED");
-            System.out.println(mdE.toString());
-        }else{ 
-            System.out.println("NO ENTRY REMOVED!");
-        }      
-        
+    public void deleteEntry(String tableName)
+            throws Exception
+    {
+        MetaDataEntry mdE = hashMap.remove(tableName.toLowerCase());
+        if(mdE == null){
+            throw new Exception("Metadata Entry not found");
+        }
     }
     
     public MetaDataEntry getEntry(String tableName){
-        return DataSet.get(tableName);
+        return hashMap.get(tableName.toLowerCase());
     }
     
     @Override
     public String toString(){
-        return DataSet.toString();
+        return hashMap.toString();
     }
 }

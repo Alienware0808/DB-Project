@@ -48,7 +48,6 @@ public class FedPseudoDriver implements FedPseudoDriverInterface
         {
             exc.printStackTrace();
         }
-         
         FedConnection cone= new FedConnection(con);            
         return cone;
     }

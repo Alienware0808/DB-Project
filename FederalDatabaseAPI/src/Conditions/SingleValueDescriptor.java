@@ -5,32 +5,33 @@
  */
 package Conditions;
 
-import ResultSetManagment.FedResultSet;
+import FederalDB.FedResultSetInterface;
 
 /**
  *
- * @author Tobias Habermann
+ * @author Admin
  */
-public class SingleValueDescriptor extends ValueDescriptor {
-    private Object value;
-    
+public class SingleValueDescriptor implements IValue {
+    public Object Value;
+
     public SingleValueDescriptor() {
     }
 
-    public SingleValueDescriptor(Object value) {
-        this.value = value;
-    }
-
-    public Object getValue() {
-        return value;
-    }
-
-    public void setValue(Object value) {
-        this.value = value;
+    public SingleValueDescriptor(Object Value) {
+        this.Value = Value;
     }
 
     @Override
-    public Object getValue(FedResultSet resultSet) {
-        return value;
+    public Object getValue(FedResultSetInterface resultSet) {
+        return Value;
     }
+
+    @Override
+    public String toWhereString() {
+        if(Value instanceof String)
+            return "'"+Value.toString()+"'";
+        return Value.toString();
+    }
+    
+    
 }

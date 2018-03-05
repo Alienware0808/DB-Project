@@ -1,4 +1,5 @@
 FederalDatabaseAPI\nbproject\ojdbc8.jar
+FederalDatabaseAPI\build\built-jar.propertiers
 
 # Compiled class file
 *.class
@@ -29,3 +30,33 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+FederalDatabaseAPI/build/built-jar.properties
+FederalDatabaseAPI/build/built-jar.properties
+FederalDatabaseAPI/build/built-jar.properties
+FederalDatabaseAPI/nbproject/private/private.properties
+FederalDatabaseAPI/nbproject/private/private.xml
+FederalDatabaseAPI/nbproject/project.properties
+FederalDatabaseAPI/src/Data/SelectHelper.java
+FederalDatabaseAPI/src/FederalDB/App.java
+FederalDatabaseAPI/src/FederalDB/FedConnection.java
+FederalDatabaseAPI/build/built-jar.properties
+FederalDatabaseAPI/nbproject/private/private.properties
+FederalDatabaseAPI/nbproject/private/private.xml
+FederalDatabaseAPI/nbproject/project.properties
+FederalDatabaseAPI/build/built-jar.properties
+FederalDatabaseAPI/build/built-jar.properties
+FederalDatabaseAPI/nbproject/project.properties
+FederalDatabaseAPI/build/built-jar.properties
+FederalDatabaseAPI/nbproject/project.properties
+FederalDatabaseAPI/src/Data/SelectHelper.java
+FederalDatabaseAPI/build/built-jar.properties
+FederalDatabaseAPI/nbproject/private/private.xml
+FederalDatabaseAPI/nbproject/private/private.xml
+FederalDatabaseAPI/nbproject/private/private.xml
+<<<<<<< HEAD
+FederalDatabaseAPI/nbproject/private/private.xml
+=======
+FederalDatabaseAPI/build/built-jar.properties
+FederalDatabaseAPI/build/built-jar.properties
+FederalDatabaseAPI/nbproject/private/private.properties
+>>>>>>> 6d55a212eed9c83397f903b943ba4a75cdf4f4b7

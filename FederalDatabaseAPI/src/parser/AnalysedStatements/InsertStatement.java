@@ -5,6 +5,7 @@
  */
 package parser.AnalysedStatements;
 
+import FederalDB.FedConnection;
 import MetaData.MetaDataEntry;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,14 +19,16 @@ import parser.SQLiteParser;
 public class InsertStatement extends Statement{
     public final MetaDataEntry tableDescription;
     public List<Object> values;
+    public FedConnection fedConnection;
  
-    public InsertStatement(ParseTree tree) {
+    public InsertStatement(ParseTree tree, FedConnection fedConnection) {
         super(tree);
         values = new ArrayList<>();
-        tableDescription = MetaData.MetaDataManager.MetaManager.getMetaData(tree.getChild(2).getText());
+        this.fedConnection = fedConnection;
+        tableDescription = fedConnection.metaDataManger.getTableMetaData(tree.getChild(2).getText());
         for(int i = 4; i < tree.getChildCount(); i++)
         {
-            if(tree.getChild(i) instanceof SQLiteParser.Literal_valueContext)
+            if(tree.getChild(i).getChild(0) instanceof SQLiteParser.Literal_valueContext)
             {
                 String valstr = tree.getChild(i).getText();
                 if(valstr.startsWith("'"))

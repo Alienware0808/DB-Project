@@ -5,13 +5,15 @@
  */
 package Conditions;
 
-import ResultSetManagment.FedResultSet;
+import FederalDB.FedException;
+import FederalDB.FedResultSetInterface;
 
 /**
  *
  * @author Tobias Habermann
  */
-public abstract class ValueDescriptor {
-    // TODO Change the type of row to the correct one...
-    public abstract Object getValue(FedResultSet resultSet);
+public interface IValue {
+    Object getValue(FedResultSetInterface resultSet)
+            throws FedException;
+    String toWhereString();
 }

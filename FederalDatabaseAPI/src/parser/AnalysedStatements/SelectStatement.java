@@ -5,13 +5,14 @@
  */
 package parser.AnalysedStatements;
 
-import Conditions.ColumnValueDescriptor;
 import Conditions.CompareCondition;
 import Conditions.CompareType;
 import Conditions.Condition;
 import Conditions.JunctionCondition;
 import Conditions.SingleValueDescriptor;
-import Conditions.ValueDescriptor;
+import Conditions.IValue;
+import FederalDB.FedConnection;
+import MetaData.ColumnDefinition;
 import MetaData.MetaDataEntry;
 import java.util.AbstractList;
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ public class SelectStatement extends Statement {
     private Conditions.Condition where;
     private ResultColumn groupByColumn;
     private Condition groupByHavingCondition;
+    public FedConnection fedConnection;
     
     /**
      * Prepares the SelectStatement given from the parser
@@ -46,7 +48,7 @@ public class SelectStatement extends Statement {
      * @throws ContextException
      * @throws Exception 
      */
-    public SelectStatement(Select_coreContext tree) throws ContextException, Exception {
+    public SelectStatement(Select_coreContext tree,FedConnection fedConnection) throws ContextException, Exception {
         super(tree);
         // Init all Fields
         columnAliases = new HashMap<>();
@@ -54,6 +56,7 @@ public class SelectStatement extends Statement {
         tables = new ArrayList<>();
         resultColumns = new ArrayList<>();
         extraColumnsForWhere = new ArrayList<>();
+        this.fedConnection = fedConnection;
         
         // Load all tables in the From Statement
         loadTableNamesAndAliases();
@@ -79,7 +82,7 @@ public class SelectStatement extends Statement {
         if(table == null)
         {
             // TODO search the Metadata for that table ...
-            table = MetaData.MetaDataManager.MetaManager.getMetaData(nameOrAlias);
+            table = fedConnection.metaDataManger.getTableMetaData(nameOrAlias);
             if(table == null)
                 throw new ContextException("Table not found");
         }
@@ -130,7 +133,7 @@ public class SelectStatement extends Statement {
                 if(table_node.getChild(j) instanceof SQLiteParser.Table_nameContext)
                 {
                     // TODO Exception Handling??? Maybe???
-                    current =  MetaData.MetaDataManager.MetaManager.getMetaData(table_node.getChild(j).getText());
+                    current =  fedConnection.metaDataManger.getTableMetaData(table_node.getChild(j).getText());
                     tables.add(current);
                 }
                 // Add the Alias for the table
@@ -310,7 +313,7 @@ public class SelectStatement extends Statement {
         }
     }
     
-    private ValueDescriptor parseValueDescriptor(ParseTree expr) throws ContextException
+    private IValue parseValueDescriptor(ParseTree expr) throws ContextException
     {
         
         switch (expr.getChildCount()) {
@@ -329,13 +332,13 @@ public class SelectStatement extends Statement {
                     Column col = new Column(tables.get(0).TableName, expr.getText());
                     if(getResultColumnByNameOrAlias(col.getName(), col.getTableName()) == null)
                         extraColumnsForWhere.add(col);
-                    return new ColumnValueDescriptor(col.getName(), col.getTableName());
+                    return new ColumnDefinition(col.getName(), col.getTableName());
                 }
             case 3:
                 Column col = new Column(getTableByNameOrAlias(expr.getChild(0).getText()).TableName, expr.getChild(2).getText());
                 if(getResultColumnByNameOrAlias(col.getName(), col.getTableName()) == null)
                     extraColumnsForWhere.add(col);
-                return new ColumnValueDescriptor(col.getName(), col.getTableName());
+                return new ColumnDefinition(col.getName(), col.getTableName());
             default:
                 throw new ContextException("Unexpected expression in where clause");
         }

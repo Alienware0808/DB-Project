@@ -7,16 +7,14 @@ package MetaData;
 
 /**
  *
- * @author Franz Weidmann
+ * @author svwer
  */
-public class ColDef {
-    public String colName;
-    public String tableName;
+public class ColumnValue extends ColumnDefinition
+{
     public Object value;
     
-    public ColDef(String cN, String tN, Object val){
-        colName = cN;
-        tableName = tN;
-        value = val;
+    public ColumnValue(String columnName, String tableName, Object value){
+        super(columnName, tableName);
+        this.value = value;
     }
 }
