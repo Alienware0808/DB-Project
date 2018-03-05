@@ -9,6 +9,7 @@ import Conditions.IValue;
 import FederalDB.FedException;
 import FederalDB.FedResultSetInterface;
 import ResultSetManagment.FedResultSetExtendedInterface;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,23 +17,31 @@ import java.util.logging.Logger;
  *
  * @author Franz Weidmann
  */
-public class ColumnDefinition implements IValue{
+public class ColumnDefinition implements IValue
+{
+
     public String name;
     public String tableName;
-    
-    public ColumnDefinition(){
+
+    public ColumnDefinition()
+    {
     }
-    
-    public ColumnDefinition(String columnName, String tableName){
+
+    public ColumnDefinition(String columnName, String tableName)
+    {
         this.name = columnName.trim().toLowerCase();
         this.tableName = tableName.trim().toLowerCase();
     }
-    
+
     private int getIndexByName(FedResultSetInterface resultSet) throws FedException
     {
-        for(int i = 0; i < resultSet.getColumnCount(); i++)
-            if(resultSet.getColumnName(i).trim().toLowerCase().equals(name.toLowerCase().trim()))
+        for (int i = 0; i < resultSet.getColumnCount(); i++)
+        {
+            if (resultSet.getColumnName(i).trim().toLowerCase().equals(name.toLowerCase().trim()))
+            {
                 return i;
+            }
+        }
         return -1;
     }
 
@@ -41,16 +50,18 @@ public class ColumnDefinition implements IValue{
             throws FedException
     {
         int index = getIndexByName(resultSet);
-        if(index == -1)
+        if (index == -1)
+        {
             throw new FedException(new Exception("Field not Found"));
+        }
         try
         {
             int type = resultSet.getColumnType(index);
-            if(type == 0)
+            if (type == 0)
             {
                 // string
                 return resultSet.getString(index);
-            }else
+            } else
             {
                 return resultSet.getInt(index);
             }
@@ -62,19 +73,37 @@ public class ColumnDefinition implements IValue{
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if(obj == null)
+    public boolean equals(Object obj)
+    {
+        if (obj == null)
+        {
             return false;
-        if(!(obj instanceof ColumnDefinition))
+        }
+        if (!(obj instanceof ColumnDefinition))
+        {
             return false;
-        if(((ColumnDefinition)(obj)).name.equals(this.name) && 
-           ((ColumnDefinition)(obj)).tableName.equals(this.tableName))
+        }
+        if (((ColumnDefinition) (obj)).name.equals(this.name)
+                && ((ColumnDefinition) (obj)).tableName.equals(this.tableName))
+        {
             return true;
+        }
         return false;
     }
 
     @Override
-    public String toWhereString() {
+    public String toWhereString()
+    {
         return tableName + "." + name;
+    }
+    
+    public static String toWhereString(List<ColumnDefinition> coldefs)
+    {
+        if(coldefs.isEmpty())
+            return "";
+        String erg = coldefs.get(0).toWhereString() + ", ";
+        for(int i = 1; i < coldefs.size(); i++)
+            erg += coldefs.get(i).toWhereString() + ", ";
+        return erg;
     }
 }

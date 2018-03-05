@@ -16,20 +16,22 @@ import java.util.List;
  *
  * @author Franz Weidmann
  */
+public abstract class Constraint
+{
 
-public abstract class Constraint {
     public ArrayList<ColumnDefinition> columns;
-    
-    public Constraint(){
+
+    public Constraint()
+    {
         columns = new ArrayList<>();
     }
-    
+
     public abstract boolean checkInsert(FedConnection fedConnection, List<ColumnValue> values)
             throws Exception;
-    
+
     public abstract boolean checkDelete(FedConnection fedConnection, List<ColumnValue> values)
             throws Exception;
-    
+
     public abstract boolean checkUpdate(FedConnection fedConnection, List<ColumnValue> values, Condition where)
             throws Exception;
 }

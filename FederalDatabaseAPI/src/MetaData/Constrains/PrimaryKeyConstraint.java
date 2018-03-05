@@ -27,94 +27,109 @@ import java.util.List;
  *
  * @author Franz Weidmann
  */
-public class PrimaryKeyConstraint extends Constraint {
-    
+public class PrimaryKeyConstraint extends Constraint
+{
+
     public ColumnDefinition PrimaryKey;
-    
+
     public PrimaryKeyConstraint()
     {
     }
-    
+
     public PrimaryKeyConstraint(ColumnDefinition PrimaryKey)
     {
         this.PrimaryKey = PrimaryKey;
     }
 
-    public ColumnDefinition getPrimaryKey() {
+    public ColumnDefinition getPrimaryKey()
+    {
         return PrimaryKey;
     }
 
     @Override
-    public boolean checkInsert(FedConnection fedConnection, List<ColumnValue> values) throws Exception {
+    public boolean checkInsert(FedConnection fedConnection, List<ColumnValue> values) throws Exception
+    {
         MetaDataEntry entry = fedConnection.metaDataManger.getTableMetaData(PrimaryKey.tableName);
         ColumnValue primVal = null;
-        for(ColumnValue colval: values)
+        for (ColumnValue colval : values)
         {
-            if(colval.equals(PrimaryKey))
+            if (colval.equals(PrimaryKey))
             {
                 primVal = colval;
                 break;
             }
         }
-        if(primVal == null)
+        if (primVal == null)
+        {
             return false;
+        }
         List<ColumnDefinition> primaryKeyAsList = new ArrayList<>();
         primaryKeyAsList.add(PrimaryKey);
         List<ColumnValue> primaryValueAsList = new ArrayList<>();
         primaryValueAsList.add(primVal);
-        if(entry.FedType instanceof FedHorizontalType)
+        if (entry.FedType instanceof FedHorizontalType)
         {
-            ResultSet resultSet = SQLHelper.select(fedConnection.getConn()[0], 
+            ResultSet resultSet = SQLHelper.select(fedConnection.getConn()[0],
                     primaryKeyAsList, entry.TableName, primaryValueAsList);
-            if(resultSet.next())
-                return false;
-            resultSet = SQLHelper.select(fedConnection.getConn()[1], 
-                    primaryKeyAsList, entry.TableName, primaryValueAsList);
-            if(resultSet.next())
-                return false;
-            if(entry.FedType.DatabaseCount == 3)
+            if (resultSet.next())
             {
-                resultSet = SQLHelper.select(fedConnection.getConn()[2], 
+                return false;
+            }
+            resultSet = SQLHelper.select(fedConnection.getConn()[1],
                     primaryKeyAsList, entry.TableName, primaryValueAsList);
-                if(resultSet.next())
+            if (resultSet.next())
+            {
+                return false;
+            }
+            if (entry.FedType.getDatabaseCount() == 3)
+            {
+                resultSet = SQLHelper.select(fedConnection.getConn()[2],
+                        primaryKeyAsList, entry.TableName, primaryValueAsList);
+                if (resultSet.next())
+                {
                     return false;
+                }
             }
             return true;
-        }
-        else 
+        } else
         {
-            ResultSet resultSet = SQLHelper.select(fedConnection.getConn()[0], 
+            ResultSet resultSet = SQLHelper.select(fedConnection.getConn()[0],
                     primaryKeyAsList, entry.TableName, primaryValueAsList);
             return !resultSet.next();
         }
     }
 
     @Override
-    public boolean checkDelete(FedConnection fedConnection, List<ColumnValue> values) throws Exception {
+    public boolean checkDelete(FedConnection fedConnection, List<ColumnValue> values) throws Exception
+    {
         return true;
     }
 
     /**
      * Updating the Primary-Key is not allowed
+     *
      * @param fedConnection
      * @param values
      * @return
-     * @throws Exception 
+     * @throws Exception
      */
     @Override
-    public boolean checkUpdate(FedConnection fedConnection, List<ColumnValue> values, Condition where) throws Exception {
+    public boolean checkUpdate(FedConnection fedConnection, List<ColumnValue> values, Condition where) throws Exception
+    {
         MetaDataEntry entry = fedConnection.metaDataManger.getTableMetaData(PrimaryKey.tableName);
         ColumnValue primVal = null;
-        for(ColumnValue colval: values)
+        for (ColumnValue colval : values)
         {
-            if(colval.equals(PrimaryKey))
+            if (colval.equals(PrimaryKey))
             {
                 primVal = colval;
                 break;
             }
         }
-        if(primVal == null)
+        if (primVal == null)
+        {
             return true;
+        }
         return false;
     }
 }

@@ -16,18 +16,20 @@ import java.util.List;
  *
  * @author Admin
  */
-public final class SelectHelper {
-    
+public final class SelectHelper
+{
+
     static List<PreparedStatement> preparedStatments = new ArrayList<>();
-    
+
     /**
      * Selects from the Connection the given fields from the given Tables
+     *
      * @param connection
      * @param columns
      * @param table
-     * @return 
+     * @return
      */
-   /* public static FedResultSetExtendedInterface select(Connection connection, List<ColumnDefinition> columns, String table)
+    /* public static FedResultSetExtendedInterface select(Connection connection, List<ColumnDefinition> columns, String table)
     {
         String select_sql = "select ";
         for(int i = 0; i < columns.size(); i++)
@@ -39,7 +41,6 @@ public final class SelectHelper {
         select_sql += " from " + table.toLowerCase();
         return null;
     }*/
-    
 //    private static PreparedStatement getPrepStatement(Connection connection)
 //    {
 //        for(PreparedStatement prepStat : preparedStatments)

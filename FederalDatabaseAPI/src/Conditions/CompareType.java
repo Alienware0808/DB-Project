@@ -11,7 +11,7 @@ package Conditions;
  */
 public enum CompareType
 {
-    EQUAL, NOT_EQUAL, 
-    GREATER, LESSER, 
+    EQUAL, NOT_EQUAL,
+    GREATER, LESSER,
     GREATER_OR_EQUAL, LESSER_OR_EQUAL
 }

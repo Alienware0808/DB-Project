@@ -29,164 +29,191 @@ import parser.AnalysedStatements.CreateStatement;
  *
  * @author Franz Weidmann
  */
-public class ForeignKeyConstraint extends Constraint {
-    
+public class ForeignKeyConstraint extends Constraint
+{
+
     private ColumnDefinition forColumn;
     private ColumnDefinition foreignColumn;
 
+    public ForeignKeyConstraint(ColumnDefinition forColumn, ColumnDefinition foreignColumn)
+    {
+        this.forColumn = forColumn;
+        this.foreignColumn = foreignColumn;
+    }
+
     @Override
-    public boolean checkInsert(FedConnection fedConnection, List<ColumnValue> values) throws Exception {
+    public boolean checkInsert(FedConnection fedConnection, List<ColumnValue> values) throws Exception
+    {
         MetaDataEntry entry = fedConnection.metaDataManger.getTableMetaData(foreignColumn.tableName);
         ColumnValue foreignValue = null;
-        for(ColumnValue colValue: values)
-            if(foreignColumn.equals(colValue))
+        for (ColumnValue colValue : values)
+        {
+            if (foreignColumn.equals(colValue))
             {
                 foreignValue = colValue;
                 break;
             }
+        }
         // If there is no fereign-Key or the foreign-Key value is Null the Constraint is true
-        if(foreignValue == null || foreignValue.value == null)
+        if (foreignValue == null || foreignValue.value == null)
+        {
             return true;
+        }
         List<ColumnValue> foreignValueAsList = new ArrayList<>();
         foreignValueAsList.add(foreignValue);
         List<ColumnDefinition> foreignColumnAsList = new ArrayList<>();
         foreignColumnAsList.add(foreignColumn);
-        if(entry.FedType instanceof FedHorizontalType)
+        if (entry.FedType instanceof FedHorizontalType)
         {
-            ResultSet resultSet = SQLHelper.select(fedConnection.getConn()[0], 
+            ResultSet resultSet = SQLHelper.select(fedConnection.getConn()[0],
                     foreignColumnAsList, foreignColumn.tableName, foreignValueAsList);
-            if(resultSet.next())
+            if (resultSet.next())
                 return true;
-            resultSet = SQLHelper.select(fedConnection.getConn()[1], 
+            resultSet = SQLHelper.select(fedConnection.getConn()[1],
                     foreignColumnAsList, foreignColumn.tableName, foreignValueAsList);
-            if(resultSet.next())
+            if (resultSet.next())
                 return true;
-            if(entry.FedType.DatabaseCount == 3)
+            if (entry.FedType.getDatabaseCount() == 3)
             {
-                resultSet = SQLHelper.select(fedConnection.getConn()[2], 
-                    foreignColumnAsList, foreignColumn.tableName, foreignValueAsList);
-                if(resultSet.next())
+                resultSet = SQLHelper.select(fedConnection.getConn()[2],
+                        foreignColumnAsList, foreignColumn.tableName, foreignValueAsList);
+                if (resultSet.next())
+                {
                     return true;
+                }
             }
             return false;
-        }
-        else if(entry.FedType instanceof FedVerticalType)
+        } else if (entry.FedType instanceof FedVerticalType)
         {
-            int dbindex = ((FedVerticalType)entry.FedType).getDatabaseForColumn(foreignValue);
-            ResultSet resultSet = SQLHelper.select(fedConnection.getConn()[dbindex], 
+            int dbindex = ((FedVerticalType) entry.FedType).getDatabaseForColumn(foreignValue);
+            ResultSet resultSet = SQLHelper.select(fedConnection.getConn()[dbindex],
                     foreignColumnAsList, foreignColumn.tableName, foreignValueAsList);
             return resultSet.next();
-        }
-        else 
+        } else
         {
-            ResultSet resultSet = SQLHelper.select(fedConnection.getConn()[0], 
+            ResultSet resultSet = SQLHelper.select(fedConnection.getConn()[0],
                     foreignColumnAsList, foreignColumn.tableName, foreignValueAsList);
             return resultSet.next();
         }
     }
 
     @Override
-    public boolean checkDelete(FedConnection fedConnection, List<ColumnValue> values) throws Exception {
+    public boolean checkDelete(FedConnection fedConnection, List<ColumnValue> values) throws Exception
+    {
         return true;
     }
 
     @Override
-    public boolean checkUpdate(FedConnection fedConnection, List<ColumnValue> values, Condition where) throws Exception {
+    public boolean checkUpdate(FedConnection fedConnection, List<ColumnValue> values, Condition where) throws Exception
+    {
         MetaDataEntry entry = fedConnection.metaDataManger.getTableMetaData(foreignColumn.tableName);
         ColumnValue foreignValue = null;
-        for(ColumnValue colValue: values)
-            if(foreignColumn.equals(colValue))
+        for (ColumnValue colValue : values)
+        {
+            if (foreignColumn.equals(colValue))
             {
                 foreignValue = colValue;
                 break;
             }
+        }
         // If there is no fereign-Key or the foreign-Key value is Null the Constraint is true
-        if(foreignValue == null || foreignValue.value == null)
+        if (foreignValue == null || foreignValue.value == null)
+        {
             return true;
+        }
         List<ColumnValue> foreignValueAsList = new ArrayList<>();
         foreignValueAsList.add(foreignValue);
         List<ColumnDefinition> foreignColumnAsList = new ArrayList<>();
         foreignColumnAsList.add(foreignColumn);
-        if(entry.FedType instanceof FedHorizontalType)
+        if (entry.FedType instanceof FedHorizontalType)
         {
-            ResultSet resultSet = SQLHelper.select(fedConnection.getConn()[0], 
+            ResultSet resultSet = SQLHelper.select(fedConnection.getConn()[0],
                     foreignColumnAsList, foreignColumn.tableName, foreignValueAsList);
-            if(resultSet.next())
-                return true;
-            resultSet = SQLHelper.select(fedConnection.getConn()[1], 
-                    foreignColumnAsList, foreignColumn.tableName, foreignValueAsList);
-            if(resultSet.next())
-                return true;
-            if(entry.FedType.DatabaseCount == 3)
+            if (resultSet.next())
             {
-                resultSet = SQLHelper.select(fedConnection.getConn()[2], 
+                return true;
+            }
+            resultSet = SQLHelper.select(fedConnection.getConn()[1],
                     foreignColumnAsList, foreignColumn.tableName, foreignValueAsList);
-                if(resultSet.next())
+            if (resultSet.next())
+            {
+                return true;
+            }
+            if (entry.FedType.getDatabaseCount() == 3)
+            {
+                resultSet = SQLHelper.select(fedConnection.getConn()[2],
+                        foreignColumnAsList, foreignColumn.tableName, foreignValueAsList);
+                if (resultSet.next())
+                {
                     return true;
+                }
             }
             return false;
-        }
-        else if(entry.FedType instanceof FedVerticalType)
+        } else if (entry.FedType instanceof FedVerticalType)
         {
-            int dbindex = ((FedVerticalType)entry.FedType).getDatabaseForColumn(foreignValue);
-            ResultSet resultSet = SQLHelper.select(fedConnection.getConn()[dbindex], 
+            int dbindex = ((FedVerticalType) entry.FedType).getDatabaseForColumn(foreignValue);
+            ResultSet resultSet = SQLHelper.select(fedConnection.getConn()[dbindex],
                     foreignColumnAsList, foreignColumn.tableName, foreignValueAsList);
             return resultSet.next();
-        }
-        else 
+        } else
         {
-            ResultSet resultSet = SQLHelper.select(fedConnection.getConn()[0], 
+            ResultSet resultSet = SQLHelper.select(fedConnection.getConn()[0],
                     foreignColumnAsList, foreignColumn.tableName, foreignValueAsList);
             return resultSet.next();
         }
     }
-    
+
     /**
-     * 
+     * Determines if there are any Entries in Foreign Entries that reference to the keys
      * @param fedConnection
-     * @param foreignKeysToDelete Single Row ResultSet with all PrimaryKeys to delete
-     * @return 
+     * @param foreignKeysToDelete Single Row ResultSet with all PrimaryKeys to
+     * delete
+     * @return
      */
-    public boolean checkReferences(FedConnection fedConnection, 
-            FedResultSetExtendedInterface foreignKeysToDelete) 
+    public boolean checkReferences(FedConnection fedConnection,
+            FedResultSetExtendedInterface foreignKeysToDelete)
             throws SQLException, FedException
     {
-        FedResultSetExtendedInterface allForeignKeys = 
-                FedHelper.selectFromSingleTable(fedConnection, forColumn);
+        FedResultSetExtendedInterface allForeignKeys
+                = FedHelper.selectFromSingleTable(fedConnection, forColumn);
         return !isMatched(allForeignKeys, foreignKeysToDelete);
     }
-    
-    private boolean isMatched(FedResultSetExtendedInterface left, FedResultSetExtendedInterface right) 
+
+    private boolean isMatched(FedResultSetExtendedInterface left, FedResultSetExtendedInterface right)
             throws FedException
     {
-        if(left.getColumnType(0) == Types.VARCHAR)
+        if (left.getColumnType(0) == Types.VARCHAR)
         {
             do
             {
                 do
                 {
-                    if(left.getString(1).equals(right.getString(1)))
+                    if (left.getString(1).equals(right.getString(1)))
+                    {
                         return true;
-                } while(right.next());
+                    }
+                } while (right.next());
                 right.first();
-            }while(left.next());
-        }
-        else 
+            } while (left.next());
+        } else
         {
             do
             {
                 do
                 {
-                    if(left.getInt(1) == (right.getInt(1)))
+                    if (left.getInt(1) == (right.getInt(1)))
+                    {
                         return true;
-                } while(right.next());
+                    }
+                } while (right.next());
                 right.first();
-            }while(left.next());
+            } while (left.next());
         }
         return false;
     }
 
-    public ColumnDefinition getForeignColumn() {
+    public ColumnDefinition getForeignColumn()
+    {
         return foreignColumn;
     }
 }

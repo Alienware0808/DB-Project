@@ -16,118 +16,152 @@ import java.util.logging.Logger;
  *
  * @author Admin
  */
-public class SqlWrapperResultSet implements FedResultSetExtendedInterface {
+public class SqlWrapperResultSet implements FedResultSetExtendedInterface
+{
+
     ResultSet resultSet;
     private Integer cachedRowCount = null;
-    
+
     public SqlWrapperResultSet(ResultSet resultSet)
     {
         this.resultSet = resultSet;
     }
-    
+
     @Override
-    public boolean next() throws FedException {
-        try {
+    public boolean next() throws FedException
+    {
+        try
+        {
             return resultSet.next();
-        } catch (SQLException ex) {
+        } catch (SQLException ex)
+        {
             throw new FedException(ex);
         }
     }
 
     @Override
-    public String getString(int columnIndex) throws FedException {
-        try {
+    public String getString(int columnIndex) throws FedException
+    {
+        try
+        {
             return resultSet.getString(columnIndex);
-        } catch (SQLException ex) {
+        } catch (SQLException ex)
+        {
             throw new FedException(ex);
         }
     }
 
     @Override
-    public int getInt(int columnIndex) throws FedException {
-        try {
+    public int getInt(int columnIndex) throws FedException
+    {
+        try
+        {
             return resultSet.getInt(columnIndex);
-        } catch (SQLException ex) {
+        } catch (SQLException ex)
+        {
             throw new FedException(ex);
         }
     }
 
     @Override
-    public int getColumnCount() throws FedException {
-        try {
+    public int getColumnCount() throws FedException
+    {
+        try
+        {
             int colcount = resultSet.getMetaData().getColumnCount();
             return colcount;
-        } catch (SQLException ex) {
+        } catch (SQLException ex)
+        {
             throw new FedException(ex);
         }
     }
 
     @Override
-    public String getColumnName(int index) throws FedException {
-        try {
+    public String getColumnName(int index) throws FedException
+    {
+        try
+        {
             return resultSet.getMetaData().getColumnName(index);
-        } catch (SQLException ex) {
+        } catch (SQLException ex)
+        {
             throw new FedException(ex);
         }
     }
 
     @Override
-    public int getColumnType(int index) throws FedException {
-        try {
+    public int getColumnType(int index) throws FedException
+    {
+        try
+        {
             return resultSet.getMetaData().getColumnType(index);
-        } catch (SQLException ex) {
+        } catch (SQLException ex)
+        {
             throw new FedException(ex);
         }
     }
 
     @Override
-    public void close() throws FedException {
-        try {
+    public void close() throws FedException
+    {
+        try
+        {
             resultSet.close();
-        } catch (SQLException ex) {
+        } catch (SQLException ex)
+        {
             throw new FedException(ex);
         }
     }
 
     @Override
-    public boolean first() throws FedException {
-        try {
+    public boolean first() throws FedException
+    {
+        try
+        {
             return resultSet.first();
-        } catch (SQLException ex) {
+        } catch (SQLException ex)
+        {
             throw new FedException(ex);
         }
     }
 
     @Override
-    public int getCursorPosition() throws FedException {
-        try {
+    public int getCursorPosition() throws FedException
+    {
+        try
+        {
             return this.resultSet.getRow();
-        } catch (SQLException ex) {
+        } catch (SQLException ex)
+        {
             throw new FedException(ex);
         }
     }
 
     @Override
-    public boolean setCursorPosition(int position) throws FedException {
-        try {
+    public boolean setCursorPosition(int position) throws FedException
+    {
+        try
+        {
             return resultSet.absolute(position);
-        } catch (SQLException ex) {
+        } catch (SQLException ex)
+        {
             throw new FedException(ex);
         }
     }
 
     @Override
-    public int getRowCount() throws FedException {
-        if(cachedRowCount == null)
+    public int getRowCount() throws FedException
+    {
+        if (cachedRowCount == null)
         {
             int position = getCursorPosition();
-            try {
+            try
+            {
                 resultSet.last();
                 cachedRowCount = resultSet.getRow();
-            } catch (SQLException ex) {
+            } catch (SQLException ex)
+            {
                 throw new FedException(ex);
-            }
-            finally
+            } finally
             {
                 setCursorPosition(position);
             }

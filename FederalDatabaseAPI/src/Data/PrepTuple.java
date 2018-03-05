@@ -11,7 +11,9 @@ import java.sql.PreparedStatement;
  *
  * @author Admin
  */
-class PrepTuple {
+class PrepTuple
+{
+
     public PreparedStatement prepStat;
     public String sqlString;
 }

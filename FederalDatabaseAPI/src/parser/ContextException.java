@@ -9,17 +9,20 @@ package parser;
  *
  * @author Tobias Habermann
  */
-public class ContextException extends Exception {
+public class ContextException extends Exception
+{
+
     private String message;
 
-    public ContextException(String message) {
+    public ContextException(String message)
+    {
         this.message = message;
     }
 
     @Override
-    public String getMessage() {
+    public String getMessage()
+    {
         return message;//To change body of generated methods, choose Tools | Templates.
     }
-    
-    
+
 }

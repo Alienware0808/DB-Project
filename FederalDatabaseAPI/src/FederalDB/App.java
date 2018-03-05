@@ -1,10 +1,11 @@
 package FederalDB;
 
 //package hsfulda.de;
+public class App
+{
 
-public class App {
-
-    public static void main(final String[] args) {
+    public static void main(final String[] args)
+    {
 
         /**
          * Logging
@@ -19,12 +20,13 @@ public class App {
         final String passwordValidation = "VDBSA09";
 
         FedConnection fedConnection;
-        
+
 
         /*
          * Test schema
          */
-        try {
+        try
+        {
             fedConnection = (new FedPseudoDriver()).getConnection(usernameValidation, passwordValidation);
 
             final FedTestEnvironment fedTestEvironment = new FedTestEnvironment(fedConnection);
@@ -32,9 +34,8 @@ public class App {
             fedTestEvironment.run("SQL Test/DRPTABS.SQL", false);
             //fedTestEvironment.run("SQL Test/CREPARTABS.SQL", false);
 
-            
             //fedTestEvironment.run("SQL Test/INSERTAIRPORTS.SQL", false);
-           /* fedTestEvironment.run("Test/INSERTAIRLINES.SQL", false);
+            /* fedTestEvironment.run("Test/INSERTAIRLINES.SQL", false);
             fedTestEvironment.run("Test/INSERTPASSENGERS.SQL", false);
             fedTestEvironment.run("Test/INSERTFLIGHTS.SQL", false);
             fedTestEvironment.run("Test/INSERTBOOKINGS.SQL", false);
@@ -53,14 +54,16 @@ public class App {
 //        } catch (final FedException fedException) {
 //            fedException.printStackTrace();
 //        }
-        } catch (final Exception e) {
+        } catch (final Exception e)
+        {
 
         }
 
         /*
 		 * Validation schema
          */
-        try {
+        try
+        {
             fedConnection = (new FedPseudoDriver()).getConnection(usernameValidation, passwordValidation);
 
             final FedTestEnvironment fedTestEvironment = new FedTestEnvironment(fedConnection);
@@ -95,7 +98,8 @@ public class App {
 //        } catch (final FedException fedException) {
 //            fedException.printStackTrace();
 //        }
-        } catch (final Exception e) {
+        } catch (final Exception e)
+        {
 
         }
     }

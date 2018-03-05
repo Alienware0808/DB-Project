@@ -13,27 +13,33 @@ import parser.AnalysedStatements.CreateStatement;
  *
  * @author Admin
  */
-final class SQString {
+final class SQString
+{
+
     public static String columnList(List<ColumnDefinition> columns)
     {
         String sqlString = "";
-        for(int i = 0; i < columns.size(); i++)
+        for (int i = 0; i < columns.size(); i++)
         {
             sqlString += columns.get(i).name.toLowerCase().trim();
-            if(i+1 < columns.size())
+            if (i + 1 < columns.size())
+            {
                 sqlString += ", ";
+            }
         }
         return sqlString;
     }
-    
+
     public static String columnDefinitionList(List<CreateStatement.CreateColumnDefinition> columns)
     {
         String sqlString = "";
-        for(int i = 0; i < columns.size(); i++)
+        for (int i = 0; i < columns.size(); i++)
         {
             sqlString += columns.get(i).getText();
-            if(i+1 < columns.size())
+            if (i + 1 < columns.size())
+            {
                 sqlString += ", ";
+            }
         }
         return sqlString;
     }

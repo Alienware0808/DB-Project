@@ -2,9 +2,9 @@ package FederalDB;
 
 import ResultSetManagment.FedResultSet;
 
+public interface FedStatementInterface
+{
 
-
-public interface FedStatementInterface {
     int executeUpdate(String sql) throws FedException;
 
     FedResultSet executeQuery(String sql) throws FedException;

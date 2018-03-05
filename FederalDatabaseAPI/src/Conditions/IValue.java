@@ -12,8 +12,11 @@ import FederalDB.FedResultSetInterface;
  *
  * @author Tobias Habermann
  */
-public interface IValue {
+public interface IValue
+{
+
     Object getValue(FedResultSetInterface resultSet)
             throws FedException;
+
     String toWhereString();
 }

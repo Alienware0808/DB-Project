@@ -13,26 +13,33 @@ import java.util.List;
  *
  * @author Tobias Habermann
  */
-public class ParseException extends Exception{
+public class ParseException extends Exception
+{
+
     private final List<String> errors;
 
-    public List<String> getErrors() {
+    public List<String> getErrors()
+    {
         return errors;
     }
 
-    public ParseException(List<String> errors) {
-        if(errors == null)
+    public ParseException(List<String> errors)
+    {
+        if (errors == null)
+        {
             this.errors = new ArrayList<>();
-        else
+        } else
+        {
             this.errors = errors;
+        }
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         String text = "";
         text = errors.stream().map((error) -> error + "\n").reduce(text, String::concat);
         return text;
     }
-    
-    
+
 }

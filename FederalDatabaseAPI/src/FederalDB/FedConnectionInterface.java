@@ -1,7 +1,8 @@
 package FederalDB;
 
+public interface FedConnectionInterface
+{
 
-public interface FedConnectionInterface {
     void setAutoCommit(boolean autoCommit) throws FedException;
 
     boolean getAutoCommit() throws FedException;

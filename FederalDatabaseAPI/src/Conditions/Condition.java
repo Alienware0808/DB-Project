@@ -14,10 +14,11 @@ import java.util.List;
  *
  * @author Tobias Habermann
  */
-public abstract class Condition {
-    
+public abstract class Condition
+{
+
     public abstract List<ColumnDefinition> getRequiredColumns();
-    
+
     public abstract List<Integer> execute(FedResultSetExtendedInterface resultSet)
             throws FedException;
 

@@ -11,27 +11,34 @@ import FederalDB.FedResultSetInterface;
  *
  * @author Admin
  */
-public class SingleValueDescriptor implements IValue {
+public class SingleValueDescriptor implements IValue
+{
+
     public Object Value;
 
-    public SingleValueDescriptor() {
+    public SingleValueDescriptor()
+    {
     }
 
-    public SingleValueDescriptor(Object Value) {
+    public SingleValueDescriptor(Object Value)
+    {
         this.Value = Value;
     }
 
     @Override
-    public Object getValue(FedResultSetInterface resultSet) {
+    public Object getValue(FedResultSetInterface resultSet)
+    {
         return Value;
     }
 
     @Override
-    public String toWhereString() {
-        if(Value instanceof String)
-            return "'"+Value.toString()+"'";
+    public String toWhereString()
+    {
+        if (Value instanceof String)
+        {
+            return "'" + Value.toString() + "'";
+        }
         return Value.toString();
     }
-    
-    
+
 }

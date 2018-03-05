@@ -9,8 +9,11 @@ package FederalDB;
  *
  * @author svwer
  */
-public class SimpleTest {
-    public static void main(String[] args) throws FedException {
+public class SimpleTest
+{
+
+    public static void main(String[] args) throws FedException
+    {
 //        FedStatement.testit();
     }
 }

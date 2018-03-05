@@ -15,84 +15,96 @@ import java.util.List;
  *
  * @author Tobias Habermann
  */
-public class JunctionCondition extends Condition {
+public class JunctionCondition extends Condition
+{
+
     public final JunctionType type;
     private Condition leftCondition;
     private Condition rightCondition;
 
-    public JunctionCondition(JunctionType type, Condition leftCondition, Condition rightCondition) {
+    public JunctionCondition(JunctionType type, Condition leftCondition, Condition rightCondition)
+    {
         this.type = type;
         this.leftCondition = leftCondition;
         this.rightCondition = rightCondition;
     }
 
-    public JunctionCondition(JunctionType type) {
+    public JunctionCondition(JunctionType type)
+    {
         this.type = type;
     }
 
-    public Condition getLeftCondition() {
+    public Condition getLeftCondition()
+    {
         return leftCondition;
     }
 
-    public Condition getRightCondition() {
+    public Condition getRightCondition()
+    {
         return rightCondition;
     }
 
-    public JunctionType getType() {
+    public JunctionType getType()
+    {
         return type;
     }
 
-    public void setLeftCondition(Condition leftCondition) {
+    public void setLeftCondition(Condition leftCondition)
+    {
         this.leftCondition = leftCondition;
     }
 
-    public void setRightCondition(Condition rightCondition) {
+    public void setRightCondition(Condition rightCondition)
+    {
         this.rightCondition = rightCondition;
     }
 
     @Override
-    public List<Integer> execute(FedResultSetExtendedInterface resultSet) throws FedException {
+    public List<Integer> execute(FedResultSetExtendedInterface resultSet) throws FedException
+    {
         ArrayList<Integer> matches = new ArrayList<Integer>();
         List<Integer> left = leftCondition.execute(resultSet);
         List<Integer> right = rightCondition.execute(resultSet);
-        switch(type)
+        switch (type)
         {
             case AND:
             {
                 int lastMatchIndex = 0;
-                for(Integer lval: left)
+                for (Integer lval : left)
                 {
-                    for(int i = lastMatchIndex; i < right.size(); i++)
+                    for (int i = lastMatchIndex; i < right.size(); i++)
                     {
-                        if(lval.equals(right.get(i)))
+                        if (lval.equals(right.get(i)))
                         {
                             lastMatchIndex = i + 1;
                             matches.add(lval);
                             break;
                         }
-                        if(lval > right.get(i))
+                        if (lval > right.get(i))
+                        {
                             break;
+                        }
                     }
                 }
-            }break;
+            }
+            break;
             case OR:
             {
                 int i = 0, j = 0;
                 int lastValue = -1;
-                while(i < left.size() && j < right.size())
+                while (i < left.size() && j < right.size())
                 {
-                    if(left.get(i) > right.get(j))
+                    if (left.get(i) > right.get(j))
                     {
-                        if(lastValue != left.get(i))
+                        if (lastValue != left.get(i))
                         {
                             lastValue = right.get(j);
                             matches.add(lastValue);
                         }
                         j++;
-                    }
-                    else
+                    } else
                     {
-                        if(lastValue != left.get(i))
+                        if (lastValue != left.get(i))
                         {
                             lastValue = left.get(i);
                             matches.add(lastValue);
@@ -100,13 +112,15 @@ public class JunctionCondition extends Condition {
                         i++;
                     }
                 }
-            }break;
+            }
+            break;
         }
         return matches;
     }
 
     @Override
-    public List<ColumnDefinition> getRequiredColumns() {
+    public List<ColumnDefinition> getRequiredColumns()
+    {
         List<ColumnDefinition> result = new ArrayList<>();
         result.addAll(leftCondition.getRequiredColumns());
         result.addAll(rightCondition.getRequiredColumns());
@@ -114,12 +128,13 @@ public class JunctionCondition extends Condition {
     }
 
     @Override
-    public String toWhereString() {
-        return "(" + leftCondition.toWhereString() + ") " + 
-                (type == JunctionType.AND? "AND": "OR") +
-                "(" + rightCondition.toWhereString() + ") ";
+    public String toWhereString()
+    {
+        return "(" + leftCondition.toWhereString() + ") "
+                + (type == JunctionType.AND ? "AND" : "OR")
+                + "(" + rightCondition.toWhereString() + ") ";
     }
-    
+
     public enum JunctionType
     {
         OR, AND

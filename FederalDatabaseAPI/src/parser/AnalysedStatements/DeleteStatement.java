@@ -8,13 +8,14 @@ package parser.AnalysedStatements;
 import Conditions.CompareCondition;
 import Conditions.CompareType;
 import Conditions.Condition;
+import Conditions.IValue;
 import Conditions.JunctionCondition;
 import Conditions.SingleValueDescriptor;
-import Conditions.IValue;
 import FederalDB.FedConnection;
 import MetaData.ColumnDefinition;
 import MetaData.MetaDataEntry;
 import org.antlr.v4.runtime.tree.ParseTree;
+import static parser.AnalysedStatements.Statement.IsTerminalNode;
 import parser.ContextException;
 import parser.SQLiteParser;
 
@@ -22,25 +23,21 @@ import parser.SQLiteParser;
  *
  * @author Admin
  */
-public class UpdateStatement extends Statement
+public class DeleteStatement extends Statement
 {
 
     public final MetaDataEntry table;
-    public final String column;
-    public final String valueString;
     public final Condition where;
     private FedConnection fedConnection;
 
-    public UpdateStatement(ParseTree tree, FedConnection fedConnection) throws ContextException
+    public DeleteStatement(ParseTree tree, FedConnection fedConnection) throws ContextException
     {
         super(tree);
         this.fedConnection = fedConnection;
-        table = fedConnection.metaDataManger.getTableMetaData(tree.getChild(1).getText()); // TODO read table from metadata via name
-        column = tree.getChild(3).getText(); // TODO read column from metadata via colname and tablename
-        valueString = tree.getChild(5).getText();
-        if (IsTerminalNode(tree.getChild(6), SQLiteParser.K_WHERE))
+        table = fedConnection.metaDataManger.getTableMetaData(tree.getChild(2).getText()); 
+        if (IsTerminalNode(tree.getChild(3), SQLiteParser.K_WHERE))
         {
-            where = parseCondition(tree.getChild(7));
+            where = parseCondition(tree.getChild(4));
         } else
         {
             where = null;
@@ -107,7 +104,6 @@ public class UpdateStatement extends Statement
 
     private IValue parseValueDescriptor(ParseTree expr) throws ContextException
     {
-
         switch (expr.getChildCount())
         {
             case 1:
@@ -131,3 +127,4 @@ public class UpdateStatement extends Statement
         }
     }
 }
+

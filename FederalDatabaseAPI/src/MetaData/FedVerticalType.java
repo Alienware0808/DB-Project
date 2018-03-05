@@ -13,22 +13,35 @@ import parser.AnalysedStatements.CreateStatement;
  *
  * @author Admin
  */
-public class FedVerticalType extends FedType {
+public class FedVerticalType extends FedType
+{
     public List<List<CreateStatement.CreateColumnDefinition>> DistributionList;
-    
-    public FedVerticalType()
+
+    public FedVerticalType(List<List<CreateStatement.CreateColumnDefinition>> DistributionList)
     {
-        DistributionList = new ArrayList<>();
+        this.DistributionList = DistributionList;
     }
-    
+
     public int getDatabaseForColumn(ColumnDefinition coldef)
     {
-        for(int i = 0; i < DistributionList.size(); i++)
+        for (int i = 0; i < DistributionList.size(); i++)
         {
-            for(CreateStatement.CreateColumnDefinition crcol: DistributionList.get(i))
-                if(crcol.equals(coldef))
+            for (CreateStatement.CreateColumnDefinition crcol : DistributionList.get(i))
+            {
+                if (crcol.equals(coldef))
+                {
                     return i;
+                }
+            }
         }
         return -1;
     }
+
+    @Override
+    public int getDatabaseCount()
+    {
+        return DistributionList.size();
+    }
+    
+    
 }

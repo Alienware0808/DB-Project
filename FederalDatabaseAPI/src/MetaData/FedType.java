@@ -9,20 +9,14 @@ package MetaData;
  *
  * @author Admin
  */
-public class FedType {
-    public int DatabaseCount;
-    
+public class FedType
+{
     public FedType()
     {
-        DatabaseCount = 1;
     }
     
-    public FedType(int databaseCount)
+    public int getDatabaseCount()
     {
-        setDatabaseCount(databaseCount);
-    }
-
-    public void setDatabaseCount(int DatabaseCount) {
-        this.DatabaseCount = DatabaseCount;
+        return 1;
     }
 }

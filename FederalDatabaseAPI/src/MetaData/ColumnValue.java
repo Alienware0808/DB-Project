@@ -11,9 +11,11 @@ package MetaData;
  */
 public class ColumnValue extends ColumnDefinition
 {
+
     public Object value;
-    
-    public ColumnValue(String columnName, String tableName, Object value){
+
+    public ColumnValue(String columnName, String tableName, Object value)
+    {
         super(columnName, tableName);
         this.value = value;
     }
