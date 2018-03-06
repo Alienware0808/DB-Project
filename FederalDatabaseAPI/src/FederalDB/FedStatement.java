@@ -516,7 +516,7 @@ public class FedStatement implements FedStatementInterface
                     selstmt.getGroupByHavingCondition());
             return new FedResultSet(grouprs);
         }
-        return FedResultSet(conrs);
+        return new FedResultSet(conrs);
     }
 
     @Override
