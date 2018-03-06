@@ -10,7 +10,7 @@ import java.util.HashMap;
  *
  * @author Franz Weidmann
  */
-public class MetaDataSet
+public class MetaDataSet implements java.io.Serializable
 {
 
     /**

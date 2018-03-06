@@ -27,7 +27,7 @@ import java.util.List;
  *
  * @author Franz Weidmann
  */
-public class PrimaryKeyConstraint extends Constraint
+public class PrimaryKeyConstraint extends Constraint implements java.io.Serializable
 {
 
     public ColumnDefinition PrimaryKey;

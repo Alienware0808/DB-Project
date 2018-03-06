@@ -9,7 +9,7 @@ package MetaData;
  *
  * @author Admin
  */
-public class FedType
+public class FedType  implements java.io.Serializable
 {
     public FedType()
     {

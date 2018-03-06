@@ -29,7 +29,7 @@ import parser.AnalysedStatements.CreateStatement;
  *
  * @author Franz Weidmann
  */
-public class ForeignKeyConstraint extends Constraint
+public class ForeignKeyConstraint extends Constraint implements java.io.Serializable
 {
 
     private ColumnDefinition forColumn;

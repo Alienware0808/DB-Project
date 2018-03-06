@@ -3,15 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-<<<<<<< HEAD
-            <file>file:/D:/svwer/Documents/Master_01/Verteilte_Datenbanken/DB-Project/FederalDatabaseAPI/test/FederalDB/Update_Test.java</file>
-            <file>file:/D:/svwer/Documents/Master_01/Verteilte_Datenbanken/DB-Project/FederalDatabaseAPI/test/FederalDB/Insert_Test.java</file>
-            <file>file:/D:/svwer/Documents/Master_01/Verteilte_Datenbanken/DB-Project/FederalDatabaseAPI/test/FederalDB/UnitTest_01.java</file>
-            <file>file:/D:/svwer/Documents/Master_01/Verteilte_Datenbanken/DB-Project/FederalDatabaseAPI/test/FederalDB/FedPseudoDriverTest.java</file>
-            <file>file:/D:/svwer/Documents/Master_01/Verteilte_Datenbanken/DB-Project/FederalDatabaseAPI/test/FederalDB/Select_Test.java</file>
-=======
-            <file>file:/C:/Users/Admin/Documents/GitHub/DB-Project/FederalDatabaseAPI/src/MetaData/Constrains/CheckConstraint.java</file>
->>>>>>> origin/create
+            <file>file:/C:/Users/Admin/Documents/GitHub/DB-Project/FederalDatabaseAPI/src/FederalDB/FedPseudoDriver.java</file>
+            <file>file:/C:/Users/Admin/Documents/GitHub/DB-Project/FederalDatabaseAPI/src/parser/SQLStatement.java</file>
+            <file>file:/C:/Users/Admin/Documents/GitHub/DB-Project/FederalDatabaseAPI/src/FederalDB/FedConnection.java</file>
+            <file>file:/C:/Users/Admin/Documents/GitHub/DB-Project/FederalDatabaseAPI/src/FederalDB/FedStatement.java</file>
+            <file>file:/C:/Users/Admin/Documents/GitHub/DB-Project/FederalDatabaseAPI/src/parser/AnalysedStatements/CreateColumnDefinition.java</file>
+            <file>file:/C:/Users/Admin/Documents/GitHub/DB-Project/FederalDatabaseAPI/src/parser/AnalysedStatements/CreateStatement.java</file>
+            <file>file:/C:/Users/Admin/Documents/GitHub/DB-Project/FederalDatabaseAPI/src/FederalDB/FedTestEnvironment.java</file>
+            <file>file:/C:/Users/Admin/Documents/GitHub/DB-Project/FederalDatabaseAPI/src/FederalDB/App.java</file>
+            <file>file:/C:/Users/Admin/Documents/GitHub/DB-Project/FederalDatabaseAPI/src/MetaData/MetaDataManager.java</file>
         </group>
     </open-files>
 </project-private>

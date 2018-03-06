@@ -28,7 +28,6 @@ import java.util.logging.Logger;
 import java.util.List;
 import parser.*;
 import parser.AnalysedStatements.*;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -328,31 +327,28 @@ public class FedStatement implements FedStatementInterface
             {
                 CreateStatement.FedVertical vert = (CreateStatement.FedVertical) createstmt.fedStatement;
                 meta.FedType = new FedVerticalType(vert.getDistributionLists());
-                List<CreateStatement.CreateColumnDefinition> primkey = null;
+                CreateColumnDefinition primkey = null;
                 for (CreateStatement.TableConstraint tabcon : createstmt.tableConstrains)
                 {
                     if (tabcon instanceof CreateStatement.TableConstraintPrimaryKey)
                     {
                         CreateStatement.TableConstraintPrimaryKey tabprim = (CreateStatement.TableConstraintPrimaryKey) tabcon;
-                        primkey = tabprim.getPrimaryKeys();
+                        primkey = tabprim.getPrimaryKeys().get(0);
                     }
                 }
                 String[] createsql = new String[vert.getDistributionLists().size()];
                 for (int j = 0; j < createsql.length; j++)
                 {
                     createsql[j] = "create table " + createstmt.tableName + " (";
-                    for (int i = 0; i < primkey.size(); i++)
-                    {
-                        createsql[j] += ((CreateStatement.CreateColumnDefinition) primkey.get(i)).getText();
-                        if (i + 1 < primkey.size())
-                        {
-                            createsql[j] += ", ";
-                        }
-                    }
+                    createsql[j] += ((CreateColumnDefinition) primkey).getText();
                     for (int i = 0; i < vert.getDistributionLists().get(j).size(); i++)
                     {
-                        createsql[j] += ", ";
-                        createsql[j] += ((CreateStatement.CreateColumnDefinition) vert.getDistributionLists().get(j).get(i)).getText();
+                        CreateColumnDefinition newcol = ((CreateColumnDefinition) vert.getDistributionLists().get(j).get(i));
+                        if(!newcol.equals(primkey))
+                        {
+                            createsql[j] += ", ";
+                            createsql[j] += newcol.getText();
+                        }
                     }
                     for (int i = 0; i < createstmt.tableConstrains.size(); i++)
                     {
@@ -364,13 +360,6 @@ public class FedStatement implements FedStatementInterface
                         }
                     }
                     createsql[j] += ")";
-                }
-                for (int i = 0; i < createstmt.tableConstrains.size(); i++)
-                {
-                    if (!createstmt.tableConstrains.get(i).getCanBeLocal())
-                    {
-                        // total mayhem
-                    }
                 }
                 for (int i = 0; i < createsql.length; i++)
                 {

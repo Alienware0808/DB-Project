@@ -35,6 +35,7 @@ public class FedSavepoint
         for(int i = 0; i < savepoints.length; i++)
         {
             conn.getConn()[i].releaseSavepoint(savepoints[i]);
+            conn.getConn()[i].setAutoCommit(true);
         }
     }
     
@@ -43,6 +44,7 @@ public class FedSavepoint
         for(int i = 0; i < savepoints.length; i++)
         {
             conn.getConn()[i].rollback(savepoints[i]);
+            conn.getConn()[i].setAutoCommit(true);
         }
     }
 }

@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import parser.ContextException;
 import parser.SQLiteParser;
 import parser.Walker;
@@ -78,20 +79,20 @@ public class CreateStatement extends Statement
                 switch (typestr)
                 {
                     case "varchar":
-                        coldef.type = String.class;
+                        coldef.setType(CreateColumnDefinition.TYPE_VARCHAR);
                         break;
                     case "integer":
-                        coldef.type = Integer.class;
+                        coldef.setType(CreateColumnDefinition.TYPE_INT);
                         break;
                     case "int":
-                        coldef.type = Integer.class;
+                        coldef.setType(CreateColumnDefinition.TYPE_INT);
                         break;
                     default:
                         throw new ContextException("Unkown Collumn Type");
                 }
                 if (typethingi.getChild(2) != null)
                 {
-                    coldef.typeLength = Integer.parseInt(typethingi.getChild(2).getText());
+                    coldef.setTypeLength(Integer.parseInt(typethingi.getChild(2).getText()));
                 }
                 columnDefinitions.add(coldef);
             }
@@ -105,6 +106,7 @@ public class CreateStatement extends Statement
             if (tree.getChild(i) instanceof SQLiteParser.Table_constraintContext)
             {
                 ParseTree contree = tree.getChild(i);
+                String dummyname = contree.getText();
                 int j = 1;
                 String constraint_name = null;
                 if (contree.getChild(j) instanceof SQLiteParser.NameContext)
@@ -145,11 +147,9 @@ public class CreateStatement extends Statement
                     foreignkey.from = getColumnDefinitionByName(contree.getChild(j).getText());
                     j++;
                     j++; // skip ")"
-                    j++; // skip "references"
-                    foreignkey.referenceToTable = fedConnection.metaDataManger.getTableMetaData(contree.getChild(j).getText());
-                    j++; // skip tablename
-                    j++; // skip "("
-                    foreignkey.referenceToColumn = contree.getChild(j).getText();
+                    ParseTree keyclause = contree.getChild(j);
+                    foreignkey.referenceToTable = fedConnection.metaDataManger.getTableMetaData(keyclause.getChild(1).getText());
+                    foreignkey.referenceToColumn = keyclause.getChild(3).getText();
                     this.tableConstrains.add(foreignkey);
                 }
                 if (IsTerminalNode(contree.getChild(j), SQLiteParser.K_CHECK))
@@ -258,6 +258,7 @@ public class CreateStatement extends Statement
 
     private Condition parseCondition(ParseTree expr) throws ContextException
     {
+        String dummyname = expr.getText();
         switch (expr.getChildCount())
         {
             case 3:
@@ -279,7 +280,7 @@ public class CreateStatement extends Statement
                                 CompareType.EQUAL,
                                 parseValueDescriptor(expr.getChild(0)),
                                 parseValueDescriptor(expr.getChild(2)));
-                    case "<>":
+                    case "!=":
                         return new CompareCondition(
                                 CompareType.NOT_EQUAL,
                                 parseValueDescriptor(expr.getChild(0)),
@@ -320,7 +321,7 @@ public class CreateStatement extends Statement
         switch (expr.getChildCount())
         {
             case 1:
-                if (expr instanceof SQLiteParser.Literal_valueContext)
+                if (expr instanceof SQLiteParser.Literal_valueContext || expr.getChild(0) instanceof SQLiteParser.Literal_valueContext )
                 {
                     String value = expr.getText().trim();
                     if (value.startsWith("'"))
@@ -328,7 +329,7 @@ public class CreateStatement extends Statement
                         return new SingleValueDescriptor(value.subSequence(1, value.length() - 2).toString());
                     }
                     return new SingleValueDescriptor(Integer.parseInt(value));
-                } else if (expr instanceof SQLiteParser.Column_nameContext)
+                } else if (expr instanceof SQLiteParser.Column_nameContext || expr.getChild(0) instanceof SQLiteParser.Column_nameContext )
                 {
                     ColumnDefinition coldef = getColumnDefinitionByName(expr.getText());
                     if (coldef == null)
@@ -352,88 +353,6 @@ public class CreateStatement extends Statement
             }
         }
         return null;
-    }
-
-    public class CreateColumnDefinition extends MetaData.ColumnDefinition
-    {
-
-        private Class type;
-        private int typeLength;
-        ParseTree tree;
-
-        public CreateColumnDefinition(ParseTree tree, String tableName) throws ContextException
-        {
-            super();
-            this.tree = tree;
-            name = tree.getChild(0).getText();
-            this.tableName = tableName;
-            if (tree.getChild(1) != null)
-            {
-                String strtype = tree.getChild(1).getChild(0).getText();
-                strtype = strtype.toLowerCase();
-                switch (strtype)
-                {
-                    case "varchar":
-                        type = String.class;
-                        break;
-                    case "integer":
-                        type = Integer.class;
-                        break;
-                    default:
-                        throw new ContextException("Unknown type");
-                }
-                if (tree.getChild(1).getChild(2) != null)
-                {
-                    typeLength = Integer.parseInt(tree.getChild(1).getChild(2).getText());
-                }
-            }
-        }
-
-        public Class getType()
-        {
-            return type;
-        }
-
-        public int getTypeLength()
-        {
-            return typeLength;
-        }
-
-        public String getText()
-        {
-            String sql = "";
-            Walker walker = new Walker(tree, new Walker.IEvents()
-            {
-                @Override
-                public Object nodeFound(ParseTree tree, Object workValue) throws Exception
-                {
-                    return workValue;
-                }
-
-                @Override
-                public Object finalNodeFound(ParseTree tree, Object workValue) throws Exception
-                {
-                    workValue += tree.getText() + " ";
-                    return workValue;
-                }
-
-                @Override
-                public Object finalLiteraFound(String text, Object workValue) throws Exception
-                {
-                    //workValue += tree.getText() + " ";
-                    return workValue;
-                }
-            });
-            walker.workValue = sql;
-            try
-            {
-                walker.run();
-            } catch (Exception ex)
-            {
-                Logger.getLogger(Statement.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            return walker.workValue.toString();
-        }
     }
 
     public abstract class TableConstraint extends Statement
@@ -462,7 +381,7 @@ public class CreateStatement extends Statement
     public class TableConstraintPrimaryKey extends TableConstraint
     {
 
-        private List<CreateStatement.CreateColumnDefinition> primaryKeys;
+        private List<CreateColumnDefinition> primaryKeys;
 
         public TableConstraintPrimaryKey(ParseTree tree)
         {
@@ -470,7 +389,7 @@ public class CreateStatement extends Statement
             this.primaryKeys = new ArrayList<>();
         }
 
-        public List<CreateStatement.CreateColumnDefinition> getPrimaryKeys()
+        public List<CreateColumnDefinition> getPrimaryKeys()
         {
             return primaryKeys;
         }

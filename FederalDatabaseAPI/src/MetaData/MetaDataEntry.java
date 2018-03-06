@@ -4,17 +4,17 @@ import MetaData.Constrains.PrimaryKeyConstraint;
 import MetaData.Constrains.Constraint;
 import java.util.ArrayList;
 import java.util.List;
-import parser.AnalysedStatements.CreateStatement;
+import parser.AnalysedStatements.CreateColumnDefinition;
 
 /**
  *
  * @author Franz Weidmann
  */
-public class MetaDataEntry
+public class MetaDataEntry  implements java.io.Serializable
 {
 
     public String TableName;
-    public List<CreateStatement.CreateColumnDefinition> Columns;
+    public List<CreateColumnDefinition> Columns;
     public List<Constraint> constraints;
     public FedType FedType;
 
@@ -25,7 +25,7 @@ public class MetaDataEntry
     }
 
     public MetaDataEntry(String TableName,
-            List<CreateStatement.CreateColumnDefinition> Columns,
+            List<CreateColumnDefinition> Columns,
             List<Constraint> constraints, FedType FedType)
     {
         this.TableName = TableName;

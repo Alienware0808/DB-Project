@@ -28,35 +28,35 @@ public class App
         try
         {
             fedConnection = (new FedPseudoDriver()).getConnection(usernameValidation, passwordValidation);
-
+            
+            FedStatement stmt = fedConnection.getStatement();
+            
             final FedTestEnvironment fedTestEvironment = new FedTestEnvironment(fedConnection);
 
             fedTestEvironment.run("SQL Test/DRPTABS.SQL", false);
-            //fedTestEvironment.run("SQL Test/CREPARTABS.SQL", false);
+            fedTestEvironment.run("SQL Test/CREPARTABS.SQL", false);
 
-            //fedTestEvironment.run("SQL Test/INSERTAIRPORTS.SQL", false);
-            /* fedTestEvironment.run("Test/INSERTAIRLINES.SQL", false);
-            fedTestEvironment.run("Test/INSERTPASSENGERS.SQL", false);
-            fedTestEvironment.run("Test/INSERTFLIGHTS.SQL", false);
-            fedTestEvironment.run("Test/INSERTBOOKINGS.SQL", false);
-            fedTestEvironment.run("Test/PARSELCNTSTAR.SQL", true);
-            fedTestEvironment.run("Test/PARSELS1T.SQL", true);
-            fedTestEvironment.run("Test/PARSELS1OR.SQL", true);
-            fedTestEvironment.run("Test/PARSELSJOIN1.SQL", true);
-            fedTestEvironment.run("Test/PARSELS1TGP.SQL", true);
-            fedTestEvironment.run("Test/PARSELS1TWGP.SQL", true);   //OPTIONAL
-            fedTestEvironment.run("Test/PARSELS1TGHAV.SQL", true);  //OPTIONAL
-            fedTestEvironment.run("Test/PARUPDS.SQL", true);
-            fedTestEvironment.run("Test/PARINSERTS.SQL", true);
-            fedTestEvironment.run("Test/PARDELS.SQL", true);
-            fedTestEvironment.run("Test/PARSELCNTSTAR.SQL", true);
-             */
-//        } catch (final FedException fedException) {
-//            fedException.printStackTrace();
-//        }
-        } catch (final Exception e)
+            fedTestEvironment.run("SQL Test/INSERTAIRPORTS.SQL", false);
+            fedTestEvironment.run("SQL Test/INSERTAIRLINES.SQL", false);
+            fedTestEvironment.run("SQL Test/INSERTPASSENGERS.SQL", false);
+            fedTestEvironment.run("SQL Test/INSERTFLIGHTS.SQL", false);
+            fedTestEvironment.run("SQL Test/INSERTBOOKINGS.SQL", false);
+            fedTestEvironment.run("SQL Test/PARSELCNTSTAR.SQL", true);
+            fedTestEvironment.run("SQL Test/PARSELS1T.SQL", true);
+            fedTestEvironment.run("SQL Test/PARSELS1OR.SQL", true);
+            fedTestEvironment.run("SQL Test/PARSELSJOIN1.SQL", true);
+            fedTestEvironment.run("SQL Test/PARSELS1TGP.SQL", true);
+            fedTestEvironment.run("SQL Test/PARSELS1TWGP.SQL", true);   //OPTIONAL
+            fedTestEvironment.run("SQL Test/PARSELS1TGHAV.SQL", true);  //OPTIONAL
+            fedTestEvironment.run("SQL Test/PARUPDS.SQL", true);
+            fedTestEvironment.run("SQL Test/PARINSERTS.SQL", true);
+            fedTestEvironment.run("SQL Test/PARDELS.SQL", true);
+            fedTestEvironment.run("SQL Test/PARSELCNTSTAR.SQL", true);
+            
+         
+        } catch (Exception e)
         {
-
+            e.printStackTrace();
         }
 
         /*

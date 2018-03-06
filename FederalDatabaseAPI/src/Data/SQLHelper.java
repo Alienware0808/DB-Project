@@ -26,6 +26,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import parser.AnalysedStatements.CreateColumnDefinition;
 import parser.AnalysedStatements.CreateStatement;
 
 /**
@@ -416,7 +417,7 @@ public final class SQLHelper
      * @return true if the create succeeded. false it not
      */
     public static boolean tryCreateTable(Connection connection, String table,
-            List<CreateStatement.CreateColumnDefinition> columns)
+            List<CreateColumnDefinition> columns)
     {
         try
         {
@@ -438,7 +439,7 @@ public final class SQLHelper
      * @throws SQLException
      */
     public static void createTable(Connection connection, String table,
-            List<CreateStatement.CreateColumnDefinition> columns) throws SQLException
+            List<CreateColumnDefinition> columns) throws SQLException
     {
         if (table == null || table.isEmpty())
         {

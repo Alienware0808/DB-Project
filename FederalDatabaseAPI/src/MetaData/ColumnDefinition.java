@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  *
  * @author Franz Weidmann
  */
-public class ColumnDefinition implements IValue
+public class ColumnDefinition implements IValue, java.io.Serializable
 {
 
     public String name;

@@ -8,7 +8,7 @@ package ResultSetManagment;
 import FederalDB.FedException;
 import MetaData.ColumnValue;
 import java.util.List;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import parser.AnalysedStatements.CreateColumnDefinition;
 
 /**
  *
@@ -69,7 +69,9 @@ public class ValueWrapperResultSet implements FedResultSetExtendedInterface
     @Override
     public int getColumnType(int index) throws FedException
     {
-        throw new FedException(new NotImplementedException());
+        if(this.values.get(index).value instanceof String)
+            return CreateColumnDefinition.TYPE_VARCHAR;
+        return CreateColumnDefinition.TYPE_INT;
     }
 
     @Override

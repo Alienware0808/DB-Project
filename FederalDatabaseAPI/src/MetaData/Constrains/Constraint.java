@@ -11,12 +11,24 @@ import MetaData.ColumnDefinition;
 import MetaData.ColumnValue;
 import java.util.ArrayList;
 import java.util.List;
+import org.codehaus.jackson.annotate.JsonSubTypes;
+import org.codehaus.jackson.annotate.JsonSubTypes.Type;
+import org.codehaus.jackson.annotate.JsonTypeInfo;
+import org.codehaus.jackson.annotate.JsonTypeInfo.Id;
 
 /**
  *
  * @author Franz Weidmann
  */
-public abstract class Constraint
+@JsonTypeInfo(use = Id.CLASS,
+              include = JsonTypeInfo.As.PROPERTY,
+              property = "type")
+@JsonSubTypes({
+    @Type(value = PrimaryKeyConstraint.class),
+    @Type(value = ForeignKeyConstraint.class),
+    @Type(value = CheckConstraint.class),
+    })
+public abstract class Constraint  implements java.io.Serializable
 {
 
     public ArrayList<ColumnDefinition> columns;

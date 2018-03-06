@@ -7,17 +7,17 @@ package MetaData;
 
 import java.util.ArrayList;
 import java.util.List;
-import parser.AnalysedStatements.CreateStatement;
+import parser.AnalysedStatements.CreateColumnDefinition;
 
 /**
  *
  * @author Admin
  */
-public class FedVerticalType extends FedType
+public class FedVerticalType extends FedType  implements java.io.Serializable
 {
-    public List<List<CreateStatement.CreateColumnDefinition>> DistributionList;
+    public List<List<CreateColumnDefinition>> DistributionList;
 
-    public FedVerticalType(List<List<CreateStatement.CreateColumnDefinition>> DistributionList)
+    public FedVerticalType(List<List<CreateColumnDefinition>> DistributionList)
     {
         this.DistributionList = DistributionList;
     }
@@ -26,7 +26,7 @@ public class FedVerticalType extends FedType
     {
         for (int i = 0; i < DistributionList.size(); i++)
         {
-            for (CreateStatement.CreateColumnDefinition crcol : DistributionList.get(i))
+            for (CreateColumnDefinition crcol : DistributionList.get(i))
             {
                 if (crcol.equals(coldef))
                 {

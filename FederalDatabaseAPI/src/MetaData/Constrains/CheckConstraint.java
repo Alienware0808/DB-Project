@@ -20,7 +20,7 @@ import java.util.List;
  *
  * @author Franz Weidmann
  */
-public class CheckConstraint extends Constraint
+public class CheckConstraint extends Constraint implements java.io.Serializable
 {
 
     private Condition condition;

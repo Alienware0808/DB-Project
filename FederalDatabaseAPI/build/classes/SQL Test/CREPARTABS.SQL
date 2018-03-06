@@ -4,29 +4,6 @@ alter session set nls_language = english;
 alter session set nls_date_format = 'DD-MON-YYYY';
 alter session set nls_date_language = english;
 
-create table myVert (
-id integer,
-name varchar(40),
-eule varchar(40),
-jemy varchar(30),
-myint integer,
-kume integer,
-constraint FLUGHAFEN_PS
-		primary key (id),
-constraint DeineMutterStinkt
-                check (jemy is not null))
-VERTICAL ((name,eule),(jemy,myint),(kume))
-
-create table myHori (
-id integer,
-name varchar(40),
-eule varchar(40),
-constraint myHori_name_NN
-		check (name is not null)
-
-)
-HORIZONTAL(id(10,30));
-
 create table FLUGHAFEN (
 FHC		varchar(3),
 LAND		varchar(3),

@@ -7,12 +7,21 @@ package MetaData;
 
 import MetaData.Constrains.Constraint;
 import MetaData.Constrains.ForeignKeyConstraint;
+import com.google.gson.Gson;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -30,27 +39,30 @@ public class MetaDataManager
     private MetaDataSet metaDataSet;
     private final Connection conn;
 
-    public MetaDataManager(Connection conn) throws SQLException, IOException
+    public MetaDataManager(Connection conn) throws Exception
     {
         this.conn = conn;
-        String createSql = "create table meta (entry long)";
-        String insertSql = "Insert into meta values ('')";
+        String createSql = "create table meta (entry blob)";
+        String insertSql = "Insert into meta values (null)";
         String selectSql = "select * from meta";
         try
         {
             Statement stmt = conn.createStatement();
             stmt.executeUpdate(createSql);
             stmt.executeUpdate(insertSql);
+            metaDataSet = new MetaDataSet();
             save();
         } catch (Exception e)
         {
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(selectSql);
             rs.next();
-            String json = rs.getString(0);
-            ObjectMapper mapper = new ObjectMapper();
-            metaDataSet = mapper.readValue(json, MetaDataSet.class);
-            rs.close();
+            byte[] buf = rs.getBytes(1);
+            if (buf != null) {
+                ObjectInputStream objectIn = new ObjectInputStream(
+                    new ByteArrayInputStream(buf));
+                metaDataSet = (MetaDataSet) objectIn.readObject();
+            }
         }
     }
 
@@ -94,10 +106,18 @@ public class MetaDataManager
 
     private void save() throws Exception
     {
-        ObjectMapper mapper = new ObjectMapper();
-        String metaDataString = mapper.writeValueAsString(metaDataSet);
-        String sql = "update META set ENTRY = '" + metaDataString + "'";
-        Statement stmt = conn.createStatement();
-        stmt.executeUpdate(sql);
+        try {
+            PreparedStatement pstmt =
+                conn.prepareStatement("update META set ENTRY = ?");
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ObjectOutputStream oout = new ObjectOutputStream(baos);
+            oout.writeObject(metaDataSet);
+            oout.close();
+            pstmt.setBytes(1, baos.toByteArray());
+            pstmt.executeUpdate();
+            pstmt.close();
+        } catch (Exception i) {
+           i.printStackTrace();
+        }
     }
 }

@@ -7,19 +7,20 @@ package MetaData;
 
 import java.util.ArrayList;
 import java.util.List;
+import parser.AnalysedStatements.CreateColumnDefinition;
 import parser.AnalysedStatements.CreateStatement;
 
 /**
  *
  * @author Admin
  */
-public class FedHorizontalType extends FedType
+public class FedHorizontalType extends FedType  implements java.io.Serializable
 {
 
-    public CreateStatement.CreateColumnDefinition Column;
+    public CreateColumnDefinition Column;
     public List<Object> PartationValues;
 
-    public FedHorizontalType(CreateStatement.CreateColumnDefinition Column, List<Object> PartationValues)
+    public FedHorizontalType(CreateColumnDefinition Column, List<Object> PartationValues)
     {
         this.Column = Column;
         this.PartationValues = PartationValues;
@@ -38,7 +39,7 @@ public class FedHorizontalType extends FedType
      */
     public int getIndexForValue(Object value)
     {
-        if(Column.getType() == String.class)
+        if(Column.getType() == CreateColumnDefinition.TYPE_VARCHAR)
         {
             if(PartationValues.size() == 1)
             {

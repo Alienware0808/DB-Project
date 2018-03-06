@@ -40,8 +40,6 @@ public class FedPseudoDriver implements FedPseudoDriverInterface
         try
         {
             DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-
-            String query = "Select * from Test";
             //Get a connection do DB
             Class.forName("oracle.jdbc.OracleDriver"); //driver
 
@@ -58,10 +56,7 @@ public class FedPseudoDriver implements FedPseudoDriverInterface
         {
             cone = new FedConnection(con);
             return cone;
-        } catch (SQLException ex)
-        {
-            Logger.getLogger(FedPseudoDriver.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex)
+        } catch (Exception ex)
         {
             Logger.getLogger(FedPseudoDriver.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -7,6 +7,7 @@ package Data;
 
 import MetaData.ColumnDefinition;
 import java.util.List;
+import parser.AnalysedStatements.CreateColumnDefinition;
 import parser.AnalysedStatements.CreateStatement;
 
 /**
@@ -30,7 +31,7 @@ final class SQString
         return sqlString;
     }
 
-    public static String columnDefinitionList(List<CreateStatement.CreateColumnDefinition> columns)
+    public static String columnDefinitionList(List<CreateColumnDefinition> columns)
     {
         String sqlString = "";
         for (int i = 0; i < columns.size(); i++)

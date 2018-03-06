@@ -9,7 +9,7 @@ package MetaData;
  *
  * @author svwer
  */
-public class ColumnValue extends ColumnDefinition
+public class ColumnValue extends ColumnDefinition  implements java.io.Serializable
 {
 
     public Object value;
