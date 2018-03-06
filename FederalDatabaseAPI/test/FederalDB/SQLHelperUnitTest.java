@@ -4,7 +4,6 @@
  */
 package FederalDB;
 
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -20,7 +19,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import parser.AnalysedStatements.CreateStatement;
 /**
  *
  * @author Franz Weidmann
@@ -53,8 +51,6 @@ public class SQLHelperUnitTest
     
     final List<ColumnDefinition> columListTest = new ArrayList<ColumnDefinition>();
     final List<ColumnDefinition> columListValid = new ArrayList<ColumnDefinition>();
-    
-    final List<CreateStatement.CreateColumnDefinition> createColumnsDefinition = new ArrayList<CreateStatement.CreateColumnDefinition>();
     
     final List<ColumnValue> whereEqualsList = new ArrayList<ColumnValue>();
     
@@ -94,13 +90,6 @@ public class SQLHelperUnitTest
         fillDataBase();
         fillColumnLists();
         fillWhereEqualslist();
-        fillCreateDefinition();
-    }
-    
-    private void fillCreateDefinition(){
-        ParseTree pt = new ParseTree();
-        
-        createColumnsDefinition.add(new CreateStatement.CreateColumnDefinition(this.tableNameValid, new ParseTree()))
     }
     
     // TODO: correct use of object ?
@@ -499,47 +488,7 @@ public class SQLHelperUnitTest
         }
     }
     
-    // invalid table name
-    @Test
-    public void SQLHelperTest_DropTable_Table(){
-        for(Connection conn : fedConnection.getConn()){
-            ResultSet selectTest = null;
-            try{
-                SQLHelper.dropTable(conn, this.tableNameValid);
-                selectTest = SQLHelper.select(conn, this.colum1Valid, this.tableNameValid);
-                // checks wether the resultset is empty
-                assertTrue(selectTest.isBeforeFirst());
-                fillDataBase();
-            }catch(SQLException se){
-                System.err.println(se.getMessage());
-            }
-        }
-    }
     
-    // invalid table name
-    @Test
-    public void SQLHelperTest_TryDropTable_Table(){
-        for(Connection conn : fedConnection.getConn()){
-            assertFalse(SQLHelper.tryDropTable(conn, this.tableNameTest));
-            fillDataBase();
-        }
-    }
-    
-    
-    // invalid table name
-    @Test
-    public void SQLHelperTest_CreateTable_Table(){
-        for(Connection conn : fedConnection.getConn()){
-            int rowCount = 0;
-            try{
-                rowCount = SQLHelper.createTable(conn, tableNameTest, this.createColumnsDefinition);
-                assertEquals(1, rowCount);
-                SQLHelper.dropTable(conn, tableNameTest);
-            }catch(SQLException se){
-                System.err.println(se.getMessage());
-            }
-        }
-    }
     //Falls gelungen wieder löschen
     @Test
     public void RBack() {
