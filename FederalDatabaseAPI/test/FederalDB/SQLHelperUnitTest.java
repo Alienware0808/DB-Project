@@ -48,6 +48,7 @@ public class SQLHelperUnitTest
     
     final String tableNameTest = "testtt";
     final String tableNameValid = "FLHAFEN";
+    final int rowCountValid = 14; // correct rowcount for the table in tableNameValid
     
     final String colum1Test = "asjdias";
     // for table FLHAFEN
@@ -78,6 +79,7 @@ public class SQLHelperUnitTest
     final List<CreateStatement.CreateColumnDefinition> createColumnsDefinition = new ArrayList<CreateStatement.CreateColumnDefinition>();
     
     final List<ColumnValue> whereEqualsList = new ArrayList<ColumnValue>();
+    final int rowCountWhereEquals = 13; // correct rowcount for the where constraint in whereEqualsList
     
     private FedConnection fedConnection = (new FedPseudoDriver()).getConnection(usernameValidation, passwordValidation);
     private FedStatement statement;
@@ -118,10 +120,9 @@ public class SQLHelperUnitTest
         fillCreateDefinition();
     }
     
-    // TODO: correct use of object ?
     private void fillWhereEqualslist(){
-        whereEqualsList.add(new ColumnValue("STADT", "FLHAFEN", new Object()));
-        whereEqualsList.add(new ColumnValue("STADT", "FLHAFE", new Object()));
+        whereEqualsList.add(new ColumnValue("STADT", "FLHAFEN", "Auckland"));
+        whereEqualsList.add(new ColumnValue("STADT", "FLHAFE", "Auckland"));
     }
     
     // fill columnlist to test select funtctionality in SQLHelper
@@ -175,8 +176,8 @@ public class SQLHelperUnitTest
     
     private void fillCreateDefinition(){
        try{
-           ParseTree parseTree = getTree(this.createSQL);
-           CreateStatement.CreateColumnDefinition createColumnDef = CreateStatement.new CreateColumnDefinition(parseTree, this.tableNameValid);
+           ParseTree parseTree = getTree(createSQL);
+           CreateStatement.CreateColumnDefinition createColumnDef = CreateStatement.new CreateColumnDefinition(parseTree, tableNameValid);
            createColumnsDefinition.add(createColumnDef);
        }catch(ParseException pe){
            System.err.println(pe.getMessage());
@@ -309,6 +310,39 @@ public class SQLHelperUnitTest
             statement.executeUpdate(EigeneTest);
             System.out.println("Create Holunder");
         } catch(Exception e) {}
+        
+         //Insert für Test Flughafen
+        String aa = "INSERT INTO FLHAFEN VALUES ('AKL', 'NZ ', 'Auckland', 'Auckland International')";                  
+        String ab = "INSERT INTO FLHAFEN VALUES ('ALC', 'E  ', 'Alicante', 'Alicante')";                                
+        String ac = "INSERT INTO FLHAFEN VALUES ('ALF', 'N  ', 'Alta', 'Flughafen Alta')";                              
+        String ad = "INSERT INTO FLHAFEN VALUES ('ANC', 'USA', 'Anchorage', 'Ted Stevens AIA')";                        
+        String ae = "INSERT INTO FLHAFEN VALUES ('ARN', 'S  ', 'Stockholm', 'Arlanda')";                                
+        String af = "INSERT INTO FLHAFEN VALUES ('BCN', 'E  ', 'Barcelona', '')";                                       
+        String ag = "INSERT INTO FLHAFEN VALUES ('BHX', 'GB ', 'Birmingham', '')";                                      
+        String ah = "INSERT INTO FLHAFEN VALUES ('BOS', 'USA', 'Boston', 'Edward Lawrence Logan')";                     
+        String ai = "INSERT INTO FLHAFEN VALUES ('BRE', 'D  ', 'Bremen', 'City Airport Bremen')";                       
+        String aj = "INSERT INTO FLHAFEN VALUES ('BRS', 'GB ', 'Bristol', 'International')";                            
+        String ak = "INSERT INTO FLHAFEN VALUES ('CDG', 'F  ', 'Paris', 'Charles de Gaulle')";                          
+        String al = "INSERT INTO FLHAFEN VALUES ('CGK', 'ID ', 'Jakarta', 'Sukarno-Hatta Airport')";                    
+        String am = "INSERT INTO FLHAFEN VALUES ('CGN', 'D  ', 'Koeln', 'Konrad-Adenauer')";                          
+
+        try{
+           statement.executeUpdate(aa);
+           statement.executeUpdate(ab);
+           statement.executeUpdate(ac);
+           statement.executeUpdate(ad);
+           statement.executeUpdate(ae);
+           statement.executeUpdate(af);
+           statement.executeUpdate(ag);
+           statement.executeUpdate(ah);
+           statement.executeUpdate(ai);
+           statement.executeUpdate(aj);
+           statement.executeUpdate(ak);
+           statement.executeUpdate(al);
+           statement.executeUpdate(am);
+        }catch(Exception e){
+            System.err.println(e.getMessage());
+        }
     }
     
     @BeforeClass
@@ -338,7 +372,7 @@ public class SQLHelperUnitTest
         for(Connection conn : fedConnection.getConn()){
             ResultSet selectTest = null;
             try{
-                selectTest = SQLHelper.select(conn, this.columListTest, this.tableNameValid);
+                selectTest = SQLHelper.select(conn, columListTest, tableNameValid);
                 // checks wether the resultset is empty
                 assertTrue(selectTest.isBeforeFirst());
             }catch(SQLException se){
@@ -353,7 +387,7 @@ public class SQLHelperUnitTest
         for(Connection conn : fedConnection.getConn()){
             ResultSet selectTest = null;
             try{
-                selectTest = SQLHelper.select(conn, this.columListValid, this.tableNameTest);
+                selectTest = SQLHelper.select(conn, columListValid, tableNameTest);
                 // checks wether the resultset is empty
                 assertTrue(selectTest.isBeforeFirst());
             }catch(SQLException se){
@@ -368,14 +402,14 @@ public class SQLHelperUnitTest
         for(Connection conn : fedConnection.getConn()){
             ResultSet countTest = null;
             try{
-                countTest = SQLHelper.select(conn, this.columListValid, this.tableNameValid);
+                countTest = SQLHelper.select(conn, columListValid, tableNameValid);
                 // get rowcount in resultset
                 int rowcount = 0;
                 if (countTest.last()) {
                     rowcount = countTest.getRow();
                 } 
                 
-                assertEquals(this.columListValid.size(), rowcount);
+                assertEquals(rowCountValid, rowcount);
                 
             }catch(SQLException se){
                 System.err.println(se.getMessage());
@@ -389,7 +423,7 @@ public class SQLHelperUnitTest
         for(Connection conn : fedConnection.getConn()){
             ResultSet selectTest = null;
             try{
-                selectTest = SQLHelper.select(conn, this.columListValid, this.tableNameValid, this.whereEqualsList);
+                selectTest = SQLHelper.select(conn, columListValid, tableNameValid, whereEqualsList);
                 // checks wether the resultset is empty
                 assertTrue(selectTest.isBeforeFirst());
             }catch(SQLException se){
@@ -399,20 +433,19 @@ public class SQLHelperUnitTest
     }
     
     // test correct column count with where constraint
-    // TODO
     @Test
-    public void SQLHelperTest_Select_Coun_Where(){
+    public void SQLHelperTest_Select_Count_Where(){
         for(Connection conn : fedConnection.getConn()){
             ResultSet countTest = null;
             try{
-                countTest = SQLHelper.select(conn, this.columListValid, this.tableNameValid, this.whereEqualsList);
+                countTest = SQLHelper.select(conn, columListValid, tableNameValid, whereEqualsList);
                 // get rowcount in resultset
                 int rowcount = 0;
                 if (countTest.last()) {
                     rowcount = countTest.getRow();
                 } 
                 
-                assertEquals(this.columListValid.size(), rowcount);
+                assertEquals(rowCountWhereEquals, rowcount);
                 
             }catch(SQLException se){
                 System.err.println(se.getMessage());
@@ -428,7 +461,7 @@ public class SQLHelperUnitTest
         for(Connection conn : fedConnection.getConn()){
             ResultSet selectTest = null;
             try{
-                selectTest = SQLHelper.select(conn, this.colum1Test, this.tableNameValid);
+                selectTest = SQLHelper.select(conn, colum1Test, tableNameValid);
                 // checks wether the resultset is empty
                 assertTrue(selectTest.isBeforeFirst());
             }catch(SQLException se){
@@ -443,7 +476,7 @@ public class SQLHelperUnitTest
         for(Connection conn : fedConnection.getConn()){
             ResultSet selectTest = null;
             try{
-                selectTest = SQLHelper.select(conn, this.colum1Valid, this.tableNameTest);
+                selectTest = SQLHelper.select(conn, colum1Valid, tableNameTest);
                 // checks wether the resultset is empty
                 assertTrue(selectTest.isBeforeFirst());
             }catch(SQLException se){
@@ -458,7 +491,7 @@ public class SQLHelperUnitTest
         for(Connection conn : fedConnection.getConn()){
             ResultSet selectTest = null;
             try{
-                selectTest = SQLHelper.select(conn, this.colum1Test, this.colum2Test, this.tableNameValid);
+                selectTest = SQLHelper.select(conn, colum1Test, colum2Test, tableNameValid);
                 // checks wether the resultset is empty
                 assertTrue(selectTest.isBeforeFirst());
             }catch(SQLException se){
@@ -473,7 +506,7 @@ public class SQLHelperUnitTest
         for(Connection conn : fedConnection.getConn()){
             ResultSet selectTest = null;
             try{
-                selectTest = SQLHelper.select(conn, this.colum1Valid, this.colum2Valid, this.tableNameTest);
+                selectTest = SQLHelper.select(conn, colum1Valid, colum2Valid, tableNameTest);
                 // checks wether the resultset is empty
                 assertTrue(selectTest.isBeforeFirst());
             }catch(SQLException se){
@@ -488,7 +521,7 @@ public class SQLHelperUnitTest
         for(Connection conn : fedConnection.getConn()){
             ResultSet selectTest = null;
             try{
-                selectTest = SQLHelper.select(conn, this.colum1Test, this.colum2Test, this.colum3Test, this.tableNameValid);
+                selectTest = SQLHelper.select(conn, colum1Test, colum2Test, colum3Test, tableNameValid);
                 // checks wether the resultset is empty
                 assertTrue(selectTest.isBeforeFirst());
             }catch(SQLException se){
@@ -503,7 +536,7 @@ public class SQLHelperUnitTest
         for(Connection conn : fedConnection.getConn()){
             ResultSet selectTest = null;
             try{
-                selectTest = SQLHelper.select(conn, this.colum1Valid, this.colum2Valid, this.colum3Valid, this.tableNameTest);
+                selectTest = SQLHelper.select(conn, colum1Valid, colum2Valid, colum3Valid, tableNameTest);
                 // checks wether the resultset is empty
                 assertTrue(selectTest.isBeforeFirst());
             }catch(SQLException se){
@@ -517,7 +550,7 @@ public class SQLHelperUnitTest
     @Test
     public void SQLHelperTest_TrySelect_Column_add1Column(){
         for(Connection conn : fedConnection.getConn()){
-            ResultSet selectTest = SQLHelper.trySelect(conn, this.colum1Test, this.tableNameValid);
+            ResultSet selectTest = SQLHelper.trySelect(conn, colum1Test, tableNameValid);
             assertNull(selectTest);
         }
     }
@@ -526,7 +559,7 @@ public class SQLHelperUnitTest
     @Test
     public void SQLHelperTest_TrySelect_Table_add1Column(){
         for(Connection conn : fedConnection.getConn()){
-            ResultSet selectTest = SQLHelper.trySelect(conn, this.colum1Valid, this.tableNameTest);
+            ResultSet selectTest = SQLHelper.trySelect(conn, colum1Valid, tableNameTest);
             assertNull(selectTest);
         }
     }
@@ -535,7 +568,7 @@ public class SQLHelperUnitTest
     @Test
     public void SQLHelperTest_TrySelect_Column_add2Column(){
         for(Connection conn : fedConnection.getConn()){
-            ResultSet selectTest = SQLHelper.trySelect(conn, this.colum1Test, this.colum2Test, this.tableNameValid);
+            ResultSet selectTest = SQLHelper.trySelect(conn, colum1Test, colum2Test, tableNameValid);
             assertNull(selectTest);
         }
     }
@@ -544,7 +577,7 @@ public class SQLHelperUnitTest
     @Test
     public void SQLHelperTest_TrySelect_Table_add2Column(){
         for(Connection conn : fedConnection.getConn()){
-            ResultSet selectTest = SQLHelper.trySelect(conn, this.colum1Valid, this.colum2Valid, this.tableNameTest);
+            ResultSet selectTest = SQLHelper.trySelect(conn, colum1Valid, colum2Valid, tableNameTest);
             assertNull(selectTest);
         }
     }
@@ -553,7 +586,7 @@ public class SQLHelperUnitTest
     @Test
     public void SQLHelperTest_TrySelect_Column_add3Column(){
         for(Connection conn : fedConnection.getConn()){
-            ResultSet selectTest = SQLHelper.trySelect(conn, this.colum1Test, this.colum2Test, this.colum3Test, this.tableNameValid);
+            ResultSet selectTest = SQLHelper.trySelect(conn, colum1Test, colum2Test, colum3Test, tableNameValid);
             assertNull(selectTest);                
         }
     }
@@ -562,7 +595,7 @@ public class SQLHelperUnitTest
     @Test
     public void SQLHelperTest_TrySelect_Table_add3Column(){
         for(Connection conn : fedConnection.getConn()){
-            ResultSet selectTest = SQLHelper.trySelect(conn, this.colum1Valid, this.colum2Valid, this.colum3Valid, this.tableNameTest);
+            ResultSet selectTest = SQLHelper.trySelect(conn, colum1Valid, colum2Valid, colum3Valid, tableNameTest);
             assertNull(selectTest);
         }
     }
@@ -574,7 +607,7 @@ public class SQLHelperUnitTest
         for(Connection conn : fedConnection.getConn()){
             ResultSet selectTest = null;
             try{
-                selectTest = SQLHelper.selectAll(conn, this.tableNameTest);
+                selectTest = SQLHelper.selectAll(conn, tableNameTest);
                 // checks wether the resultset is empty
                 assertTrue(selectTest.isBeforeFirst());
             }catch(SQLException se){
@@ -587,7 +620,7 @@ public class SQLHelperUnitTest
     @Test
     public void SQLHelperTest_TrySelectAll_Table(){
         for(Connection conn : fedConnection.getConn()){
-            ResultSet selectTest = SQLHelper.trySelectAll(conn, this.tableNameTest);
+            ResultSet selectTest = SQLHelper.trySelectAll(conn, tableNameTest);
             assertNull(selectTest);
         }
     }
@@ -598,7 +631,7 @@ public class SQLHelperUnitTest
         for(Connection conn : fedConnection.getConn()){
             ResultSet selectTest = null;
             try{
-                selectTest = SQLHelper.selectAll(conn, this.tableNameTest, this.whereStringTest);
+                selectTest = SQLHelper.selectAll(conn, tableNameTest, whereStringTest);
                 // checks wether the resultset is empty
                 assertTrue(selectTest.isBeforeFirst());
             }catch(SQLException se){
@@ -613,8 +646,8 @@ public class SQLHelperUnitTest
         for(Connection conn : fedConnection.getConn()){
             ResultSet selectTest = null;
             try{
-                SQLHelper.dropTable(conn, this.tableNameValid);
-                selectTest = SQLHelper.select(conn, this.colum1Valid, this.tableNameValid);
+                SQLHelper.dropTable(conn, tableNameValid);
+                selectTest = SQLHelper.select(conn, colum1Valid, tableNameValid);
                 // checks wether the resultset is empty
                 assertTrue(selectTest.isBeforeFirst());
                 fillDataBase();
@@ -628,7 +661,7 @@ public class SQLHelperUnitTest
     @Test
     public void SQLHelperTest_TryDropTable_Table(){
         for(Connection conn : fedConnection.getConn()){
-            assertFalse(SQLHelper.tryDropTable(conn, this.tableNameTest));
+            assertFalse(SQLHelper.tryDropTable(conn, tableNameTest));
             fillDataBase();
         }
     }
@@ -639,10 +672,10 @@ public class SQLHelperUnitTest
     public void SQLHelperTest_CreateTable_Table(){
         for(Connection conn : fedConnection.getConn()){
             try{
-                SQLHelper.createTable(conn, this.createtableNameValid, this.createColumnsDefinition);
-                ResultSet createResult = SQLHelper.select(conn, columListValid, this.createtableNameValid);
+                SQLHelper.createTable(conn, createtableNameValid, createColumnsDefinition);
+                ResultSet createResult = SQLHelper.select(conn, columListValid, createtableNameValid);
                 assertFalse(createResult.isBeforeFirst());
-                SQLHelper.dropTable(conn, this.createtableNameValid);
+                SQLHelper.dropTable(conn, createtableNameValid);
             }catch(SQLException se){
                 System.err.println(se.getMessage());
             }
