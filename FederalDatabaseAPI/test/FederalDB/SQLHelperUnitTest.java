@@ -64,7 +64,7 @@ public class SQLHelperUnitTest
     final String whereStringTest = "LAND is ot NULL";
     final String whereStringValid = "LAND is not NULL";
     
-    final String createtableNameValid = "CREATIONTABLE";
+    final String createtableNameValid = "Persons";
     final String createSQL = "CREATE TABLE Persons (\n" +
     "    PersonID int,\n" +
     "    LastName varchar(255),\n" +
