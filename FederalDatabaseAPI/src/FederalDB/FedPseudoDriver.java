@@ -32,7 +32,7 @@ public class FedPseudoDriver implements FedPseudoDriverInterface
     public FedConnection getConnection(String username, String password) 
     {
         Connection[] con = new Connection [3];
-       
+        FedConnection cone = null;
          try{
             DriverManager.registerDriver (new oracle.jdbc.driver.OracleDriver());
           
@@ -44,11 +44,12 @@ public class FedPseudoDriver implements FedPseudoDriverInterface
             con [1]= DriverManager.getConnection("jdbc:oracle:thin:@krakatau.informatik.hs-fulda.de:1521:ORALV10A",username,password);
             con [2]= DriverManager.getConnection("jdbc:oracle:thin:@pinatubo.informatik.hs-fulda.de:1521:ORALV8A",username,password);
             
+            cone = new FedConnection(con); 
         }catch (Exception exc)
         {
             exc.printStackTrace();
         }
-        FedConnection cone= new FedConnection(con);            
+                  
         return cone;
     }
 }

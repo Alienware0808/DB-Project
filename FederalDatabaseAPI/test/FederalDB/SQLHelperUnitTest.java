@@ -19,8 +19,21 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.List;
+import org.antlr.v4.runtime.ANTLRErrorListener;
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.Parser;
+import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.Recognizer;
+import org.antlr.v4.runtime.atn.ATNConfigSet;
+import org.antlr.v4.runtime.dfa.DFA;
 import parser.AnalysedStatements.CreateStatement;
+import parser.ParseException;
+import parser.SQLiteLexer;
+import parser.SQLiteParser;
 /**
  *
  * @author Franz Weidmann
@@ -51,6 +64,14 @@ public class SQLHelperUnitTest
     final String whereStringTest = "LAND is ot NULL";
     final String whereStringValid = "LAND is not NULL";
     
+    final String createtableNameValid = "CREATIONTABLE";
+    final String createSQL = "CREATE TABLE Persons (\n" +
+    "    PersonID int,\n" +
+    "    LastName varchar(255),\n" +
+    "    FirstName varchar(255),\n" +
+    "    Address varchar(255),\n" +
+    "    City varchar(255))";
+
     final List<ColumnDefinition> columListTest = new ArrayList<ColumnDefinition>();
     final List<ColumnDefinition> columListValid = new ArrayList<ColumnDefinition>();
     
@@ -97,12 +118,6 @@ public class SQLHelperUnitTest
         fillCreateDefinition();
     }
     
-    private void fillCreateDefinition(){
-        ParseTree pt = new ParseTree();
-        
-        createColumnsDefinition.add(new CreateStatement.CreateColumnDefinition(this.tableNameValid, new ParseTree()))
-    }
-    
     // TODO: correct use of object ?
     private void fillWhereEqualslist(){
         whereEqualsList.add(new ColumnValue("STADT", "FLHAFEN", new Object()));
@@ -116,6 +131,56 @@ public class SQLHelperUnitTest
         
         columListValid.add(new ColumnDefinition("stadt", tableNameValid));
         columListValid.add(new ColumnDefinition("land", tableNameValid));
+    }
+    
+    private ParseTree getTree(String sql) throws ParseException{
+        CharStream stream = new ANTLRInputStream(sql);
+        SQLiteLexer lexer = new SQLiteLexer(stream);
+        SQLiteParser parser = new SQLiteParser(new CommonTokenStream(lexer));
+        List<String> errors = new ArrayList<String>();
+        parser.addErrorListener(new ANTLRErrorListener() {
+            @Override
+            public void syntaxError(Recognizer<?, ?> rcgnzr, Object o, int i, int i1, String string, RecognitionException re) {
+                errors.add("SyntaxError: "+ i + ", " + i1 + ": " + string);
+            }
+
+            @Override
+            public void reportAmbiguity(Parser parser, DFA dfa, int i, int i1, boolean bln, BitSet bitset, ATNConfigSet atncs) {
+                //errors.add("Ambiguity: " + i + ", " + i1);
+            }
+
+            @Override
+            public void reportAttemptingFullContext(Parser parser, DFA dfa, int i, int i1, BitSet bitset, ATNConfigSet atncs) {
+                 //errors.add("AttemptingFullContext: " + i + ", " + i1);
+            }
+
+            @Override
+            public void reportContextSensitivity(Parser parser, DFA dfa, int i, int i1, int i2, ATNConfigSet atncs) {
+                 //errors.add("ContextSensitivity: " + i + ", " + i1);
+            }
+        });
+        SQLiteParser.ParseContext context = parser.parse();
+        
+        // Check for any errors 
+        if(context.error() != null)
+            context.error().forEach((next) -> {
+                errors.add(next.toString());
+            });
+        if(errors.size() > 0)
+            throw new ParseException(errors);
+        
+        // Get the list with all SQL Statements
+        return context.children.get(0); // sql_stmt_list
+    }
+    
+    private void fillCreateDefinition(){
+       try{
+           ParseTree parseTree = getTree(this.createSQL);
+           CreateStatement.CreateColumnDefinition createColumnDef = CreateStatement.new CreateColumnDefinition(parseTree, this.tableNameValid);
+           createColumnsDefinition.add(createColumnDef);
+       }catch(ParseException pe){
+           System.err.println(pe.getMessage());
+       }
     }
     
     // fill database to be able to test functions
@@ -297,6 +362,27 @@ public class SQLHelperUnitTest
         }
     }
     
+    // test correct column count
+    @Test
+    public void SQLHelperTest_Select_Count(){
+        for(Connection conn : fedConnection.getConn()){
+            ResultSet countTest = null;
+            try{
+                countTest = SQLHelper.select(conn, this.columListValid, this.tableNameValid);
+                // get rowcount in resultset
+                int rowcount = 0;
+                if (countTest.last()) {
+                    rowcount = countTest.getRow();
+                } 
+                
+                assertEquals(this.columListValid.size(), rowcount);
+                
+            }catch(SQLException se){
+                System.err.println(se.getMessage());
+            }
+        }
+    }
+    
     // invalid where equals
     @Test
     public void SQLHelperTest_Select_Where(){
@@ -306,6 +392,28 @@ public class SQLHelperUnitTest
                 selectTest = SQLHelper.select(conn, this.columListValid, this.tableNameValid, this.whereEqualsList);
                 // checks wether the resultset is empty
                 assertTrue(selectTest.isBeforeFirst());
+            }catch(SQLException se){
+                System.err.println(se.getMessage());
+            }
+        }
+    }
+    
+    // test correct column count with where constraint
+    // TODO
+    @Test
+    public void SQLHelperTest_Select_Coun_Where(){
+        for(Connection conn : fedConnection.getConn()){
+            ResultSet countTest = null;
+            try{
+                countTest = SQLHelper.select(conn, this.columListValid, this.tableNameValid, this.whereEqualsList);
+                // get rowcount in resultset
+                int rowcount = 0;
+                if (countTest.last()) {
+                    rowcount = countTest.getRow();
+                } 
+                
+                assertEquals(this.columListValid.size(), rowcount);
+                
             }catch(SQLException se){
                 System.err.println(se.getMessage());
             }
@@ -530,11 +638,11 @@ public class SQLHelperUnitTest
     @Test
     public void SQLHelperTest_CreateTable_Table(){
         for(Connection conn : fedConnection.getConn()){
-            int rowCount = 0;
             try{
-                rowCount = SQLHelper.createTable(conn, tableNameTest, this.createColumnsDefinition);
-                assertEquals(1, rowCount);
-                SQLHelper.dropTable(conn, tableNameTest);
+                SQLHelper.createTable(conn, this.createtableNameValid, this.createColumnsDefinition);
+                ResultSet createResult = SQLHelper.select(conn, columListValid, this.createtableNameValid);
+                assertFalse(createResult.isBeforeFirst());
+                SQLHelper.dropTable(conn, this.createtableNameValid);
             }catch(SQLException se){
                 System.err.println(se.getMessage());
             }
