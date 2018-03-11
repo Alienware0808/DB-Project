@@ -10,6 +10,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Savepoint;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import parser.AnalysedStatements.CreateStatement;
 
 public class FedConnection implements FedConnectionInterface
@@ -23,6 +25,9 @@ public class FedConnection implements FedConnectionInterface
         this.conn = conns;
         try
         {
+            conn[0].setAutoCommit(false);
+            conn[1].setAutoCommit(false);
+            conn[2].setAutoCommit(false);
             metaDataManger = new MetaDataManager(conn[0]);
         }
         catch (Exception ex)
@@ -53,7 +58,6 @@ public class FedConnection implements FedConnectionInterface
                 this.conn[i].close();
             } catch (SQLException se)
             {
-
             }
         }
     }
@@ -72,13 +76,27 @@ public class FedConnection implements FedConnectionInterface
     @Override
     public void rollback() throws FedException
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        for(Connection con : conn)
+            try
+            {
+                con.rollback();
+            } catch (SQLException ex)
+            {
+                throw new FedException(ex);
+            }
     }
 
     @Override
     public void commit() throws FedException
     {
-        throw new FedException(new UnsupportedOperationException("Not supported yet.")); //To change body of generated methods, choose Tools | Templates.
+        for(Connection con : conn)
+            try
+            {
+                con.commit();
+            } catch (SQLException ex)
+            {
+                throw new FedException(ex);
+            }
     }
     
     public FedSavepoint setSavepoint() throws SQLException

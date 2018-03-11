@@ -36,13 +36,8 @@ public class MetaDataSet implements java.io.Serializable
     }
 
     public void deleteEntry(String tableName)
-            throws Exception
     {
         MetaDataEntry mdE = hashMap.remove(tableName.toLowerCase());
-        if (mdE == null)
-        {
-            throw new Exception("Metadata Entry not found");
-        }
     }
 
     public MetaDataEntry getEntry(String tableName)

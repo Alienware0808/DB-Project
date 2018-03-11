@@ -112,7 +112,7 @@ public class FedHorizontalResultSet implements FedResultSetExtendedInterface
     public boolean first() throws FedException
     {
         boolean res = first.first();
-        isAtFirst = true;
+        isAtFirst = res;
         if (second.first())
         {
             return true;
@@ -128,7 +128,7 @@ public class FedHorizontalResultSet implements FedResultSetExtendedInterface
             return first.getCursorPosition();
         } else
         {
-            return first.getCursorPosition() + second.getCursorPosition();
+            return first.getRowCount()+ second.getCursorPosition();
         }
     }
 
@@ -137,8 +137,10 @@ public class FedHorizontalResultSet implements FedResultSetExtendedInterface
     {
         if (position > first.getRowCount())
         {
+            isAtFirst = false;
             return second.setCursorPosition(position - first.getRowCount());
         }
+        isAtFirst = true;
         return first.setCursorPosition(position);
     }
 
@@ -146,5 +148,15 @@ public class FedHorizontalResultSet implements FedResultSetExtendedInterface
     public int getRowCount() throws FedException
     {
         return first.getRowCount() + second.getRowCount();
+    }
+
+    @Override
+    public Integer getInteger(int columnIndex) throws FedException
+    {
+        if (isAtFirst)
+        {
+            return first.getInteger(columnIndex);
+        }
+        return second.getInteger(columnIndex);
     }
 }

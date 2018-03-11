@@ -1,5 +1,6 @@
 package parser.AnalysedStatements;
 
+import java.sql.Types;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -11,8 +12,8 @@ import parser.Walker;
 @JsonIgnoreProperties({"tree", "text"})
 public class CreateColumnDefinition extends MetaData.ColumnDefinition  implements java.io.Serializable
 {
-    public static final int TYPE_INT = 0;
-    public static final int TYPE_VARCHAR = 1;
+    public static final int TYPE_INT = Types.INTEGER;
+    public static final int TYPE_VARCHAR = Types.VARCHAR;
     private int type;
     private int typeLength;
     private transient ParseTree tree;

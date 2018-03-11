@@ -106,7 +106,6 @@ public class CreateStatement extends Statement
             if (tree.getChild(i) instanceof SQLiteParser.Table_constraintContext)
             {
                 ParseTree contree = tree.getChild(i);
-                String dummyname = contree.getText();
                 int j = 1;
                 String constraint_name = null;
                 if (contree.getChild(j) instanceof SQLiteParser.NameContext)
@@ -149,6 +148,8 @@ public class CreateStatement extends Statement
                     j++; // skip ")"
                     ParseTree keyclause = contree.getChild(j);
                     foreignkey.referenceToTable = fedConnection.metaDataManger.getTableMetaData(keyclause.getChild(1).getText());
+                    if(foreignkey.referenceToTable == null)
+                        throw new ContextException("Referenced Table does not exist");
                     foreignkey.referenceToColumn = keyclause.getChild(3).getText();
                     this.tableConstrains.add(foreignkey);
                 }
@@ -176,7 +177,7 @@ public class CreateStatement extends Statement
                         }
                         this.tableConstrains.add(between);
                     }
-                    if (IsTerminalNode(expr.getChild(1), SQLiteParser.K_IS))
+                    else if (IsTerminalNode(expr.getChild(1), SQLiteParser.K_IS))
                     {
                         ColumnDefinition coldef = getColumnDefinitionByName(expr.getChild(0).getText());
                         if (coldef == null)
@@ -258,7 +259,6 @@ public class CreateStatement extends Statement
 
     private Condition parseCondition(ParseTree expr) throws ContextException
     {
-        String dummyname = expr.getText();
         switch (expr.getChildCount())
         {
             case 3:
@@ -326,7 +326,7 @@ public class CreateStatement extends Statement
                     String value = expr.getText().trim();
                     if (value.startsWith("'"))
                     {
-                        return new SingleValueDescriptor(value.subSequence(1, value.length() - 2).toString());
+                        return new SingleValueDescriptor(value.subSequence(1, value.length() - 1).toString());
                     }
                     return new SingleValueDescriptor(Integer.parseInt(value));
                 } else if (expr instanceof SQLiteParser.Column_nameContext || expr.getChild(0) instanceof SQLiteParser.Column_nameContext )

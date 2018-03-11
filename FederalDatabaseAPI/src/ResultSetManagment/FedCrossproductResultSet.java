@@ -151,4 +151,14 @@ public class FedCrossproductResultSet implements FedResultSetExtendedInterface
     {
         return new FedCrossproductResultSet(left, right);
     }
+
+    @Override
+    public Integer getInteger(int columnIndex) throws FedException
+    {
+        if (columnIndex > left.getColumnCount())
+        {
+            return right.getInteger(columnIndex - left.getColumnCount());
+        }
+        return left.getInteger(columnIndex);
+    }
 }

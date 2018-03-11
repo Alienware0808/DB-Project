@@ -56,4 +56,10 @@ public class MinAggregation extends Aggregation
         }
         return min; 
     }
+    
+    @Override
+    public String toWhereString()
+    {
+        return "min("+name+")";
+    }
 }

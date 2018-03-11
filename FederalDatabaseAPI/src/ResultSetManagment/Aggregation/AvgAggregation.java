@@ -52,4 +52,10 @@ public class AvgAggregation extends Aggregation
         }
         return sum/indices.size(); 
     }
+
+    @Override
+    public String toWhereString()
+    {
+        return "avg("+name+")";
+    }
 }

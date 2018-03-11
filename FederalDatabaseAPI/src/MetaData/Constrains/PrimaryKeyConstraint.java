@@ -132,4 +132,10 @@ public class PrimaryKeyConstraint extends Constraint implements java.io.Serializ
         }
         return false;
     }
+
+    @Override
+    public String toString()
+    {
+        return "PRIMARY KEY CONSTRAINT " + this.PrimaryKey.toColumnString();
+    }
 }

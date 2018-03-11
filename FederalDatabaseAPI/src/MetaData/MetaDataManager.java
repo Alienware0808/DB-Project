@@ -57,12 +57,9 @@ public class MetaDataManager
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(selectSql);
             rs.next();
-            byte[] buf = rs.getBytes(1);
-            if (buf != null) {
-                ObjectInputStream objectIn = new ObjectInputStream(
-                    new ByteArrayInputStream(buf));
-                metaDataSet = (MetaDataSet) objectIn.readObject();
-            }
+            InputStream in = rs.getBinaryStream(1);
+            ObjectInputStream objstream = new ObjectInputStream(in);
+            metaDataSet = (MetaDataSet) objstream.readObject();
         }
     }
 
@@ -106,18 +103,26 @@ public class MetaDataManager
 
     private void save() throws Exception
     {
+        File tempFile = File.createTempFile("prefix-", "-suffix");
         try {
             PreparedStatement pstmt =
                 conn.prepareStatement("update META set ENTRY = ?");
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            //ByteArrayOutputStream baos = new ByteArrayOutputStream();            
+            FileOutputStream baos = new FileOutputStream(tempFile);
             ObjectOutputStream oout = new ObjectOutputStream(baos);
             oout.writeObject(metaDataSet);
             oout.close();
-            pstmt.setBytes(1, baos.toByteArray());
+            baos.close();
+            FileInputStream fis = new FileInputStream(tempFile);
+            int filelen = (int)tempFile.length();
+            pstmt.setBinaryStream(1, fis, filelen); 
             pstmt.executeUpdate();
             pstmt.close();
         } catch (Exception i) {
            i.printStackTrace();
+        }
+        finally{
+            tempFile.delete();
         }
     }
 }

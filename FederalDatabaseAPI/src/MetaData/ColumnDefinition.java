@@ -9,9 +9,13 @@ import Conditions.IValue;
 import FederalDB.FedException;
 import FederalDB.FedResultSetInterface;
 import ResultSetManagment.FedResultSetExtendedInterface;
+import java.util.AbstractList;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import parser.AnalysedStatements.CreateColumnDefinition;
 
 /**
  *
@@ -35,7 +39,7 @@ public class ColumnDefinition implements IValue, java.io.Serializable
 
     private int getIndexByName(FedResultSetInterface resultSet) throws FedException
     {
-        for (int i = 0; i < resultSet.getColumnCount(); i++)
+        for (int i = 1; i <= resultSet.getColumnCount(); i++)
         {
             if (resultSet.getColumnName(i).trim().toLowerCase().equals(name.toLowerCase().trim()))
             {
@@ -46,7 +50,7 @@ public class ColumnDefinition implements IValue, java.io.Serializable
     }
 
     @Override
-    public Object getValue(FedResultSetInterface resultSet)
+    public Object getValue(FedResultSetExtendedInterface resultSet)
             throws FedException
     {
         int index = getIndexByName(resultSet);
@@ -57,13 +61,13 @@ public class ColumnDefinition implements IValue, java.io.Serializable
         try
         {
             int type = resultSet.getColumnType(index);
-            if (type == 0)
+            if (Objects.equals(type, CreateColumnDefinition.TYPE_VARCHAR))
             {
                 // string
                 return resultSet.getString(index);
             } else
             {
-                return resultSet.getInt(index);
+                return resultSet.getInteger(index);
             }
         } catch (FedException ex)
         {
@@ -83,8 +87,10 @@ public class ColumnDefinition implements IValue, java.io.Serializable
         {
             return false;
         }
-        if (((ColumnDefinition) (obj)).name.equals(this.name)
-                && ((ColumnDefinition) (obj)).tableName.equals(this.tableName))
+        String otherName = ((ColumnDefinition) (obj)).name.toLowerCase();
+        String otherTable = ((ColumnDefinition) (obj)).tableName.toLowerCase();
+        if (otherName.equals(this.name.toLowerCase())
+                && otherTable.equals(this.tableName.toLowerCase()))
         {
             return true;
         }
@@ -97,13 +103,44 @@ public class ColumnDefinition implements IValue, java.io.Serializable
         return tableName + "." + name;
     }
     
+    public String toColumnString()
+    {
+        return toWhereString();
+    }
+
+    @Override
+    public String toString()
+    {
+        return tableName + "." + name;
+    }
+    
+    public static String toColumnString(List<ColumnDefinition> coldefs)
+    {
+        if(coldefs.isEmpty())
+            return "";
+        String erg = coldefs.get(0).toColumnString();
+        for(int i = 1; i < coldefs.size(); i++)
+            erg +=  ", " + coldefs.get(i).toColumnString();
+        return erg;
+    }
+    
     public static String toWhereString(List<ColumnDefinition> coldefs)
     {
         if(coldefs.isEmpty())
             return "";
-        String erg = coldefs.get(0).toWhereString() + ", ";
+        String erg = coldefs.get(0).toWhereString();
         for(int i = 1; i < coldefs.size(); i++)
-            erg += coldefs.get(i).toWhereString() + ", ";
+            erg +=  ", " + coldefs.get(i).toWhereString();
         return erg;
+    }
+    
+    public static List<ColumnDefinition> filtered(List<CreateColumnDefinition> allcolls, List<ColumnDefinition> selection)
+    {
+        List<ColumnDefinition> result = new ArrayList<>();
+        selection.stream().filter((sel) -> (allcolls.contains(sel))).forEachOrdered((sel) ->
+        {
+            result.add(sel);
+        });
+        return result;
     }
 }

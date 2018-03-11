@@ -23,6 +23,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import parser.AnalysedStatements.CreateStatement;
 
 /**
@@ -48,9 +49,10 @@ public class ForeignKeyConstraint extends Constraint implements java.io.Serializ
         ColumnValue foreignValue = null;
         for (ColumnValue colValue : values)
         {
-            if (foreignColumn.equals(colValue))
+            if (forColumn.equals(colValue))
             {
-                foreignValue = colValue;
+                //foreignValue = colValue;
+                foreignValue = new ColumnValue(foreignColumn.name, foreignColumn.tableName, colValue.value);
                 break;
             }
         }
@@ -85,7 +87,7 @@ public class ForeignKeyConstraint extends Constraint implements java.io.Serializ
             return false;
         } else if (entry.FedType instanceof FedVerticalType)
         {
-            int dbindex = ((FedVerticalType) entry.FedType).getDatabaseForColumn(foreignValue);
+            int dbindex = ((FedVerticalType) entry.FedType).getDatabaseForColumn(foreignColumn);
             ResultSet resultSet = SQLHelper.select(fedConnection.getConn()[dbindex],
                     foreignColumnAsList, foreignColumn.tableName, foreignValueAsList);
             return resultSet.next();
@@ -201,7 +203,7 @@ public class ForeignKeyConstraint extends Constraint implements java.io.Serializ
             {
                 do
                 {
-                    if (left.getInt(1) == (right.getInt(1)))
+                    if (Objects.equals(left.getInteger(1), right.getInteger(1)))
                     {
                         return true;
                     }
@@ -215,5 +217,11 @@ public class ForeignKeyConstraint extends Constraint implements java.io.Serializ
     public ColumnDefinition getForeignColumn()
     {
         return foreignColumn;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "FOREIGN KEY CONSTRAINT " + forColumn.toColumnString() + " -> " + this.foreignColumn.toColumnString(); 
     }
 }

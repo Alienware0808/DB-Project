@@ -45,13 +45,25 @@ public class ValueWrapperResultSet implements FedResultSetExtendedInterface
     @Override
     public String getString(int columnIndex) throws FedException
     {
-        return values.get(columnIndex).value.toString();
+        if(values.get(columnIndex - 1).value != null)
+            return values.get(columnIndex - 1).value.toString();
+        return null;
     }
 
     @Override
     public int getInt(int columnIndex) throws FedException
     {
-        return (int) values.get(columnIndex).value;
+        if(values.get(columnIndex - 1).value != null)
+            return (int) values.get(columnIndex - 1).value;
+        return 0;
+    }
+    
+    @Override
+    public Integer getInteger(int columnIndex) throws FedException
+    {
+        if(values.get(columnIndex - 1).value != null)
+            return (int) values.get(columnIndex - 1).value;
+        return null;
     }
 
     @Override
@@ -63,13 +75,13 @@ public class ValueWrapperResultSet implements FedResultSetExtendedInterface
     @Override
     public String getColumnName(int index) throws FedException
     {
-        return values.get(index).name;
+        return values.get(index - 1).name;
     }
 
     @Override
     public int getColumnType(int index) throws FedException
     {
-        if(this.values.get(index).value instanceof String)
+        if(this.values.get(index - 1).value instanceof String)
             return CreateColumnDefinition.TYPE_VARCHAR;
         return CreateColumnDefinition.TYPE_INT;
     }

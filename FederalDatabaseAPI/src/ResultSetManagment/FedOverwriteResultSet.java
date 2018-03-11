@@ -76,7 +76,10 @@ public class FedOverwriteResultSet implements FedResultSetExtendedInterface
     {
         if (indexToValue.containsKey(columnIndex))
         {
-            return indexToValue.get(columnIndex).value.toString();
+            Object value = indexToValue.get(columnIndex).value;
+            if(value != null)
+                return value.toString();
+            return null;
         }
         return resultSet.getString(columnIndex);
     }
@@ -113,6 +116,16 @@ public class FedOverwriteResultSet implements FedResultSetExtendedInterface
     public void close() throws FedException
     {
         resultSet.close();
+    }
+
+    @Override
+    public Integer getInteger(int columnIndex) throws FedException
+    {
+        if (indexToValue.containsKey(columnIndex))
+        {
+            return (Integer) indexToValue.get(columnIndex).value;
+        }
+        return resultSet.getInteger(columnIndex);
     }
 
 }

@@ -9,6 +9,7 @@ import FederalDB.FedException;
 import FederalDB.FedResultSetInterface;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -167,5 +168,20 @@ public class SqlWrapperResultSet implements FedResultSetExtendedInterface
             }
         }
         return cachedRowCount;
+    }
+
+    @Override
+    public Integer getInteger(int columnIndex) throws FedException
+    {
+        try
+        {
+            int res = resultSet.getInt(columnIndex);
+            if(resultSet.wasNull())
+                return null;
+            return res;
+        } catch (SQLException ex)
+        {
+            throw new FedException(ex);
+        }
     }
 }

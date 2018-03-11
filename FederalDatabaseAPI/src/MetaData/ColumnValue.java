@@ -19,4 +19,12 @@ public class ColumnValue extends ColumnDefinition  implements java.io.Serializab
         super(columnName, tableName);
         this.value = value;
     }
+
+    @Override
+    public String toString()
+    {
+        return super.toString() + " = " + String.valueOf(value);
+    }
+    
+    
 }

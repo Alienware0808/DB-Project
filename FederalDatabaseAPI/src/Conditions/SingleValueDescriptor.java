@@ -6,12 +6,14 @@
 package Conditions;
 
 import FederalDB.FedResultSetInterface;
+import ResultSetManagment.FedResultSetExtendedInterface;
+import java.io.Serializable;
 
 /**
  *
  * @author Admin
  */
-public class SingleValueDescriptor implements IValue
+public class SingleValueDescriptor implements IValue, Serializable
 {
 
     public Object Value;
@@ -26,7 +28,7 @@ public class SingleValueDescriptor implements IValue
     }
 
     @Override
-    public Object getValue(FedResultSetInterface resultSet)
+    public Object getValue(FedResultSetExtendedInterface resultSet)
     {
         return Value;
     }

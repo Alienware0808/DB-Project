@@ -56,4 +56,10 @@ public class MaxAggregation extends Aggregation
         }
         return max; 
     }
+    
+    @Override
+    public String toWhereString()
+    {
+        return "max("+name+")";
+    }
 }

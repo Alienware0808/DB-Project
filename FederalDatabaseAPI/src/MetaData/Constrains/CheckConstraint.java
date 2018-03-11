@@ -11,6 +11,7 @@ import FederalDB.FedConnection;
 import FederalDB.FedResultSetInterface;
 import MetaData.ColumnValue;
 import ResultSetManagment.FedOverwriteResultSet;
+import ResultSetManagment.FedResultSet;
 import ResultSetManagment.FedResultSetExtendedInterface;
 import ResultSetManagment.ValueWrapperResultSet;
 import java.util.ArrayList;
@@ -54,11 +55,18 @@ public class CheckConstraint extends Constraint implements java.io.Serializable
         MetaData.MetaDataEntry meta = fedConnection.metaDataManger.getTableMetaData(values.get(0).tableName);
         FedResultSetExtendedInterface resultSet = FedHelper.selectAllFromSingleTable(fedConnection, meta.TableName, where);
         FedOverwriteResultSet ov = new FedOverwriteResultSet(resultSet, values);
-        int filteredCount = condition.execute(ov).size();
-        if (filteredCount != resultSet.getRowCount())
-        {
+        String ov_str = FedResultSet.printOut(ov);
+        String resultSet_str = FedResultSet.printOut(resultSet);
+        int filteredCount = condition.executeIgnoreNull(ov).size();
+        int resCount = resultSet.getRowCount();
+        if (filteredCount != resCount)
             return false;
-        }
         return true;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "CHECK CONSTRAINT " + condition.toWhereString();
     }
 }

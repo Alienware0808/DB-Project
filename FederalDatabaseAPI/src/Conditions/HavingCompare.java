@@ -11,7 +11,7 @@ import javafx.collections.transformation.SortedList;
  *
  * @author Tobias Habermann
  */
-public class HavingCompare
+public class HavingCompare 
 {
 
     public final CompareType type;

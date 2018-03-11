@@ -36,7 +36,7 @@ public class FedConditionResultSet implements FedResultSetExtendedInterface
         index = 0;
         if (filteredRows.size() > 0)
         {
-            return resultSet.setCursorPosition(filteredRows.get(0));
+            return resultSet.setCursorPosition(filteredRows.get(index));
         }
         return false;
     }
@@ -62,7 +62,7 @@ public class FedConditionResultSet implements FedResultSetExtendedInterface
         {
             return false;
         }
-        return resultSet.setCursorPosition(++index);
+        return resultSet.setCursorPosition(filteredRows.get(++index));
     }
 
     @Override
@@ -88,7 +88,7 @@ public class FedConditionResultSet implements FedResultSetExtendedInterface
     @Override
     public int getColumnCount() throws FedException
     {
-        return filteredRows.size();
+        return resultSet.getColumnCount();
     }
 
     @Override
@@ -128,6 +128,16 @@ public class FedConditionResultSet implements FedResultSetExtendedInterface
     public int getRowCount() throws FedException
     {
         return filteredRows.size();
+    }
+
+    @Override
+    public Integer getInteger(int columnIndex) throws FedException
+    {
+        if (filteredRows.isEmpty())
+        {
+            throw new FedException(new Exception("No Row Selected"));
+        }
+        return resultSet.getInteger(columnIndex);
     }
 
 }

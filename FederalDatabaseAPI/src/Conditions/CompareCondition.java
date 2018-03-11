@@ -8,15 +8,17 @@ package Conditions;
 import FederalDB.FedException;
 import MetaData.ColumnDefinition;
 import ResultSetManagment.FedResultSetExtendedInterface;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javafx.collections.transformation.SortedList;
 
 /**
  *
  * @author Tobias Habermann
  */
-public class CompareCondition extends Condition
+public class CompareCondition extends Condition implements Serializable
 {
 
     public final CompareType type;
@@ -59,125 +61,169 @@ public class CompareCondition extends Condition
     public ArrayList<Integer> execute(FedResultSetExtendedInterface resultSet)
             throws FedException
     {
-        resultSet.first();
         ArrayList<Integer> matches = new ArrayList<>();
-        boolean isString = (leftValues.getValue(resultSet) instanceof String);
-        switch (type)
+        if (resultSet.first())
         {
-            case EQUAL:
+            boolean isString = (leftValues.getValue(resultSet) instanceof String);
+            switch (type)
             {
-                do
+                case EQUAL:
                 {
-                    if (leftValues.getValue(resultSet).equals(rightValues.getValue(resultSet)))
+                    do
                     {
-                        matches.add(resultSet.getCursorPosition());
+                        if (Objects.equals(leftValues.getValue(resultSet), (rightValues.getValue(resultSet))))
+                        {
+                            matches.add(resultSet.getCursorPosition());
+                        }
+                    } while (resultSet.next());
+                }
+                break;
+                case NOT_EQUAL:
+                {
+                    do
+                    {
+                        Object left = leftValues.getValue(resultSet);
+                        Object right = rightValues.getValue(resultSet);
+                        if (!Objects.equals(left, right))
+                        {
+                            matches.add(resultSet.getCursorPosition());
+                        }
+                    } while (resultSet.next());
+                }
+                break;
+                case GREATER:
+                {
+                    if (isString)
+                    {
+                        do
+                        {
+                            String left = (String) leftValues.getValue(resultSet);
+                            String right = (String) rightValues.getValue(resultSet);
+                            if (left != null && right != null)
+                            {
+                                if (left.compareTo(right) > 0)
+                                {
+                                    matches.add(resultSet.getCursorPosition());
+                                }
+                            }
+                        } while (resultSet.next());
+                    } else
+                    {
+                        do
+                        {
+                            Integer left = (Integer) leftValues.getValue(resultSet);
+                            Integer right = (Integer) rightValues.getValue(resultSet);
+                            if (left != null && right != null)
+                            {
+                                if (left > right)
+                                {
+                                    matches.add(resultSet.getCursorPosition());
+                                }
+                            }
+                        } while (resultSet.next());
                     }
-                } while (resultSet.next());
-            }
-            break;
-            case NOT_EQUAL:
-            {
-                do
+                }
+                break;
+                case LESSER:
                 {
-                    if (!leftValues.getValue(resultSet).equals(rightValues.getValue(resultSet)))
+                    if (isString)
                     {
-                        matches.add(resultSet.getCursorPosition());
+                        do
+                        {
+                            String left = (String) leftValues.getValue(resultSet);
+                            String right = (String) rightValues.getValue(resultSet);
+                            if (left != null && right != null)
+                            {
+                                if (left.compareTo(right) < 0)
+                                {
+                                    matches.add(resultSet.getCursorPosition());
+                                }
+                            }
+                        } while (resultSet.next());
+                    } else
+                    {
+                        do
+                        {
+                            Integer left = (Integer) leftValues.getValue(resultSet);
+                            Integer right = (Integer) rightValues.getValue(resultSet);
+                            if (left != null && right != null)
+                            {
+                                if (left < right)
+                                {
+                                    matches.add(resultSet.getCursorPosition());
+                                }
+                            }
+                        } while (resultSet.next());
                     }
-                } while (resultSet.next());
-            }
-            break;
-            case GREATER:
-            {
-                if (isString)
-                {
-                    do
-                    {
-                        if (((String) leftValues.getValue(resultSet)).compareTo((String) rightValues.getValue(resultSet)) > 0)
-                        {
-                            matches.add(resultSet.getCursorPosition());
-                        }
-                    } while (resultSet.next());
-                } else
-                {
-                    do
-                    {
-                        if (((int) leftValues.getValue(resultSet)) > ((int) rightValues.getValue(resultSet)))
-                        {
-                            matches.add(resultSet.getCursorPosition());
-                        }
-                    } while (resultSet.next());
                 }
-            }
-            break;
-            case LESSER:
-            {
-                if (isString)
+                break;
+                case GREATER_OR_EQUAL:
                 {
-                    do
+                    if (isString)
                     {
-                        if (((String) leftValues.getValue(resultSet)).compareTo((String) rightValues.getValue(resultSet)) < 0)
+                        do
                         {
-                            matches.add(resultSet.getCursorPosition());
-                        }
-                    } while (resultSet.next());
-                } else
-                {
-                    do
+                            String left = (String) leftValues.getValue(resultSet);
+                            String right = (String) rightValues.getValue(resultSet);
+                            if (left != null && right != null)
+                            {
+                                if (left.compareTo(right) >= 0)
+                                {
+                                    matches.add(resultSet.getCursorPosition());
+                                }
+                            }
+                        } while (resultSet.next());
+                    } else
                     {
-                        if (((int) leftValues.getValue(resultSet)) < ((int) rightValues.getValue(resultSet)))
+                        do
                         {
-                            matches.add(resultSet.getCursorPosition());
-                        }
-                    } while (resultSet.next());
+                            Integer left = (Integer) leftValues.getValue(resultSet);
+                            Integer right = (Integer) rightValues.getValue(resultSet);
+                            if (left != null && right != null)
+                            {
+                                if (left >= right)
+                                {
+                                    matches.add(resultSet.getCursorPosition());
+                                }
+                            }
+                        } while (resultSet.next());
+                    }
                 }
-            }
-            break;
-            case GREATER_OR_EQUAL:
-            {
-                if (isString)
+                break;
+                case LESSER_OR_EQUAL:
                 {
-                    do
+                    if (isString)
                     {
-                        if (((String) leftValues.getValue(resultSet)).compareTo((String) rightValues.getValue(resultSet)) >= 0)
+                        do
                         {
-                            matches.add(resultSet.getCursorPosition());
-                        }
-                    } while (resultSet.next());
-                } else
-                {
-                    do
+                            String left = (String) leftValues.getValue(resultSet);
+                            String right = (String) rightValues.getValue(resultSet);
+                            if (left != null && right != null)
+                            {
+                                if (left.compareTo(right) <= 0)
+                                {
+                                    matches.add(resultSet.getCursorPosition());
+                                }
+                            }
+                        } while (resultSet.next());
+                    } else
                     {
-                        if (((int) leftValues.getValue(resultSet)) >= ((int) rightValues.getValue(resultSet)))
+                        do
                         {
-                            matches.add(resultSet.getCursorPosition());
-                        }
-                    } while (resultSet.next());
+                            Integer left = (Integer) leftValues.getValue(resultSet);
+                            Integer right = (Integer) rightValues.getValue(resultSet);
+                            if (left != null && right != null)
+                            {
+                                if (left <= right)
+                                {
+                                    matches.add(resultSet.getCursorPosition());
+                                }
+                            }
+                        } while (resultSet.next());
+                    }
                 }
+                break;
             }
-            break;
-            case LESSER_OR_EQUAL:
-            {
-                if (isString)
-                {
-                    do
-                    {
-                        if (((String) leftValues.getValue(resultSet)).compareTo((String) rightValues.getValue(resultSet)) <= 0)
-                        {
-                            matches.add(resultSet.getCursorPosition());
-                        }
-                    } while (resultSet.next());
-                } else
-                {
-                    do
-                    {
-                        if (((int) leftValues.getValue(resultSet)) <= ((int) rightValues.getValue(resultSet)))
-                        {
-                            matches.add(resultSet.getCursorPosition());
-                        }
-                    } while (resultSet.next());
-                }
-            }
-            break;
         }
         return matches;
     }
@@ -224,5 +270,154 @@ public class CompareCondition extends Condition
         }
         str += " " + rightValues.toWhereString();
         return str;
+    }
+
+    @Override
+    public List<Integer> executeIgnoreNull(FedResultSetExtendedInterface resultSet) throws FedException
+    {
+
+        ArrayList<Integer> matches = new ArrayList<>();
+        if (resultSet.first())
+        {
+            boolean isString = (leftValues.getValue(resultSet) instanceof String);
+            switch (type)
+            {
+                case EQUAL:
+                {
+                    do
+                    {
+                        Object left = leftValues.getValue(resultSet);
+                        Object right = rightValues.getValue(resultSet);
+                        if (left == null || right == null || Objects.equals(left, right))
+                        {
+                            matches.add(resultSet.getCursorPosition());
+                        }
+                    } while (resultSet.next());
+                }
+                break;
+                case NOT_EQUAL:
+                {
+                    do
+                    {
+                        Object left = leftValues.getValue(resultSet);
+                        Object right = rightValues.getValue(resultSet);
+                        if (left == null || right == null || !Objects.equals(left, right))
+                        {
+                            matches.add(resultSet.getCursorPosition());
+                        }
+                    } while (resultSet.next());
+                }
+                break;
+                case GREATER:
+                {
+                    if (isString)
+                    {
+                        do
+                        {
+                            Object left = leftValues.getValue(resultSet);
+                            Object right = rightValues.getValue(resultSet);
+                            if (left == null || right == null || ((String) left).compareTo(((String) left)) > 0)
+                            {
+                                matches.add(resultSet.getCursorPosition());
+                            }
+                        } while (resultSet.next());
+                    } else
+                    {
+                        do
+                        {
+                            Object left = leftValues.getValue(resultSet);
+                            Object right = rightValues.getValue(resultSet);
+                            if (left == null || right == null || ((Integer) left) > ((Integer) right))
+                            {
+                                matches.add(resultSet.getCursorPosition());
+                            }
+                        } while (resultSet.next());
+                    }
+                }
+                break;
+                case LESSER:
+                {
+                    if (isString)
+                    {
+                        do
+                        {
+                            Object left = leftValues.getValue(resultSet);
+                            Object right = rightValues.getValue(resultSet);
+                            if (left == null || right == null || ((String) left).compareTo((String) right) < 0)
+                            {
+                                matches.add(resultSet.getCursorPosition());
+                            }
+                        } while (resultSet.next());
+                    } else
+                    {
+                        do
+                        {
+                            Object left = leftValues.getValue(resultSet);
+                            Object right = rightValues.getValue(resultSet);
+                            if (left == null || right == null || ((Integer) left) < (Integer) right)
+                            {
+                                matches.add(resultSet.getCursorPosition());
+                            }
+                        } while (resultSet.next());
+                    }
+                }
+                break;
+                case GREATER_OR_EQUAL:
+                {
+                    if (isString)
+                    {
+                        do
+                        {
+                            Object left = leftValues.getValue(resultSet);
+                            Object right = rightValues.getValue(resultSet);
+                            if (left == null || right == null || ((String) left).compareTo((String) right) >= 0)
+                            {
+                                matches.add(resultSet.getCursorPosition());
+                            }
+                        } while (resultSet.next());
+                    } else
+                    {
+                        do
+                        {
+                            Object left = leftValues.getValue(resultSet);
+                            Object right = rightValues.getValue(resultSet);
+                            if (left == null || right == null || ((Integer) left) >= (Integer) right)
+                            {
+                                matches.add(resultSet.getCursorPosition());
+                            }
+                        } while (resultSet.next());
+                    }
+                }
+                break;
+                case LESSER_OR_EQUAL:
+                {
+                    if (isString)
+                    {
+                        do
+                        {
+                            Object left = leftValues.getValue(resultSet);
+                            Object right = rightValues.getValue(resultSet);
+                            if (left == null || right == null || ((String) left).compareTo((String) right) <= 0)
+                            {
+                                matches.add(resultSet.getCursorPosition());
+                            }
+                        } while (resultSet.next());
+                    } else
+                    {
+                        do
+                        {
+                            Object left = leftValues.getValue(resultSet);
+                            Object right = rightValues.getValue(resultSet);
+                            if (left == null || right == null || ((Integer) left) <= (Integer) right)
+                            {
+                                matches.add(resultSet.getCursorPosition());
+                            }
+                        } while (resultSet.next());
+                    }
+                }
+                break;
+            }
+        }
+        return matches;
     }
 }

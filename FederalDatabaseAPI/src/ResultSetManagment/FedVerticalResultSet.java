@@ -170,4 +170,14 @@ public class FedVerticalResultSet implements FedResultSetExtendedInterface
         return left.getRowCount();
     }
 
+    @Override
+    public Integer getInteger(int columnIndex) throws FedException
+    {
+        if (columnIndex > left.getColumnCount())
+        {
+            return right.getInteger(getRightIndex(columnIndex));
+        }
+        return left.getInteger(columnIndex);
+    }
+
 }

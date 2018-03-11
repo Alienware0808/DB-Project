@@ -15,36 +15,34 @@ import java.sql.Savepoint;
  */
 public class FedSavepoint
 {
-    private Savepoint[] savepoints;
     private FedConnection conn;
 
     public FedSavepoint(FedConnection conn) throws SQLException
     {
         this.conn = conn;
-        savepoints = new Savepoint[conn.getConn().length];
-        for(int i = 0; i < savepoints.length; i++)
+        for(int i = 0; i < conn.getConn().length; i++)
         {
             conn.getConn()[i].setAutoCommit(false);
-            savepoints[i] = conn.getConn()[i].setSavepoint();
+            conn.getConn()[i].commit();
         }
         
     }
     
     public void releaseSavepoint() throws SQLException
     {
-        for(int i = 0; i < savepoints.length; i++)
+        for(int i = 0; i < conn.getConn().length; i++)
         {
-            conn.getConn()[i].releaseSavepoint(savepoints[i]);
-            conn.getConn()[i].setAutoCommit(true);
+            conn.getConn()[i].commit();
+            conn.getConn()[i].setAutoCommit(false);
         }
     }
     
     public void rollback() throws SQLException
     {
-        for(int i = 0; i < savepoints.length; i++)
+        for(int i = 0; i < conn.getConn().length; i++)
         {
-            conn.getConn()[i].rollback(savepoints[i]);
-            conn.getConn()[i].setAutoCommit(true);
+            conn.getConn()[i].rollback();
+            conn.getConn()[i].setAutoCommit(false);
         }
     }
 }

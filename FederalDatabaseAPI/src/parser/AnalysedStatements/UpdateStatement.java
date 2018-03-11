@@ -35,8 +35,10 @@ public class UpdateStatement extends Statement
     {
         super(tree);
         this.fedConnection = fedConnection;
-        table = fedConnection.metaDataManger.getTableMetaData(tree.getChild(1).getText()); // TODO read table from metadata via name
-        column = tree.getChild(3).getText(); // TODO read column from metadata via colname and tablename
+        table = fedConnection.metaDataManger.getTableMetaData(tree.getChild(1).getText()); 
+        if(table == null)
+            throw new ContextException("Table " + tree.getChild(1).getText() + " not found");
+        column = tree.getChild(3).getText(); 
         valueString = tree.getChild(5).getText();
         if (IsTerminalNode(tree.getChild(6), SQLiteParser.K_WHERE))
         {
@@ -111,20 +113,22 @@ public class UpdateStatement extends Statement
         switch (expr.getChildCount())
         {
             case 1:
-                if (expr instanceof SQLiteParser.Literal_valueContext)
+                if (expr instanceof SQLiteParser.Literal_valueContext ||
+                    expr.getChild(0) instanceof SQLiteParser.Literal_valueContext)
                 {
                     String value = expr.getText().trim();
                     if (value.startsWith("'"))
                     {
-                        return new SingleValueDescriptor(value.subSequence(1, value.length() - 2).toString());
+                        return new SingleValueDescriptor(value.subSequence(1, value.length() - 1).toString());
                     }
                     return new SingleValueDescriptor(Integer.parseInt(value));
-                } else if (expr instanceof SQLiteParser.Column_nameContext)
+                } else if (expr instanceof SQLiteParser.Column_nameContext || 
+                           expr.getChild(0) instanceof SQLiteParser.Column_nameContext)
                 {
 //                    Conditions.ColumnValueDescriptor coldef = null; // TODO get column //getColumnDefinitionByName(expr.getText());
 //                    if(coldef == null)
 //                        throw new ContextException("Column Definition not found");
-                    return new ColumnDefinition(this.table.TableName, expr.getText());
+                    return new ColumnDefinition(expr.getText(), this.table.TableName);
                 }
             default:
                 throw new ContextException("Unexpected expression in where clause");

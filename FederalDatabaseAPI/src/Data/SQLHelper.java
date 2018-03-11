@@ -103,8 +103,20 @@ public final class SQLHelper
                 select_sql += " and " + where_equals.get(i).name + " = ?";
         }
         PreparedStatement prepStat = getPrepStatement(connection, select_sql);
+        if(!where_equals.isEmpty())
+        {
+            for(int i = 0; i < where_equals.size(); i++)
+                prepStat.setObject(i+1, where_equals.get(i).value);
+        }
         return prepStat.executeQuery();
     }
+    
+    /*private void setObject(int index, Object value, PreparedStatement prepstmt) throws SQLException
+    {
+        if(value instanceof String)
+            prepstmt.setString(index, (String)value);
+        else prepstmt.setInt(index, (int)value);
+    }*/
 
     /**
      * Selects from the Connection the given fields from the given Tables
@@ -359,7 +371,8 @@ public final class SQLHelper
             throw new NullPointerException("connection cannot be null or closed");
         }
         String select_sql = "select * from " + table.toLowerCase().trim();
-        select_sql += " where " + where.trim();
+        if(where != null)
+            select_sql += " where " + where.trim();
         PreparedStatement prepStat = getPrepStatement(connection, select_sql);
         return prepStat.executeQuery();
     }
@@ -465,8 +478,8 @@ public final class SQLHelper
             throw new NullPointerException("connection cannot be null or closed");
         if (values == null || values.isEmpty())
             throw new NullPointerException("No Values given");
-        String insert = "insert into " + table + " (" + values.get(1).name;
-        for(int i = 2; i <= values.size(); i++)
+        String insert = "insert into " + table + " (" + values.get(0).name;
+        for(int i = 1; i < values.size(); i++)
             insert += ","+values.get(i).name;
         insert +=  ") values (?";
         for(int i = 1; i < values.size(); i++)
@@ -501,6 +514,8 @@ public final class SQLHelper
             for(int i = 0; i < asUpdatedRows.getColumnCount(); i++)
                 if(asUpdatedRows.getColumnType(i) == Types.VARCHAR)
                     prepStat.setString(i+1, asUpdatedRows.getString(i));
+                else if(asUpdatedRows.getInteger(i) == null)
+                    prepStat.setNull(i+1, java.sql.Types.INTEGER);
                 else prepStat.setInt(i+1, asUpdatedRows.getInt(i));
             prepStat.addBatch();
         } while(asUpdatedRows.next());

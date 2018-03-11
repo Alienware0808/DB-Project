@@ -3,15 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/Admin/Documents/GitHub/DB-Project/FederalDatabaseAPI/src/Data/FedHelper.java</file>
             <file>file:/C:/Users/Admin/Documents/GitHub/DB-Project/FederalDatabaseAPI/src/FederalDB/FedPseudoDriver.java</file>
-            <file>file:/C:/Users/Admin/Documents/GitHub/DB-Project/FederalDatabaseAPI/src/parser/SQLStatement.java</file>
-            <file>file:/C:/Users/Admin/Documents/GitHub/DB-Project/FederalDatabaseAPI/src/FederalDB/FedConnection.java</file>
             <file>file:/C:/Users/Admin/Documents/GitHub/DB-Project/FederalDatabaseAPI/src/FederalDB/FedStatement.java</file>
-            <file>file:/C:/Users/Admin/Documents/GitHub/DB-Project/FederalDatabaseAPI/src/parser/AnalysedStatements/CreateColumnDefinition.java</file>
-            <file>file:/C:/Users/Admin/Documents/GitHub/DB-Project/FederalDatabaseAPI/src/parser/AnalysedStatements/CreateStatement.java</file>
-            <file>file:/C:/Users/Admin/Documents/GitHub/DB-Project/FederalDatabaseAPI/src/FederalDB/FedTestEnvironment.java</file>
+            <file>file:/C:/Users/Admin/Documents/GitHub/DB-Project/FederalDatabaseAPI/src/parser/FastParse.java</file>
             <file>file:/C:/Users/Admin/Documents/GitHub/DB-Project/FederalDatabaseAPI/src/FederalDB/App.java</file>
-            <file>file:/C:/Users/Admin/Documents/GitHub/DB-Project/FederalDatabaseAPI/src/MetaData/MetaDataManager.java</file>
         </group>
     </open-files>
 </project-private>

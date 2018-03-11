@@ -7,6 +7,7 @@ package Conditions;
 
 import FederalDB.FedException;
 import FederalDB.FedResultSetInterface;
+import ResultSetManagment.FedResultSetExtendedInterface;
 
 /**
  *
@@ -15,7 +16,7 @@ import FederalDB.FedResultSetInterface;
 public interface IValue
 {
 
-    Object getValue(FedResultSetInterface resultSet)
+    Object getValue(FedResultSetExtendedInterface resultSet)
             throws FedException;
 
     String toWhereString();

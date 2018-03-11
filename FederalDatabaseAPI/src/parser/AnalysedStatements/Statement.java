@@ -5,11 +5,20 @@
  */
 package parser.AnalysedStatements;
 
+import Conditions.CompareCondition;
+import Conditions.CompareType;
+import Conditions.Condition;
+import Conditions.IValue;
+import Conditions.JunctionCondition;
+import Conditions.SingleValueDescriptor;
+import MetaData.ColumnDefinition;
+import MetaData.MetaDataEntry;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
+import parser.ContextException;
 import parser.SQLiteParser;
 import parser.Walker;
 
@@ -19,7 +28,6 @@ import parser.Walker;
  */
 public abstract class Statement
 {
-
     protected final ParseTree tree;
 
     public Statement(ParseTree tree)

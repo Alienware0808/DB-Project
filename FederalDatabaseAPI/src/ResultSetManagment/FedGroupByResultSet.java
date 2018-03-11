@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import parser.AnalysedStatements.CreateColumnDefinition;
 
 /**
  *
@@ -51,7 +52,7 @@ public class FedGroupByResultSet implements FedResultSetExtendedInterface
         {
             do
             {
-                Object colval = rs.getColumnType(forColumnIndex) == Types.VARCHAR? rs.getString(forColumnIndex): rs.getInt(forColumnIndex);
+                Object colval = rs.getColumnType(forColumnIndex) == Types.VARCHAR? rs.getString(forColumnIndex): rs.getInteger(forColumnIndex);
                 if(!map.containsKey(colval))
                     map.put(colval, new ArrayList<>());
                 map.get(colval).add(rs.getCursorPosition());
@@ -136,18 +137,25 @@ public class FedGroupByResultSet implements FedResultSetExtendedInterface
     @Override
     public int getColumnCount() throws FedException
     {
-        return rs.getColumnCount();
+        //return rs.getColumnCount();
+        if(FedResultSet.getIndexOfColumn(rs, forColumn) == -1)
+            return aggregationMap.size();
+        return aggregationMap.size() + 1;
     }
 
     @Override
     public String getColumnName(int index) throws FedException
     {
+        if(aggregationMap.get(index) != null)
+            return aggregationMap.get(index).name;
         return rs.getColumnName(index);
     }
 
     @Override
     public int getColumnType(int index) throws FedException
     {
+        if(aggregationMap.get(index) != null)
+            return CreateColumnDefinition.TYPE_INT;
         return rs.getColumnType(index);
     }
 
@@ -155,5 +163,21 @@ public class FedGroupByResultSet implements FedResultSetExtendedInterface
     public void close() throws FedException
     {
         rs.close();
+    }
+
+    @Override
+    public Integer getInteger(int columnIndex) throws FedException
+    {
+        if(aggregationMap.containsKey(columnIndex))
+        {
+            try {
+                return aggregationMap.get(columnIndex).aggregate(rs, (List<Integer>)new ArrayList(map.values()).get(cursor-1));
+            } catch (Exception ex) {
+                throw new FedException(ex);
+            }
+        }
+        else if(columnIndex == forColumnIndex)
+            return ((Integer) new ArrayList(map.keySet()).get(cursor-1));
+        throw new FedException(new Exception("Column not found or not aggregated"));
     }
 }

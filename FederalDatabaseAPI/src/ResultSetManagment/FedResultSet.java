@@ -8,9 +8,12 @@ package ResultSetManagment;
 import FederalDB.FedException;
 import FederalDB.FedResultSetInterface;
 import MetaData.ColumnDefinition;
+import MetaData.ColumnValue;
+import ResultSetManagment.Aggregation.Aggregation;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
+import parser.AnalysedStatements.CreateColumnDefinition;
 
 /**
  *
@@ -19,23 +22,33 @@ import java.util.List;
 public class FedResultSet implements FedResultSetInterface
 {
 
-    private FedResultSetInterface rs;
+    private FedResultSetExtendedInterface rs;
+    private boolean beforeFirst;
 
-    public FedResultSet(FedResultSetInterface rs)
+    public FedResultSet(FedResultSetExtendedInterface rs) throws FedException
     {
         this.rs = rs;
+        rs.first();
+        beforeFirst = true;
     }
 
     @Override
     public boolean next() throws FedException
     {
+        if(beforeFirst)
+        {
+            beforeFirst = false;
+            return rs.first();
+        }
         return rs.next();
     }
 
     @Override
     public String getString(int columnIndex) throws FedException
     {
-        return rs.getString(columnIndex);
+        if(rs.getColumnType(columnIndex) == CreateColumnDefinition.TYPE_VARCHAR)
+            return rs.getString(columnIndex);
+        return rs.getInt(columnIndex) + "";
     }
 
     @Override
@@ -71,9 +84,14 @@ public class FedResultSet implements FedResultSetInterface
     public static int getIndexOfColumn(FedResultSetInterface rs, ColumnDefinition coldef) 
             throws FedException
     {
-        for(int i = 0; i < rs.getColumnCount(); i++)
+        for(int i = 1; i <= rs.getColumnCount(); i++)
+        {
+            if(coldef instanceof Aggregation && rs.getColumnName(i).toLowerCase().equals(coldef.toWhereString().toLowerCase().trim()))
+                return i;
             if(rs.getColumnName(i).toLowerCase().equals(coldef.name.toLowerCase().trim()))
                 return i;
+           
+        }
         return -1;
     }
     
@@ -90,9 +108,47 @@ public class FedResultSet implements FedResultSetInterface
                 }while(rs.next());
             else
                 do{
-                    list[i++] = rs.getInt(index);
+                    list[i++] = rs.getInteger(index);
                 }while(rs.next());
         }
         return list;
+    }
+    
+    public static String padLeft(String s, int n) {
+        return String.format("%1$" + n + "s", s);  
+    }
+    
+    public static String printOut(FedResultSetExtendedInterface rs) throws FedException
+    {
+        int oldpos = rs.getCursorPosition();
+        String str = " # |";
+        for(int i = 1; i <= rs.getColumnCount(); i++)
+            str += padLeft(rs.getColumnName(i), 20) + "|";
+        str += " (" + rs.getRowCount() + ")";
+        if(rs.first())
+        {
+            do
+            {
+                str += "\n" + padLeft(rs.getCursorPosition()+"", 3) + "|";
+                for(int i = 1; i <= rs.getColumnCount(); i++)
+                    if(rs.getColumnType(i) == CreateColumnDefinition.TYPE_VARCHAR)
+                        str += padLeft(rs.getString(i), 20) + "|";
+                    else str += padLeft(rs.getInt(i)+"", 20) + "|";
+            } while(rs.next());
+        }
+        rs.setCursorPosition(oldpos);
+        return str;
+    }
+    
+    public static FedResultSetExtendedInterface aggregate(FedResultSetExtendedInterface seleResu, List<ColumnDefinition> resultColumns) throws Exception
+    {
+        List<ColumnValue> values = new ArrayList<>();
+        for(ColumnDefinition coldef : resultColumns)
+        {
+            Aggregation agcol = (Aggregation)coldef;
+            ColumnValue val = new ColumnValue(coldef.name, coldef.tableName, agcol.aggregate(seleResu));
+            values.add(val);
+        }
+        return new ValueWrapperResultSet(values);
     }
 }

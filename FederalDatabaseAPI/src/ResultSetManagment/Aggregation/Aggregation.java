@@ -25,4 +25,13 @@ public abstract class Aggregation extends ColumnDefinition
     
     public abstract int aggregate(FedResultSetExtendedInterface rs, List<Integer> indices)
             throws Exception;
+
+    @Override
+    public abstract String toWhereString();
+
+    @Override
+    public String toColumnString()
+    {
+        return tableName + "." + name;
+    }
 }

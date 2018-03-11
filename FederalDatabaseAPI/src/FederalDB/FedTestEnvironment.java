@@ -2,6 +2,7 @@ package FederalDB;
 
 import ResultSetManagment.FedResultSet;
 import FederalDB.FedException;
+import java.sql.Types;
 import java.util.Scanner;
 
 public class FedTestEnvironment
@@ -135,7 +136,9 @@ public class FedTestEnvironment
                                         {
                                             for (int i = 1; i <= fedResultSet.getColumnCount(); i++)
                                             {
-                                                System.out.printf("%-15s", fedResultSet.getString(i));
+                                                if(fedResultSet.getColumnType(i) == Types.VARCHAR)
+                                                    System.out.printf("%-15s", fedResultSet.getString(i));
+                                                else System.out.printf("%-15s", fedResultSet.getInt(i));
                                             }
                                             System.out.println();
                                         }

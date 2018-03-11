@@ -21,10 +21,13 @@ import ResultSetManagment.Aggregation.CountAggregation;
 import ResultSetManagment.Aggregation.MaxAggregation;
 import ResultSetManagment.Aggregation.MinAggregation;
 import ResultSetManagment.Aggregation.SumAggregate;
+import com.sun.org.apache.xml.internal.dtm.ref.ExpandedNameTable;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 import parser.ContextException;
@@ -121,7 +124,7 @@ public class SelectStatement extends Statement
         return null;
     }
 
-    public ColumnDefinition getResultColumnByNameOrAlias(String colName, String tableNameOrAlias) throws ContextException
+    public ColumnDefinition findResultColumnByNameOrAlias(String colName, String tableNameOrAlias) throws ContextException
     {
         MetaDataEntry table = getTableByNameOrAlias(tableNameOrAlias);
         colName = colName.toLowerCase();
@@ -133,6 +136,20 @@ public class SelectStatement extends Statement
             }
         }
         return null;
+    }
+    
+    public ColumnDefinition getResultColumnByNameOrAlias(String colName, String tableNameOrAlias) throws ContextException
+    {
+        MetaDataEntry table = getTableByNameOrAlias(tableNameOrAlias);
+        colName = colName.toLowerCase();
+        for (ColumnDefinition curCol : resultColumns)
+        {
+            if (curCol.name.equals(colName) && curCol.tableName.equals(table.TableName))
+            {
+                return curCol;
+            }
+        }
+        return new ColumnDefinition(colName, table.TableName);
     }
 
     private void loadTableNamesAndAliases()
@@ -210,6 +227,12 @@ public class SelectStatement extends Statement
                 | func '(' expr ')'
              */
             // The "*" case
+            if (IsTerminalNode(column_node, SQLiteParser.STAR))
+            {
+                ArrayList<ColumnDefinition> res = new ArrayList<>();
+                res.add(new ColumnDefinition("*", tables.get(0).TableName));
+                return res;
+            }
             if (column_node.getChild(0).getText().startsWith("*"))
             {
                 if (tables.size() != 1)
@@ -220,13 +243,19 @@ public class SelectStatement extends Statement
                     result.addAll(meta.Columns);
                 }
             } 
-            else if (column_node.getChild(0) instanceof SQLiteParser.ExprContext)
+            else if (column_node.getChild(0) instanceof SQLiteParser.ExprContext
+                        || column_node instanceof SQLiteParser.ExprContext)
             {
-                ParseTree expr = column_node.getChild(0);
+                ParseTree expr;
+                if(column_node.getChild(0) instanceof SQLiteParser.ExprContext)
+                    expr = column_node.getChild(0);
+                else expr = column_node;
                 if(expr.getChild(0) instanceof SQLiteParser.Table_nameContext)
                 {
                     MetaDataEntry table = getTableByNameOrAlias(expr.getChild(0).getText().toLowerCase());
                     ColumnDefinition coldef = getResultColumnByNameOrAlias(expr.getChild(2).getText().toLowerCase(), table.TableName);
+                    if(coldef == null)
+                        coldef = new ColumnDefinition(expr.getChild(2).getText().toLowerCase(), table.TableName);
                     if(expr.getChild(2).getText().startsWith("*")) // Table.*
                         result.addAll(table.Columns);
                     else if(coldef != null) // Table.columname
@@ -249,7 +278,7 @@ public class SelectStatement extends Statement
                         break;
                         case "max": result.add(new MaxAggregation(columnName.get(0).name, columnName.get(0).tableName));
                         break;
-                        case "count": result.add(new CountAggregation(columnName.get(0).name, columnName.get(0).tableName));
+                        case "count": result.add(new CountAggregation(/*columnName.get(0).name*/tables.get(0).getPrimaryKeyConstraint().PrimaryKey.name, columnName.get(0).tableName));
                         break;
                     }
                 }
@@ -261,6 +290,7 @@ public class SelectStatement extends Statement
                     else throw new FedException(new Exception("No table defined for Column"));
                 }
             } // The "expr ..." case
+           
             /*else
             {
                 // Search in all the Children nodes for the column and its alias
@@ -350,6 +380,8 @@ public class SelectStatement extends Statement
 
     private Condition parseCondition(ParseTree expr) throws ContextException
     {
+        if(expr.getChild(0).getText().equals("("))
+            return parseCondition(expr.getChild(1));
         switch (expr.getChildCount())
         {
             case 3:
@@ -408,18 +440,19 @@ public class SelectStatement extends Statement
 
     private IValue parseValueDescriptor(ParseTree expr) throws ContextException
     {
-
+        String dummy = expr.getText();
         switch (expr.getChildCount())
         {
             case 1:
-                if (expr instanceof SQLiteParser.Literal_valueContext)
+                if (expr instanceof SQLiteParser.Literal_valueContext
+                        || expr.getChild(0) instanceof SQLiteParser.Literal_valueContext)
                 {
                     String value = expr.getText().trim();
                     if (value.startsWith("'"))
-                    {
-                        return new SingleValueDescriptor(value.subSequence(1, value.length() - 2).toString());
-                    }
-                    return new SingleValueDescriptor(Integer.parseInt(value));
+                        return new SingleValueDescriptor(value.subSequence(1, value.length() - 1).toString());
+                    else if (value.toLowerCase().equals("null"))
+                        return new SingleValueDescriptor(null);
+                    else return new SingleValueDescriptor(Integer.parseInt(value));
                 } else if (expr instanceof SQLiteParser.Column_nameContext)
                 {
                     if (tables.size() != 1)
@@ -427,21 +460,32 @@ public class SelectStatement extends Statement
                         throw new ContextException("The Column description could not be matched to an exact table");
                     }
                     ColumnDefinition col = new ColumnDefinition(tables.get(0).TableName, expr.getText());
-                    if (getResultColumnByNameOrAlias(col.name, col.tableName) == null)
+                    if (findResultColumnByNameOrAlias(col.name, col.tableName) == null)
                     {
-                        if(!resultColumns.contains(col))
+                        if(!resultColumns.contains(col) && !extraColumnsForWhere.contains(col))
                             extraColumnsForWhere.add(col);
                     }
                     return new ColumnDefinition(col.name, col.tableName);
                 }
             case 3:
-                ColumnDefinition col = new ColumnDefinition(getTableByNameOrAlias(expr.getChild(0).getText()).TableName, expr.getChild(2).getText());
-                if (getResultColumnByNameOrAlias(col.name, col.tableName) == null)
+                ColumnDefinition col = new ColumnDefinition(expr.getChild(2).getText(), getTableByNameOrAlias(expr.getChild(0).getText()).TableName);
+                if (findResultColumnByNameOrAlias(col.name, col.tableName) == null)
                 {
-                    if(!resultColumns.contains(col))
+                    if(!resultColumns.contains(col) && !extraColumnsForWhere.contains(col))
                         extraColumnsForWhere.add(col);
                 }
-                return new ColumnDefinition(col.name, col.tableName);
+                return col;
+            case 4:
+        {
+            try
+            {
+                ColumnDefinition mycol = loadSingleResultColumn(expr).get(0);
+                return (IValue) mycol;
+            } catch (FedException ex)
+            {
+                throw new ContextException(ex.toString());
+            }
+        }
             default:
                 throw new ContextException("Unexpected expression in where clause");
         }
@@ -451,7 +495,7 @@ public class SelectStatement extends Statement
     {
         int i = 0;
         // Find the Group by Clause
-        while (!(tree.getChild(i) instanceof SQLiteParser.Select_core_groud_byContext) && tree.getChild(i) != null)
+        while (!(tree.getChild(i) instanceof SQLiteParser.Select_core_groud_byContext || IsTerminalNode(tree.getChild(i), SQLiteParser.K_GROUP)) && tree.getChild(i) != null)
         {
             i++;
         }
@@ -459,6 +503,8 @@ public class SelectStatement extends Statement
         {
             return;
         }
+        //if(IsTerminalNode(tree.getChild(i), SQLiteParser.K_GROUP))
+        //    i += 2;
         // get the initial expr ParseTree
         // Skip the "group" and "by" Terminal Nodes and take the third Child of the group by clause
         ParseTree coltree = tree.getChild(i).getChild(2);
@@ -473,9 +519,13 @@ public class SelectStatement extends Statement
             String tableNameOrAlias = coltree.getChild(0).getText().toLowerCase();
             groupByColumn = getResultColumnByNameOrAlias(colNameOrAlias, tableNameOrAlias);
         }
-        if (tree.getChild(i).getChild(4) != null)
+        if (tree.getChild(i).getChild(4) != null) // "HAVING" TOKEN
         {
-            ParseTree havingExpr = tree.getChild(i).getChild(4).getChild(0);
+            ArrayList<String> dumli = new ArrayList<>();
+            for(int j = 0; j < tree.getChild(i).getChildCount(); j++)
+                dumli.add(tree.getChild(i).getChild(j).getText());
+            
+            ParseTree havingExpr = tree.getChild(i).getChild(4);
             CompareCondition cache = (CompareCondition)parseCondition(havingExpr);
             groupByHavingCondition = new HavingCompare(cache.type, (Integer)((SingleValueDescriptor)cache.getRightValues()).Value);
         }

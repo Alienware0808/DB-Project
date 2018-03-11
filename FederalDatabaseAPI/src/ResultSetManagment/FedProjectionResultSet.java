@@ -6,7 +6,9 @@
 package ResultSetManagment;
 
 import FederalDB.FedException;
+import FederalDB.FedExtendedException;
 import MetaData.ColumnDefinition;
+import ResultSetManagment.Aggregation.Aggregation;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,12 +30,27 @@ public class FedProjectionResultSet implements FedResultSetExtendedInterface
         map = new int[projected.size()];
         for(int i = 0; i < projected.size(); i++)
         {
+            boolean found = false;
             for(int colindex = 1; colindex <= rs.getColumnCount(); colindex++)
-                if(rs.getColumnName(colindex).toLowerCase().trim().equals(projected.get(i).name))
+            {
+                String rscol = rs.getColumnName(colindex).toLowerCase().trim();
+                ColumnDefinition curcol = projected.get(i);
+                if(curcol instanceof Aggregation && rscol.toLowerCase().equals(curcol.toWhereString().toLowerCase()))
                 {
                     map[i] = colindex;
+                    found = true;
                     break;
                 }
+                else if(rscol.toLowerCase().equals(curcol.name.toLowerCase()))
+                {
+                    map[i] = colindex;
+                    found = true;
+                    break;
+                }
+            }
+            if(!found)
+                throw new FedExtendedException("Cannot create Projection for a column which is not in the ResultSet",
+                        new Exception("Column not found in ResultSet"));
         }
     }
     
@@ -119,5 +136,11 @@ public class FedProjectionResultSet implements FedResultSetExtendedInterface
     public void close() throws FedException
     {
         rs.close();
+    }
+
+    @Override
+    public Integer getInteger(int columnIndex) throws FedException
+    {
+        return rs.getInteger(map[columnIndex-1]);
     }
 }

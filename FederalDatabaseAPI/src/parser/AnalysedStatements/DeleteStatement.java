@@ -43,7 +43,7 @@ public class DeleteStatement extends Statement
             where = null;
         }
     }
-
+    
     private Condition parseCondition(ParseTree expr) throws ContextException
     {
         switch (expr.getChildCount())
@@ -104,23 +104,26 @@ public class DeleteStatement extends Statement
 
     private IValue parseValueDescriptor(ParseTree expr) throws ContextException
     {
+
         switch (expr.getChildCount())
         {
             case 1:
-                if (expr instanceof SQLiteParser.Literal_valueContext)
+                if (expr instanceof SQLiteParser.Literal_valueContext ||
+                    expr.getChild(0) instanceof SQLiteParser.Literal_valueContext)
                 {
                     String value = expr.getText().trim();
                     if (value.startsWith("'"))
                     {
-                        return new SingleValueDescriptor(value.subSequence(1, value.length() - 2).toString());
+                        return new SingleValueDescriptor(value.subSequence(1, value.length() - 1).toString());
                     }
                     return new SingleValueDescriptor(Integer.parseInt(value));
-                } else if (expr instanceof SQLiteParser.Column_nameContext)
+                } else if (expr instanceof SQLiteParser.Column_nameContext || 
+                           expr.getChild(0) instanceof SQLiteParser.Column_nameContext)
                 {
 //                    Conditions.ColumnValueDescriptor coldef = null; // TODO get column //getColumnDefinitionByName(expr.getText());
 //                    if(coldef == null)
 //                        throw new ContextException("Column Definition not found");
-                    return new ColumnDefinition(this.table.TableName, expr.getText());
+                    return new ColumnDefinition(expr.getText(), this.table.TableName);
                 }
             default:
                 throw new ContextException("Unexpected expression in where clause");

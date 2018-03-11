@@ -32,4 +32,10 @@ public class CountAggregation extends Aggregation
     {
         return indices.size();
     }
+
+    @Override
+    public String toWhereString()
+    {
+        return "count("+name+")";
+    }
 }

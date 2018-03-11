@@ -52,4 +52,10 @@ public class SumAggregate extends Aggregation
         }
         return sum; 
     }
+    
+    @Override
+    public String toWhereString()
+    {
+        return "sum("+name+")";
+    }
 }

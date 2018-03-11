@@ -8,6 +8,7 @@ package Conditions;
 import FederalDB.FedException;
 import MetaData.ColumnDefinition;
 import ResultSetManagment.FedResultSetExtendedInterface;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,7 @@ import java.util.List;
  *
  * @author Tobias Habermann
  */
-public class JunctionCondition extends Condition
+public class JunctionCondition extends Condition implements Serializable
 {
 
     public final JunctionType type;
@@ -58,13 +59,10 @@ public class JunctionCondition extends Condition
     {
         this.rightCondition = rightCondition;
     }
-
-    @Override
-    public List<Integer> execute(FedResultSetExtendedInterface resultSet) throws FedException
+    
+    private List<Integer> exec(List<Integer> left, List<Integer> right)
     {
         ArrayList<Integer> matches = new ArrayList<Integer>();
-        List<Integer> left = leftCondition.execute(resultSet);
-        List<Integer> right = rightCondition.execute(resultSet);
         switch (type)
         {
             case AND:
@@ -72,7 +70,9 @@ public class JunctionCondition extends Condition
                 int lastMatchIndex = 0;
                 for (Integer lval : left)
                 {
-                    for (int i = lastMatchIndex; i < right.size(); i++)
+                    if(right.contains(lval))
+                        matches.add(lval);
+                    /*for (int i = lastMatchIndex; i < right.size(); i++)
                     {
                         if (lval.equals(right.get(i)))
                         {
@@ -84,7 +84,7 @@ public class JunctionCondition extends Condition
                         {
                             break;
                         }
-                    }
+                    }*/
                 }
             }
             break;
@@ -112,10 +112,22 @@ public class JunctionCondition extends Condition
                         i++;
                     }
                 }
+                if(i != left.size())
+                    matches.add(left.get(i));
+                if(j != right.size())
+                    matches.add(right.get(j));
             }
             break;
         }
         return matches;
+    }
+
+    @Override
+    public List<Integer> execute(FedResultSetExtendedInterface resultSet) throws FedException
+    {
+        List<Integer> left = leftCondition.execute(resultSet);
+        List<Integer> right = rightCondition.execute(resultSet);
+        return exec(left, right);
     }
 
     @Override
@@ -133,6 +145,14 @@ public class JunctionCondition extends Condition
         return "(" + leftCondition.toWhereString() + ") "
                 + (type == JunctionType.AND ? "AND" : "OR")
                 + "(" + rightCondition.toWhereString() + ") ";
+    }
+
+    @Override
+    public List<Integer> executeIgnoreNull(FedResultSetExtendedInterface resultSet) throws FedException
+    {
+        List<Integer> left = leftCondition.executeIgnoreNull(resultSet);
+        List<Integer> right = rightCondition.executeIgnoreNull(resultSet);
+        return exec(left, right);
     }
 
     public enum JunctionType
