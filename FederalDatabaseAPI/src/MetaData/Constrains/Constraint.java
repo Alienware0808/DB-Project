@@ -20,15 +20,7 @@ import org.codehaus.jackson.annotate.JsonTypeInfo.Id;
  *
  * @author Franz Weidmann
  */
-@JsonTypeInfo(use = Id.CLASS,
-              include = JsonTypeInfo.As.PROPERTY,
-              property = "type")
-@JsonSubTypes({
-    @Type(value = PrimaryKeyConstraint.class),
-    @Type(value = ForeignKeyConstraint.class),
-    @Type(value = CheckConstraint.class),
-    })
-public abstract class Constraint  implements java.io.Serializable
+public abstract class Constraint implements java.io.Serializable
 {
 
     public ArrayList<ColumnDefinition> columns;
@@ -38,12 +30,9 @@ public abstract class Constraint  implements java.io.Serializable
         columns = new ArrayList<>();
     }
 
-    public abstract boolean checkInsert(FedConnection fedConnection, List<ColumnValue> values)
-            throws Exception;
+    public abstract boolean checkInsert(FedConnection fedConnection, List<ColumnValue> values);
 
-    public abstract boolean checkDelete(FedConnection fedConnection, List<ColumnValue> values)
-            throws Exception;
+    public abstract boolean checkDelete(FedConnection fedConnection, List<ColumnValue> values);
 
-    public abstract boolean checkUpdate(FedConnection fedConnection, List<ColumnValue> values, Condition where)
-            throws Exception;
+    public abstract boolean checkUpdate(FedConnection fedConnection, List<ColumnValue> values, Condition where);
 }

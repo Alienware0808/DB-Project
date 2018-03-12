@@ -1,6 +1,9 @@
 package FederalDB;
 
 //package hsfulda.de;
+
+import Data.FedConnectionFactory;
+
 public class App
 {
 
@@ -28,7 +31,7 @@ public class App
         try
         {
             fedConnection = (new FedPseudoDriver()).getConnection(usernameValidation, passwordValidation);
-            
+            FedConnectionFactory.init(fedConnection);
             
             final FedTestEnvironment fedTestEvironment = new FedTestEnvironment(fedConnection);
 
@@ -50,30 +53,7 @@ public class App
             fedTestEvironment.run("SQL Test/PARINSERTS.SQL", false);
             fedTestEvironment.run("SQL Test/PARDELS.SQL", false);
             fedTestEvironment.run("SQL Test/PARSELCNTSTAR.SQL", false);
-            
-            /*
-            fedTestEvironment.run("Validation/DRPTABS.SQL",true);
-            fedTestEvironment.run("Validation/CREPARTABS.SQL",true);
-            fedTestEvironment.run("Validation/INSERT-PASSAGIER-10K-5.SQL",true);
-            fedTestEvironment.run("Validation/INSERT-BUCHUNG-10K-5.SQL",true);
-            fedTestEvironment.run("Validation/INSERTAIRLINES.SQL",true);
-            fedTestEvironment.run("Validation/INSERTAIRPORTS.SQL",true);
-            fedTestEvironment.run("Validation/INSERTBOOKINGS.SQL",true);
-            fedTestEvironment.run("Validation/INSERTFLIGHTS.SQL",true);
-            fedTestEvironment.run("Validation/INSERTPASSENGERS.SQL",true);
-            fedTestEvironment.run("Validation/PARSEL1TGHAVLarge.SQL",true);
-            fedTestEvironment.run("Validation/PARSEL1TGHAVSmall.SQL",true);
-            fedTestEvironment.run("Validation/PARSEL1TGPLarge.SQL",true);
-            fedTestEvironment.run("Validation/PARSEL1TGPSmall.SQL",true);
-            fedTestEvironment.run("Validation/PARSEL1TLarge.SQL",true);
-            fedTestEvironment.run("Validation/PARSEL1TOR.SQL",true);
-            fedTestEvironment.run("Validation/PARSEL1TSmall.SQL",true);
-            fedTestEvironment.run("Validation/PARSEL1TWGPLarge.SQL",true);
-            fedTestEvironment.run("Validation/PARSEL1TWGPSmall.SQL",true);
-            fedTestEvironment.run("Validation/PARSELCNTSTAR.SQL",true);
-            fedTestEvironment.run("Validation/PARSELJoinNormal.SQL",true);
-            fedTestEvironment.run("Validation/PARSELJoinWGP.SQL",true);
-         */
+          
         } catch (Exception e)
         {
             e.printStackTrace();
@@ -82,13 +62,14 @@ public class App
         /*
 		 * Validation schema
          */
+        /*
         try
         {
             fedConnection = (new FedPseudoDriver()).getConnection(usernameValidation, passwordValidation);
 
             final FedTestEnvironment fedTestEvironment = new FedTestEnvironment(fedConnection);
 
-            /*
+            
             fedTestEvironment.run("Validation/DRPTABS.SQL", false);
             fedTestEvironment.run("Validation/CREPARTABS.SQL", false);
             fedTestEvironment.run("Validation/INSERTAIRPORTS.SQL", false);
@@ -114,13 +95,15 @@ public class App
             fedTestEvironment.run("Validation/PARSEL1TGHAVSmall.SQL", true);  // OPTIONAL
             fedTestEvironment.run("Validation/PARSEL1TGHAVLarge.SQL", true);  // OPTIONAL
             fedTestEvironment.run("Validation/PARSELCNTSTAR.SQL", true);            
-             */
+             
 //        } catch (final FedException fedException) {
 //            fedException.printStackTrace();
 //        }
         } catch (final Exception e)
         {
-
+            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
+*/
     }
 }

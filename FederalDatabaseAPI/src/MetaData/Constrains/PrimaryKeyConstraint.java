@@ -6,6 +6,7 @@
 package MetaData.Constrains;
 
 import Conditions.Condition;
+import Data.FedConnectionFactory;
 import MetaData.Constrains.Constraint;
 import Data.FedHelper;
 import Data.SQLHelper;
@@ -47,7 +48,7 @@ public class PrimaryKeyConstraint extends Constraint implements java.io.Serializ
     }
 
     @Override
-    public boolean checkInsert(FedConnection fedConnection, List<ColumnValue> values) throws Exception
+    public boolean checkInsert(FedConnection fedConnection, List<ColumnValue> values) 
     {
         MetaDataEntry entry = fedConnection.metaDataManger.getTableMetaData(PrimaryKey.tableName);
         ColumnValue primVal = null;
@@ -67,18 +68,22 @@ public class PrimaryKeyConstraint extends Constraint implements java.io.Serializ
         primaryKeyAsList.add(PrimaryKey);
         List<ColumnValue> primaryValueAsList = new ArrayList<>();
         primaryValueAsList.add(primVal);
+        try
+        {
         if (entry.FedType instanceof FedHorizontalType)
         {
             ResultSet resultSet = SQLHelper.select(fedConnection.getConn()[0],
                     primaryKeyAsList, entry.TableName, primaryValueAsList);
             if (resultSet.next())
             {
+                resultSet.close();
                 return false;
             }
             resultSet = SQLHelper.select(fedConnection.getConn()[1],
                     primaryKeyAsList, entry.TableName, primaryValueAsList);
             if (resultSet.next())
             {
+                resultSet.close();
                 return false;
             }
             if (entry.FedType.getDatabaseCount() == 3)
@@ -87,6 +92,7 @@ public class PrimaryKeyConstraint extends Constraint implements java.io.Serializ
                         primaryKeyAsList, entry.TableName, primaryValueAsList);
                 if (resultSet.next())
                 {
+                    resultSet.close();
                     return false;
                 }
             }
@@ -95,12 +101,19 @@ public class PrimaryKeyConstraint extends Constraint implements java.io.Serializ
         {
             ResultSet resultSet = SQLHelper.select(fedConnection.getConn()[0],
                     primaryKeyAsList, entry.TableName, primaryValueAsList);
-            return !resultSet.next();
+            boolean result = !resultSet.next();
+            resultSet.close();
+            return result;
+        }
+        } catch (Exception ex)
+        {
+            ex.printStackTrace();
+            return false;
         }
     }
 
     @Override
-    public boolean checkDelete(FedConnection fedConnection, List<ColumnValue> values) throws Exception
+    public boolean checkDelete(FedConnection fedConnection, List<ColumnValue> values) 
     {
         return true;
     }
@@ -114,7 +127,7 @@ public class PrimaryKeyConstraint extends Constraint implements java.io.Serializ
      * @throws Exception
      */
     @Override
-    public boolean checkUpdate(FedConnection fedConnection, List<ColumnValue> values, Condition where) throws Exception
+    public boolean checkUpdate(FedConnection fedConnection, List<ColumnValue> values, Condition where) 
     {
         MetaDataEntry entry = fedConnection.metaDataManger.getTableMetaData(PrimaryKey.tableName);
         ColumnValue primVal = null;
@@ -127,9 +140,7 @@ public class PrimaryKeyConstraint extends Constraint implements java.io.Serializ
             }
         }
         if (primVal == null)
-        {
             return true;
-        }
         return false;
     }
 

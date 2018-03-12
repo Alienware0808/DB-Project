@@ -7,6 +7,7 @@ import ResultSetManagment.FedHorizontalResultSet;
 import ResultSetManagment.FedVerticalResultSet;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Savepoint;
@@ -16,19 +17,48 @@ import parser.AnalysedStatements.CreateStatement;
 
 public class FedConnection implements FedConnectionInterface
 {
-
+    private String[] connectionStrings;
     private Connection conn[] = new Connection[3];
     public final MetaDataManager metaDataManger;
+    String username; String password;
 
-    public FedConnection(Connection[] conns) throws FedException
+    public FedConnection(String[] constrs, String username, String password) throws FedException
     {
-        this.conn = conns;
+        this.username = username;
+        this.password = password;
+        connectionStrings = constrs;
         try
         {
+            conn[0] = DriverManager.getConnection(constrs[0], username, password);
+            conn[1] = DriverManager.getConnection(constrs[1], username, password);
+            conn[2] = DriverManager.getConnection(constrs[2], username, password);
+            
             conn[0].setAutoCommit(false);
             conn[1].setAutoCommit(false);
             conn[2].setAutoCommit(false);
             metaDataManger = new MetaDataManager(conn[0]);
+        }
+        catch (Exception ex)
+        {
+            throw new FedException(ex);
+        }
+    }
+    
+    public FedConnection(FedConnection template) throws FedException
+    {
+        this.connectionStrings = template.connectionStrings;
+        this.username = template.username;
+        this.password = template.password;
+        try
+        {
+            conn[0] = DriverManager.getConnection(connectionStrings[0], username, password);
+            conn[1] = DriverManager.getConnection(connectionStrings[1], username, password);
+            conn[2] = DriverManager.getConnection(connectionStrings[2], username, password);
+            
+            conn[0].setAutoCommit(false);
+            conn[1].setAutoCommit(false);
+            conn[2].setAutoCommit(false);
+            metaDataManger = template.metaDataManger;
         }
         catch (Exception ex)
         {

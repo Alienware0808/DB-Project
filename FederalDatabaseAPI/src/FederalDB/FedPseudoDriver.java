@@ -20,32 +20,24 @@ import java.util.logging.Logger;
  */
 public class FedPseudoDriver implements FedPseudoDriverInterface
 {
-
     public FedPseudoDriver()
     {
-
-    }
-
-    public static void main(String[] args)
-    {
-        // TODO code application logic here
-        
     }
 
     @Override
     public FedConnection getConnection(String username, String password)
     {
-        Connection[] con = new Connection[3];
+        String[] con = new String[3];
 
         try
         {
             DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
             //Get a connection do DB
             Class.forName("oracle.jdbc.OracleDriver"); //driver
-
-            con[0] = DriverManager.getConnection("jdbc:oracle:thin:@mtsthelens.informatik.hs-fulda.de:1521:ORALV9A", username, password);
-            con[1] = DriverManager.getConnection("jdbc:oracle:thin:@krakatau.informatik.hs-fulda.de:1521:ORALV10A", username, password);
-            con[2] = DriverManager.getConnection("jdbc:oracle:thin:@pinatubo.informatik.hs-fulda.de:1521:ORALV8A", username, password);
+           
+            con[0] = "jdbc:oracle:thin:@mtsthelens.informatik.hs-fulda.de:1521:ORALV9A";
+            con[1] = "jdbc:oracle:thin:@krakatau.informatik.hs-fulda.de:1521:ORALV10A";
+            con[2] = "jdbc:oracle:thin:@pinatubo.informatik.hs-fulda.de:1521:ORALV8A";
 
         } catch (Exception exc)
         {
@@ -54,7 +46,7 @@ public class FedPseudoDriver implements FedPseudoDriverInterface
         FedConnection cone;
         try
         {
-            cone = new FedConnection(con);
+            cone = new FedConnection(con, username, password);
             return cone;
         } catch (Exception ex)
         {

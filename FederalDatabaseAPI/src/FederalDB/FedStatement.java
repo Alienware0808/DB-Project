@@ -1,5 +1,6 @@
 package FederalDB;
 
+import Data.FedConnectionFactory;
 import Data.FedHelper;
 import Data.SQLHelper;
 import ResultSetManagment.FedResultSet;
@@ -31,6 +32,10 @@ import parser.AnalysedStatements.*;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class FedStatement implements FedStatementInterface
 {
@@ -182,7 +187,7 @@ public class FedStatement implements FedStatementInterface
             throws Exception
     {
         MetaDataEntry meta = delstmt.table;
-        checkReferences(meta);
+        checkReferences(meta); // @TODO Do the check correctly
         if(meta.FedType instanceof FedHorizontalType)
         {
             int count = 0;
@@ -282,9 +287,7 @@ public class FedStatement implements FedStatementInterface
             int index = vert.getDatabaseForColumn(upval);
             return SQLHelper.updateSelection(fedCon.getConn()[index], meta.TableName, upval, selectedPrimKeys);
         } else
-        {
             return SQLHelper.updateWhere(fedCon.getConn()[0], meta.TableName, upval, upstmt.where);
-        }
     }
 
     private void handleCreate(CreateStatement createstmt) throws FedException, SQLException, Exception
@@ -427,10 +430,28 @@ public class FedStatement implements FedStatementInterface
         //if (insstmt.tableMeta == null)
         //    throw new FedException(new Exception("Table does not exist"));
         
+        Stream<Supplier<Boolean>> tasks = Stream.empty();
+        
         // Check Constrains
         for(Constraint constraint : meta.constraints)
-            if(!constraint.checkInsert(fedCon, insstmt.ColumnValues))
-                throw new FedException(new Exception("Hurting Constraint " + constraint.toString()));
+            tasks = Stream.concat(tasks, Stream.of(() -> {
+                FedConnection con = FedConnectionFactory.give();
+                 boolean resu = constraint.checkInsert(con, insstmt.ColumnValues);
+                 FedConnectionFactory.free(con);
+                 return resu;
+                    }));
+            //if(!constraint.checkInsert(fedCon, insstmt.ColumnValues))
+                //throw new FedException(new Exception("Hurting Constraint " + constraint.toString()));
+        
+        List<Boolean> lists = tasks
+             // Supply all the tasks for execution and collect CompletableFutures
+             .map(CompletableFuture::supplyAsync).collect(Collectors.toList())
+             // Join all the CompletableFutures to gather the results
+             .stream()
+             .map(CompletableFuture::join).collect(Collectors.toList());
+        int checkindex = lists.indexOf(false);
+        if(checkindex != -1)
+            throw new FedException(new Exception("Hurting Constraint " + meta.constraints.get(checkindex).toString()));
         
         if(meta.FedType instanceof FedHorizontalType)
         {

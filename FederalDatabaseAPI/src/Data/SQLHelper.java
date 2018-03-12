@@ -163,11 +163,18 @@ public final class SQLHelper
      */
     public static ResultSet select(
             Connection connection, String column1,
-            String table) throws SQLException
+            String table)
     {
         List<ColumnDefinition> columns = new ArrayList<>();
         columns.add(new ColumnDefinition(column1, table));
-        return select(connection, columns, table);
+        try
+        {
+            return select(connection, columns, table);
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(SQLHelper.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
     }
     
         /**
@@ -181,11 +188,18 @@ public final class SQLHelper
      */
     public static ResultSet select(
             Connection connection, String column1,
-            String table, Condition where) throws SQLException
+            String table, Condition where) 
     {
         List<ColumnDefinition> columns = new ArrayList<>();
         columns.add(new ColumnDefinition(column1, table));
-        return select(connection, columns, table, where);
+        try
+        {
+            return select(connection, columns, table, where);
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(SQLHelper.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
     }
 
     /**
@@ -336,19 +350,27 @@ public final class SQLHelper
      * @return
      * @throws SQLException
      */
-    public static ResultSet selectAll(Connection connection, String table) throws SQLException
+    public static ResultSet selectAll(Connection connection, String table) 
     {
-        if (table == null || table.isEmpty())
+        try
         {
-            throw new NullPointerException("Table name cannot be null or an empty String");
+            if (table == null || table.isEmpty())
+            {
+                throw new NullPointerException("Table name cannot be null or an empty String");
+            }
+            if (connection == null || connection.isClosed())
+            {
+                throw new NullPointerException("connection cannot be null or closed");
+            }
+            String select_sql = "select * from " + table.toLowerCase().trim();
+            PreparedStatement prepStat = getPrepStatement(connection, select_sql);
+            return prepStat.executeQuery();
         }
-        if (connection == null || connection.isClosed())
+        catch (Exception ex)
         {
-            throw new NullPointerException("connection cannot be null or closed");
+            ex.printStackTrace();
+            return null;
         }
-        String select_sql = "select * from " + table.toLowerCase().trim();
-        PreparedStatement prepStat = getPrepStatement(connection, select_sql);
-        return prepStat.executeQuery();
     }
 
     /**
@@ -360,21 +382,21 @@ public final class SQLHelper
      * @throws SQLException
      */
     public static ResultSet selectAll(Connection connection, String table,
-            String where) throws SQLException
+            String where)
     {
-        if (table == null || table.isEmpty())
+        try
         {
-            throw new NullPointerException("Table name cannot be null or an empty String");
+            String select_sql = "select * from " + table.toLowerCase().trim();
+            if(where != null)
+                select_sql += " where " + where.trim();
+            PreparedStatement prepStat = getPrepStatement(connection, select_sql);
+            return prepStat.executeQuery();
         }
-        if (connection == null || connection.isClosed())
+        catch (Exception ex)
         {
-            throw new NullPointerException("connection cannot be null or closed");
+            ex.printStackTrace();
+            return null;
         }
-        String select_sql = "select * from " + table.toLowerCase().trim();
-        if(where != null)
-            select_sql += " where " + where.trim();
-        PreparedStatement prepStat = getPrepStatement(connection, select_sql);
-        return prepStat.executeQuery();
     }
 
     /**

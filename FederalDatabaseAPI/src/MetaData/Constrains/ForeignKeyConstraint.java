@@ -6,6 +6,7 @@
 package MetaData.Constrains;
 
 import Conditions.Condition;
+import Data.FedConnectionFactory;
 import Data.FedHelper;
 import Data.SQLHelper;
 import MetaData.Constrains.Constraint;
@@ -24,6 +25,8 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import parser.AnalysedStatements.CreateStatement;
 
 /**
@@ -43,7 +46,7 @@ public class ForeignKeyConstraint extends Constraint implements java.io.Serializ
     }
 
     @Override
-    public boolean checkInsert(FedConnection fedConnection, List<ColumnValue> values) throws Exception
+    public boolean checkInsert(FedConnection fedConnection, List<ColumnValue> values)
     {
         MetaDataEntry entry = fedConnection.metaDataManger.getTableMetaData(foreignColumn.tableName);
         ColumnValue foreignValue = null;
@@ -65,48 +68,69 @@ public class ForeignKeyConstraint extends Constraint implements java.io.Serializ
         foreignValueAsList.add(foreignValue);
         List<ColumnDefinition> foreignColumnAsList = new ArrayList<>();
         foreignColumnAsList.add(foreignColumn);
-        if (entry.FedType instanceof FedHorizontalType)
+        try
         {
-            ResultSet resultSet = SQLHelper.select(fedConnection.getConn()[0],
-                    foreignColumnAsList, foreignColumn.tableName, foreignValueAsList);
-            if (resultSet.next())
-                return true;
-            resultSet = SQLHelper.select(fedConnection.getConn()[1],
-                    foreignColumnAsList, foreignColumn.tableName, foreignValueAsList);
-            if (resultSet.next())
-                return true;
-            if (entry.FedType.getDatabaseCount() == 3)
+            if (entry.FedType instanceof FedHorizontalType)
             {
-                resultSet = SQLHelper.select(fedConnection.getConn()[2],
+                ResultSet resultSet;
+
+                resultSet = SQLHelper.select(fedConnection.getConn()[0],
+                        foreignColumnAsList, foreignColumn.tableName, foreignValueAsList);
+
+                if (resultSet.next())
+                {
+                    resultSet.close();
+                    return true;
+                }
+                resultSet = SQLHelper.select(fedConnection.getConn()[1],
                         foreignColumnAsList, foreignColumn.tableName, foreignValueAsList);
                 if (resultSet.next())
                 {
+                    resultSet.close();
                     return true;
                 }
+                if (entry.FedType.getDatabaseCount() == 3)
+                {
+                    resultSet = SQLHelper.select(fedConnection.getConn()[2],
+                            foreignColumnAsList, foreignColumn.tableName, foreignValueAsList);
+                    if (resultSet.next())
+                    {
+                        resultSet.close();
+                        return true;
+                    }
+                }
+                return false;
+            } else if (entry.FedType instanceof FedVerticalType)
+            {
+                int dbindex = ((FedVerticalType) entry.FedType).getDatabaseForColumn(foreignColumn);
+                ResultSet resultSet = SQLHelper.select(fedConnection.getConn()[dbindex],
+                        foreignColumnAsList, foreignColumn.tableName, foreignValueAsList);
+                boolean result = resultSet.next();
+                resultSet.close();
+                return result;
+            } else
+            {
+                ResultSet resultSet = SQLHelper.select(fedConnection.getConn()[0],
+                        foreignColumnAsList, foreignColumn.tableName, foreignValueAsList);
+                boolean result = resultSet.next();
+                resultSet.close();
+                return result;
             }
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(ForeignKeyConstraint.class.getName()).log(Level.SEVERE, null, ex);
             return false;
-        } else if (entry.FedType instanceof FedVerticalType)
-        {
-            int dbindex = ((FedVerticalType) entry.FedType).getDatabaseForColumn(foreignColumn);
-            ResultSet resultSet = SQLHelper.select(fedConnection.getConn()[dbindex],
-                    foreignColumnAsList, foreignColumn.tableName, foreignValueAsList);
-            return resultSet.next();
-        } else
-        {
-            ResultSet resultSet = SQLHelper.select(fedConnection.getConn()[0],
-                    foreignColumnAsList, foreignColumn.tableName, foreignValueAsList);
-            return resultSet.next();
         }
     }
 
     @Override
-    public boolean checkDelete(FedConnection fedConnection, List<ColumnValue> values) throws Exception
+    public boolean checkDelete(FedConnection fedConnection, List<ColumnValue> values)
     {
         return true;
     }
 
     @Override
-    public boolean checkUpdate(FedConnection fedConnection, List<ColumnValue> values, Condition where) throws Exception
+    public boolean checkUpdate(FedConnection fedConnection, List<ColumnValue> values, Condition where)
     {
         MetaDataEntry entry = fedConnection.metaDataManger.getTableMetaData(foreignColumn.tableName);
         ColumnValue foreignValue = null;
@@ -127,46 +151,65 @@ public class ForeignKeyConstraint extends Constraint implements java.io.Serializ
         foreignValueAsList.add(foreignValue);
         List<ColumnDefinition> foreignColumnAsList = new ArrayList<>();
         foreignColumnAsList.add(foreignColumn);
-        if (entry.FedType instanceof FedHorizontalType)
+        try
         {
-            ResultSet resultSet = SQLHelper.select(fedConnection.getConn()[0],
-                    foreignColumnAsList, foreignColumn.tableName, foreignValueAsList);
-            if (resultSet.next())
+            if (entry.FedType instanceof FedHorizontalType)
             {
-                return true;
-            }
-            resultSet = SQLHelper.select(fedConnection.getConn()[1],
-                    foreignColumnAsList, foreignColumn.tableName, foreignValueAsList);
-            if (resultSet.next())
-            {
-                return true;
-            }
-            if (entry.FedType.getDatabaseCount() == 3)
-            {
-                resultSet = SQLHelper.select(fedConnection.getConn()[2],
+                ResultSet resultSet;
+
+                resultSet = SQLHelper.select(fedConnection.getConn()[0],
+                        foreignColumnAsList, foreignColumn.tableName, foreignValueAsList);
+
+                if (resultSet.next())
+                {
+                    resultSet.close();
+                    return true;
+                }
+                resultSet = SQLHelper.select(fedConnection.getConn()[1],
                         foreignColumnAsList, foreignColumn.tableName, foreignValueAsList);
                 if (resultSet.next())
                 {
+                    resultSet.close();
                     return true;
                 }
+                if (entry.FedType.getDatabaseCount() == 3)
+                {
+                    resultSet = SQLHelper.select(fedConnection.getConn()[2],
+                            foreignColumnAsList, foreignColumn.tableName, foreignValueAsList);
+                    if (resultSet.next())
+                    {
+                        resultSet.close();
+                        return true;
+                    }
+                }
+                return false;
+            } else if (entry.FedType instanceof FedVerticalType)
+            {
+                int dbindex = ((FedVerticalType) entry.FedType).getDatabaseForColumn(foreignValue);
+                ResultSet resultSet = SQLHelper.select(fedConnection.getConn()[dbindex],
+                        foreignColumnAsList, foreignColumn.tableName, foreignValueAsList);
+                boolean result = resultSet.next();
+                resultSet.close();
+                return result;
+            } else
+            {
+                ResultSet resultSet = SQLHelper.select(fedConnection.getConn()[0],
+                        foreignColumnAsList, foreignColumn.tableName, foreignValueAsList);
+                boolean result = resultSet.next();
+                resultSet.close();
+                return result;
             }
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(ForeignKeyConstraint.class.getName()).log(Level.SEVERE, null, ex);
             return false;
-        } else if (entry.FedType instanceof FedVerticalType)
-        {
-            int dbindex = ((FedVerticalType) entry.FedType).getDatabaseForColumn(foreignValue);
-            ResultSet resultSet = SQLHelper.select(fedConnection.getConn()[dbindex],
-                    foreignColumnAsList, foreignColumn.tableName, foreignValueAsList);
-            return resultSet.next();
-        } else
-        {
-            ResultSet resultSet = SQLHelper.select(fedConnection.getConn()[0],
-                    foreignColumnAsList, foreignColumn.tableName, foreignValueAsList);
-            return resultSet.next();
         }
     }
 
     /**
-     * Determines if there are any Entries in Foreign Entries that reference to the keys
+     * Determines if there are any Entries in Foreign Entries that reference to
+     * the keys
+     *
      * @param fedConnection
      * @param foreignKeysToDelete Single Row ResultSet with all PrimaryKeys to
      * delete
@@ -222,6 +265,6 @@ public class ForeignKeyConstraint extends Constraint implements java.io.Serializ
     @Override
     public String toString()
     {
-        return "FOREIGN KEY CONSTRAINT " + forColumn.toColumnString() + " -> " + this.foreignColumn.toColumnString(); 
+        return "FOREIGN KEY CONSTRAINT " + forColumn.toColumnString() + " -> " + this.foreignColumn.toColumnString();
     }
 }
