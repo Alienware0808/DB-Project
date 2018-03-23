@@ -44,6 +44,12 @@ public class FedStatement implements FedStatementInterface
     private Connection[] con;
     public final MetaDataManager metaDataManger;
 
+    /**
+     * 
+     * @param parent fed- connection
+     * @param con redundante connections
+     * @param metaDataManager 
+     */
     public FedStatement(FedConnection parent, Connection[] con, MetaDataManager metaDataManager)
     {
         this.con = con;
@@ -51,6 +57,12 @@ public class FedStatement implements FedStatementInterface
         this.metaDataManger = metaDataManager;
     }
 
+    /**
+     * Delete/Drop/Insert/update/create
+     * @param sql
+     * @return
+     * @throws FedException 
+     */
     @Override
     public int executeUpdate(String sql) throws FedException
     {
@@ -59,6 +71,7 @@ public class FedStatement implements FedStatementInterface
             parser.AnalysedStatements.Statement inpstatement;
             try
             {
+                //fastparse nur für Inserts
                 parser.AnalysedStatements.Statement fastsmt = FastParse.fastParse(sql, fedCon);
                 if(fastsmt == null)
                     inpstatement = SQLStatement.parseString(sql, fedCon)[0];
@@ -67,7 +80,7 @@ public class FedStatement implements FedStatementInterface
             {
                 Logger.getLogger(FedStatement.class.getName()).log(Level.SEVERE, null, ex);
                 throw new FedException(ex);
-            }
+            } //drop
             if (inpstatement instanceof LazyPreparedStatement)
             {
                 LazyPreparedStatement lstmt = (LazyPreparedStatement) inpstatement;
@@ -81,7 +94,7 @@ public class FedStatement implements FedStatementInterface
                         {
                             try
                             {
-                                checkReferences(meta);
+                                checkReferences(meta);//Constrains für Drop getestet
                             } catch (Exception ex)
                             {
                                 throw new FedException(ex);
@@ -91,7 +104,7 @@ public class FedStatement implements FedStatementInterface
                                 try
                                 {
                                     PreparedStatement statement = con[i].prepareStatement(sql);
-                                    statement.executeUpdate();
+                                    statement.executeUpdate();//jdbc funktion 
                                     succ = true;
                                 } catch (Exception ex)
                                 {
@@ -166,14 +179,14 @@ public class FedStatement implements FedStatementInterface
     {
         List<ForeignKeyConstraint> referencedForeignKeyConstrains = 
                 metaDataManger.getReferencesToTable(meta.TableName);
-        if(referencedForeignKeyConstrains.size() != 0)
+        if(referencedForeignKeyConstrains.size() != 0)//hat ein FK
         {
-            FedResultSetExtendedInterface rs = FedHelper.selectPrimFromSingleTable(fedCon, meta.TableName, null);
+            FedResultSetExtendedInterface rs = FedHelper.selectPrimFromSingleTable(fedCon, meta.TableName, null); //rs= resultset //Holen uns die PK von der eingene Table
             for(ForeignKeyConstraint refFor : referencedForeignKeyConstrains)
             {
                 try
                 {
-                    if(!refFor.checkReferences(fedCon, rs))
+                    if(!refFor.checkReferences(fedCon, rs))//andere Tabelle
                         throw new FedException(new Exception("Violated foreign Key Constraint " + refFor.toString()));
                 } catch (SQLException ex)
                 {
@@ -186,11 +199,11 @@ public class FedStatement implements FedStatementInterface
     private int handleDelete(DeleteStatement delstmt)
             throws Exception
     {
-        MetaDataEntry meta = delstmt.table;
-        checkReferences(meta); // @TODO Do the check correctly
+        MetaDataEntry meta = delstmt.table; //getMetha informationen 
+        checkReferences(meta); 
         if(meta.FedType instanceof FedHorizontalType)
         {
-            int count = 0;
+            int count = 0; //wie viele Zeilen wurden gelöscht
             count += SQLHelper.deleteWhere(fedCon.getConn()[0], meta.TableName, delstmt.where);
             count += SQLHelper.deleteWhere(fedCon.getConn()[1], meta.TableName, delstmt.where);
             if(meta.FedType.getDatabaseCount() == 3)
@@ -202,7 +215,7 @@ public class FedStatement implements FedStatementInterface
             FedVerticalType vert = (FedVerticalType)meta.FedType;
             FedResultSetExtendedInterface selectedPrimKeys = FedHelper.selectPrimFromSingleTable(fedCon, meta.TableName, delstmt.where);
             //SQLHelper.updateSelection(fedCon.getConn()[index], meta.TableName, upval, selectedPrimKeys);
-            SQLHelper.deleteSelection(fedCon.getConn()[0], meta.TableName, selectedPrimKeys);
+            SQLHelper.deleteSelection(fedCon.getConn()[0], meta.TableName, selectedPrimKeys); //PK ist in jeder Tabelle
             SQLHelper.deleteSelection(fedCon.getConn()[1], meta.TableName, selectedPrimKeys);
             if(meta.FedType.getDatabaseCount() == 3)
                 SQLHelper.deleteSelection(fedCon.getConn()[2], meta.TableName, selectedPrimKeys);
@@ -210,57 +223,57 @@ public class FedStatement implements FedStatementInterface
         }
         else
         {
-            return SQLHelper.deleteWhere(fedCon.getConn()[0], meta.TableName, delstmt.where);
+            return SQLHelper.deleteWhere(fedCon.getConn()[0], meta.TableName, delstmt.where); //nicht verti und hori weiterreichen an DB
         }
     }
     
     private int handleUpdate(UpdateStatement upstmt)
             throws Exception
-    {
+    {   
         MetaDataEntry meta = upstmt.table;
-        List<ColumnValue> upvalAsList = new ArrayList<>();
+        List<ColumnValue> upvalAsList = new ArrayList<>(); //ColummValue= Columedefinition und Attributwert
         Object valueObject = null;
-        if(upstmt.valueString.startsWith("'"))
+        if(upstmt.valueString.startsWith("'"))//handelt es sich hier um einen String //Conventierung wird hier gemacht
         {
-            String str = upstmt.valueString;
-            str = str.substring(1);
-            str = str.substring(0, str.length()-1);
+            String str = upstmt.valueString;//Wert mit dem ich es update durchführe
+            str = str.substring(1);//Erste Zeichen weg wegen '
+            str = str.substring(0, str.length()-1); //Ende löschen wegen '
             valueObject = str;
-        } else if(upstmt.valueString.toLowerCase().equals("null"))
+        } else if(upstmt.valueString.toLowerCase().equals("null")) //NULL ?
             valueObject = null;
-        else valueObject = Integer.parseInt(upstmt.valueString);
+        else valueObject = Integer.parseInt(upstmt.valueString); //Integer?
         ColumnValue upval = new ColumnValue(upstmt.column, upstmt.table.TableName, valueObject);
         upvalAsList.add(upval);
         // Check Constrains
         for(Constraint constraint : meta.constraints)
             if(!constraint.checkUpdate(fedCon, upvalAsList, upstmt.where))
-                throw new FedException(new Exception("Hurting Constraint " + constraint.toString()));
+                throw new FedException(new Exception("Hurting Constraint " + constraint.toString())); //FK update nicht erlaubt
         
         if(meta.FedType instanceof FedHorizontalType)
         {
             FedHorizontalType hori = (FedHorizontalType)meta.FedType;
-            // if the Column to update equals the hori col
+            // if the Column to update equals the hori col //Wenn über die VERTEILSCHLÜSSEL ein update gemacht wird (meistens PK //erste Spalte)
             if(hori.Column.equals(upval))
             {
                 int changedRows = 0;
-                int dbindex = hori.getIndexForValue(upval.value);
-                FedSavepoint savepoint = fedCon.setSavepoint();
+                int dbindex = hori.getIndexForValue(upval.value); //Index für die auszuwelende DB auf die ich die Updates durchführe
+                FedSavepoint savepoint = fedCon.setSavepoint();//Für Rollback
                 try
                 {
                     for(int i = 0; i < hori.getDatabaseCount(); i++)
                     {
-                        if(dbindex == i)
+                        if(dbindex == i) //update z.B. 50 also tabelle zwei wenn genau wieder 50 gemacht wird also dann auch auf dieser einfach
                             changedRows += SQLHelper.updateWhere(fedCon.getConn()[dbindex], meta.TableName, upval, upstmt.where);
-                        else
+                        else //alle DB durchgehen
                         {
                             FedResultSetExtendedInterface affectedRows = new SqlWrapperResultSet(
                                     SQLHelper.selectAll(fedCon.getConn()[i], meta.TableName, upstmt.where.toWhereString()));
                             changedRows += affectedRows.getRowCount();
                             FedResultSetExtendedInterface asUpdatedRows = 
-                                    new FedOverwriteResultSet(affectedRows, upvalAsList);
-                            SQLHelper.insert(fedCon.getConn()[i], meta.TableName, asUpdatedRows);
+                                    new FedOverwriteResultSet(affectedRows, upvalAsList); //FedResultset der dad Updat entspricht
+                            SQLHelper.insert(fedCon.getConn()[i], meta.TableName, asUpdatedRows); //Insert
                             SQLHelper.deleteSelection(fedCon.getConn()[i], meta.TableName, 
-                                    new FedProjectionResultSet(affectedRows, meta.getPrimaryKeyConstraint().PrimaryKey));
+                                    new FedProjectionResultSet(affectedRows, meta.getPrimaryKeyConstraint().PrimaryKey)); //gelöscht
                         }
                     }
                     return changedRows;
@@ -270,8 +283,8 @@ public class FedStatement implements FedStatementInterface
                     throw new FedException(ex);
                 }
             }
-            else
-            {
+            else //verteilung verändert sich nicht einfaches Update
+            { 
                 int updatedRows = 0;
                 updatedRows += SQLHelper.updateWhere(fedCon.getConn()[0], meta.TableName, upval, upstmt.where);
                 updatedRows += SQLHelper.updateWhere(fedCon.getConn()[1], meta.TableName, upval, upstmt.where);
@@ -283,9 +296,9 @@ public class FedStatement implements FedStatementInterface
         else if(meta.FedType instanceof FedVerticalType)
         {
             FedVerticalType vert = (FedVerticalType)meta.FedType;
-            FedResultSetExtendedInterface selectedPrimKeys = FedHelper.selectPrimFromSingleTable(fedCon, meta.TableName, upstmt.where);
+            FedResultSetExtendedInterface selectedPrimKeys = FedHelper.selectPrimFromSingleTable(fedCon, meta.TableName, upstmt.where); //Hole PK VON MIR mit WHERE//betroffenen
             int index = vert.getDatabaseForColumn(upval);
-            return SQLHelper.updateSelection(fedCon.getConn()[index], meta.TableName, upval, selectedPrimKeys);
+            return SQLHelper.updateSelection(fedCon.getConn()[index], meta.TableName, upval, selectedPrimKeys);//update mit selection
         } else
             return SQLHelper.updateWhere(fedCon.getConn()[0], meta.TableName, upval, upstmt.where);
     }
@@ -300,7 +313,7 @@ public class FedStatement implements FedStatementInterface
             meta.TableName = createstmt.tableName;
             for (CreateStatement.TableConstraint tc : createstmt.tableConstrains)
             {
-                if (!tc.getCanBeLocal())
+                if (!tc.getCanBeLocal())//was komplex ist 
                 {
                     meta.constraints.add(tc.toMetaConstraint());
                 }
@@ -311,7 +324,7 @@ public class FedStatement implements FedStatementInterface
                 {
                     // Do the Meta Thing
                     CreateStatement.FedHorizontal hori = (CreateStatement.FedHorizontal) createstmt.fedStatement;
-                    List<Object> intervalls = hori.getIntervall();
+                    List<Object> intervalls = hori.getIntervall();//Verteilungsschlüssel Intervalle
                     meta.FedType = new FedHorizontalType(hori.getColumn(), intervalls);
                     String createsql = "create table " + createstmt.tableName + " (";
                     for (int i = 0; i < createstmt.columnDefinitions.size(); i++)
@@ -337,7 +350,7 @@ public class FedStatement implements FedStatementInterface
                     {
                         for (int i = 0; i <= intervalls.size(); i++)
                         {
-                            PreparedStatement statement = con[i].prepareStatement(createsql);
+                            PreparedStatement statement = con[i].prepareStatement(createsql);//DB geschickt
                             statement.executeUpdate();
                         }
                         // TODO cereate new metadata entry
@@ -349,11 +362,11 @@ public class FedStatement implements FedStatementInterface
                 else if (createstmt.fedStatement instanceof CreateStatement.FedVertical)
                 {
                     CreateStatement.FedVertical vert = (CreateStatement.FedVertical) createstmt.fedStatement;
-                    meta.FedType = new FedVerticalType(vert.getDistributionLists());
+                    meta.FedType = new FedVerticalType(vert.getDistributionLists()); //WIe bin ich verteilt /Liste von Columedefintion
                     CreateColumnDefinition primkey = null;
-                    for (CreateStatement.TableConstraint tabcon : createstmt.tableConstrains)
+                    for (CreateStatement.TableConstraint tabcon : createstmt.tableConstrains) //brauch zunächst alle PK
                     {
-                        if (tabcon instanceof CreateStatement.TableConstraintPrimaryKey)
+                        if (tabcon instanceof CreateStatement.TableConstraintPrimaryKey)  //Suche den PK für jedes Creade
                         {
                             CreateStatement.TableConstraintPrimaryKey tabprim = (CreateStatement.TableConstraintPrimaryKey) tabcon;
                             primkey = tabprim.getPrimaryKeys().get(0);
@@ -389,9 +402,9 @@ public class FedStatement implements FedStatementInterface
                         PreparedStatement statement = con[i].prepareStatement(createsql[i]);
                         statement.executeUpdate();
                     }
-                } else
+                } else //wenn nicht hori und vert
                 {
-                    meta.FedType = new FedType();
+                    meta.FedType = new FedType(); //keine verteilte Tabelle
                     PreparedStatement statement;
                     try
                     {
@@ -422,7 +435,7 @@ public class FedStatement implements FedStatementInterface
         MetaDataEntry meta = insstmt.tableMeta;
         // Find the PrimaryKey Value
         ColumnValue primKeyVal = null;
-        int indexOfPrimKey = insstmt.ColumnValues.indexOf(meta.getPrimaryKeyConstraint().PrimaryKey);
+        int indexOfPrimKey = insstmt.ColumnValues.indexOf(meta.getPrimaryKeyConstraint().PrimaryKey); //Hole mir den Primärschlüßelattribut für Insert
         if(indexOfPrimKey == -1)
             throw new FedException(new Exception("Missing PrimaryKey Value"));
         primKeyVal = insstmt.ColumnValues.get(indexOfPrimKey);
@@ -430,7 +443,7 @@ public class FedStatement implements FedStatementInterface
         //if (insstmt.tableMeta == null)
         //    throw new FedException(new Exception("Table does not exist"));
         
-        Stream<Supplier<Boolean>> tasks = Stream.empty();
+        Stream<Supplier<Boolean>> tasks = Stream.empty(); //parallel für Contrains
         
         // Check Constrains
         for(Constraint constraint : meta.constraints)
@@ -457,7 +470,7 @@ public class FedStatement implements FedStatementInterface
         {
             FedHorizontalType hori = (FedHorizontalType)meta.FedType;
             ColumnValue horival = insstmt.ColumnValues.get(insstmt.ColumnValues.indexOf(hori.Column));
-            int index = hori.getIndexForValue(horival.value);
+            int index = hori.getIndexForValue(horival.value); //Zu welcher DB gehört der Value?
             return SQLHelper.insert(fedCon.getConn()[index], meta.TableName, insstmt.ColumnValues);
         }
         else if(meta.FedType instanceof FedVerticalType)
@@ -465,25 +478,25 @@ public class FedStatement implements FedStatementInterface
             FedVerticalType vert = (FedVerticalType)meta.FedType;
             
             // Split the insert for each Table
-            List<ColumnValue> valuesForTable1 = new ArrayList<>();
-            List<ColumnValue> valuesForTable2 = new ArrayList<>();                
+            List<ColumnValue> valuesForTable1 = new ArrayList<>(); //Speicher für DB1
+            List<ColumnValue> valuesForTable2 = new ArrayList<>();  //Speicher für DB2              
             List<ColumnValue> valuesForTable3 = null;
             if(vert.getDatabaseCount() == 2)
             {
                 for(ColumnValue colval : insstmt.ColumnValues)
                 {
-                    int index = vert.DistributionList.get(0).indexOf(colval);
+                    int index = vert.DistributionList.get(0).indexOf(colval);//schaue in Methadaten wozu gehört das value //für die erste
                     if(index != -1)
-                        valuesForTable1.add(colval);
+                        valuesForTable1.add(colval); //weise der Liste hinzu
                     else
                     {
-                        index = vert.DistributionList.get(1).indexOf(colval);
+                        index = vert.DistributionList.get(1).indexOf(colval); //zweite
                         if(index != -1)
                             valuesForTable2.add(colval);
                         else throw new FedException(new Exception("Unkown Field in Inser Statement"));
                     }
                 }
-            } else
+            } else //für 3 redundant
             {
                 valuesForTable3 = new ArrayList<>();
                 for(ColumnValue colval : insstmt.ColumnValues)
@@ -506,13 +519,13 @@ public class FedStatement implements FedStatementInterface
                     }
                 }
             }
-            if(!valuesForTable1.contains(primKeyVal))
+            if(!valuesForTable1.contains(primKeyVal))//ist der PK vorhanden wenn nicht füge einen hinzu
                 valuesForTable1.add(primKeyVal);
             if(!valuesForTable2.contains(primKeyVal))
                 valuesForTable2.add(primKeyVal);
-            int result = SQLHelper.insert(fedCon.getConn()[0], meta.TableName, valuesForTable1);
+            int result = SQLHelper.insert(fedCon.getConn()[0], meta.TableName, valuesForTable1);//füre Insert durch
             SQLHelper.insert(fedCon.getConn()[1], meta.TableName, valuesForTable2);
-            if(valuesForTable3 != null)
+            if(valuesForTable3 != null) //Fall für 3 DB
             {
                 if(!valuesForTable3.contains(primKeyVal))
                     valuesForTable3.add(primKeyVal);
@@ -525,7 +538,7 @@ public class FedStatement implements FedStatementInterface
     }
 
     @Override
-    public FedResultSet executeQuery(String sql) throws FedException
+    public FedResultSet executeQuery(String sql) throws FedException //select
     {
         parser.AnalysedStatements.Statement[] statements;
         try
